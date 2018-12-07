@@ -115,61 +115,6 @@ $(document).ready(function () {
 
     });
 
-    //Tabla de Retenciones
-    $('#table_ret').DataTable({
-        language: {
-            "url": "../Scripts/lang/ES.json"
-        },
-        "paging": false,
-        "info": false,
-        "searching": false,
-        "columns": [
-            {
-                "name": 'SOCRET',
-                "className": 'SOCRET',
-                "orderable": false,
-                "visible": false
-            },
-            {
-                "name": 'PROVRET',
-                "className": 'PROVRET',
-                "orderable": false,
-                "visible": false
-            },
-            {
-                "name": 'TRET',
-                "className": 'TRET',
-                "orderable": false
-            },
-            {
-                "name": 'DESCRET',
-                "className": 'DESCTRET',
-                "orderable": false
-            },
-            {
-                "name": 'INDRET',
-                "className": 'INDRET',
-                "orderable": false
-            },
-            {
-                "name": 'BIMPONIBLE',
-                "className": 'BIMPONIBLE',
-                "orderable": false
-            },
-            {
-                "name": 'IMPRET',
-                "className": 'IMPRET',
-                "orderable": false
-            }
-        ],
-        columnDefs: [
-            {
-                targets: [0, 1, 2, 3, 4],
-                className: 'mdl-data-table__cell--non-numeric'
-            }
-        ]
-    });
-
     $('#div-menu').on('click', function () {
 
     });
@@ -409,6 +354,8 @@ function formatoTabla() {
     });
     //Tabla de Información
     $('#table_info').DataTable({
+        scrollX: true,
+        scrollCollapse: true,
         language: {
             //"url": "../Scripts/lang/@Session["spras"].ToString()" + ".json"
             "url": "../../Scripts/lang/ES.json"
@@ -633,7 +580,7 @@ function datosCadena(nDoc) {
         dataType: "json",
         success: function (data) {
             if (data !== null || data !== "") {
-                obtenerCadena(data[5], data[4], data[2], data[3], data[1], data[0]);
+                obtenerCadena(data[5],data[4],data[2],data[3],data[1],data[0]);
             }
         },
         error: function (xhr, httpStatusMessage, customErrorMessage) {

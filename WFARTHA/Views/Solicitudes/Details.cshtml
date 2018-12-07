@@ -73,20 +73,20 @@
 
 <div class="row" style="margin-bottom:0">
 
-    @*@{WFARTHA.Entities.USUARIO us = ViewBag.usuario;
+    @{WFARTHA.Entities.USUARIO us = ViewBag.usuario;
 
-            <div class="col s12 m3 l2">
-                <div class="row" style="margin-bottom:0">
-                    <div class="input-field col s12">
-                        @Html.EditorFor(model => model.D.USUARIOC_ID, "Usuario", new { htmlAttributes = new { @disabled = "disabled", @Value = us.ID, @id = "txt_user" } })
-                        @Html.LabelFor(model => model.D.USUARIOC_ID, "Usuario", new { @id = "lbl_userid" })
-                    </div>
-
+        <div class="col s12 m3 l2">
+            <div class="row" style="margin-bottom:0">
+                <div class="input-field col s12">
+                    @Html.EditorFor(model => model.D.USUARIOC_ID, "Usuario", new { htmlAttributes = new { @disabled = "disabled", @Value = us.ID, @id = "txt_user" } })
+                    @Html.LabelFor(model => model.D.USUARIOC_ID, "Usuario", new { @id = "lbl_userid" })
                 </div>
-            </div>
-        }*@
 
-    <style>
+            </div>
+        </div>
+    }
+
+        <style>
         .anexosWidth {
             width: 8px;
         }
@@ -160,16 +160,60 @@
             border-collapse: collapse;
             table-layout: fixed;
         }
-    </style>
+
+        /*MGC 26-11-2018 Visualizar caratula --------------------------------------------------->*/
+        .row#div_caratula{
+            margin-bottom: 5px;
+        }
+        /*MGC 26-11-2018 Visualizar caratula ---------------------------------------------------<*/
+
+        </style>
     @*MGC 04-10-2018 Botones para acciones -->*@
     <div class="row" style="margin-bottom:0">
         <div class="col s12 m5 l5">
             <div class="row" style="margin-bottom:0">
+                <div class="input-field col s4">
+                    @Html.EditorFor(model => model.D.USUARIOC_ID, new { htmlAttributes = new { @disabled = "disabled", style = "display:none" } })
+                    @Html.LabelFor(model => model.D.USUARIOC_ID, new { @id = "lbl_userid", style = "display:none" })
+                </div>
+                <div class="input-field col s4">
+                    @if (Model.D.ESTATUS == "N")
+                    {
+                        <input type="text" id="txt_status" value="Nuevo" disabled="disabled" />
+                        <label for="txt_status" id="lbl_status">Estatus</label>
+                    }
+                </div>
+                <div class="input-field col s4">
+                    @*<input type="text" id="txt_user" value="@ViewBag.usuario.MANAGER" disabled="disabled" />
+                        <label for="txt_user">Manager</label>*@
+                    @*@Html.EditorFor(model => model.D.USUARIO.MANAGER, new { htmlAttributes = new { @disabled = "disabled" } })
+                        @Html.LabelFor(model => model.D.USUARIO.MANAGER, new { @id = "lbl_manager" })*@
+                </div>
 
 
+                <div class="input-field col s4">
+                    @Html.EditorFor(model => model.D.USUARIO.BACKUP_ID, new { htmlAttributes = new { @disabled = "disabled", style = "display:none" } })
+                    @Html.LabelFor(model => model.D.USUARIO.BACKUP_ID, new { @id = "lbl_backup", style = "display:none" })
+                    @*<input type="text" id="txt_user" value="@ViewBag.usuario.BACKUP_ID" disabled="disabled" />
+                        <label for="txt_user">Backup</label>*@
+                </div>
             </div>
         </div>
-
+        <div class="col s6 m2 l2">
+            <div class="input-field col s6">
+                @*<input type="text" id="txt_user" value="PRGA" disabled="disabled" />
+                    <label for="txt_user">BU</label>*@
+                @*@Html.EditorFor(model => model.D.USUARIO.BUNIT, new { htmlAttributes = new { @disabled = "disabled" } })
+                    @Html.LabelFor(model => model.D.USUARIO.BUNIT, "Sociedad", new { @id = "lbl_bu" })*@
+            </div>
+            @*<div class="input-field col s6">
+                    @if (Model.D.ESTATUS == "N")
+                    {
+                        <input type="text" id="txt_status"  value="Nuevo" disabled="disabled" />
+                        <label for="txt_status" id="lbl_status">Estatus</label>
+                    }
+                </div>*@
+        </div>
         <div class="col s12 m5 l5">
             <div class="row right">
                 @if (Model.D.ESTATUS_C != "C")
@@ -235,28 +279,28 @@
 
                         }
                         @*else if (ViewBag.accion == "N")
-                            {
-                                <div class="fixed-action-btn" id="lbl_wf">
-                                    <a class="btn-floating btn-large blue">
-                                        <i class="large material-icons">work</i>
-                                    </a>
-                                    <ul>
-                                        <li><a id="lbl_wfn" class="btn-floating yellow darken-1 modal-trigger" href="#modal1" onclick="siguiente()"><i class="material-icons">play_arrow</i></a></li>
-                                    </ul>
-                                </div>
-                                <script>
+                        {
+                            <div class="fixed-action-btn" id="lbl_wf">
+                                <a class="btn-floating btn-large blue">
+                                    <i class="large material-icons">work</i>
+                                </a>
+                                <ul>
+                                    <li><a id="lbl_wfn" class="btn-floating yellow darken-1 modal-trigger" href="#modal1" onclick="siguiente()"><i class="material-icons">play_arrow</i></a></li>
+                                </ul>
+                            </div>
+                            <script>
 
-                                    var elem = document.querySelector('.fixed-action-btn');
-                                    var options = {
-                                        direction: 'left',
-                                        hoverEnabled: false,
-                                        toolbarEnabled: false
-                                    };
-                                    var instance = M.FloatingActionButton.init(elem, options);
-                                </script>*@
-                        @*esto ya estaba comentado <a id="lbl_wfn" class="btn-small  " href="@Url.Action(" Procesa", "Flujos" , new { id=Model.D.NUM_DOC, accion="N" })">Siguiente</a>*@
-                        @*<a id="lbl_wfn" class="btn-small modal-trigger" href="#modal1" onclick="siguiente()">Siguiente</a>
-                            }*@
+                                var elem = document.querySelector('.fixed-action-btn');
+                                var options = {
+                                    direction: 'left',
+                                    hoverEnabled: false,
+                                    toolbarEnabled: false
+                                };
+                                var instance = M.FloatingActionButton.init(elem, options);
+                            </script>*@
+                            @*esto ya estaba comentado <a id="lbl_wfn" class="btn-small  " href="@Url.Action(" Procesa", "Flujos" , new { id=Model.D.NUM_DOC, accion="N" })">Siguiente</a>*@
+                            @*<a id="lbl_wfn" class="btn-small modal-trigger" href="#modal1" onclick="siguiente()">Siguiente</a>
+                        }*@
                         else if (ViewBag.accion == "P")
                         {
 
@@ -371,14 +415,14 @@
 
             </div>
         </div>
-    </div>
-    <div class="col s12" style="display:inline;">
-        @*FRT 02112018 Agregar titulos*@
         <div>
+            <br />
             <h5 id="head_cabecera" style="display:inline-block">@ViewBag.pid - </h5>
             <h5 id="head_cabecera" style="display:inline-block">@ViewBag.PrSl</h5>
+
         </div>
     </div>
+
     @*MGC 04-10-2018 Botones para acciones <--*@
 
     <div class="div_bottom">
@@ -404,6 +448,16 @@
     {
         @Html.AntiForgeryToken()*@
 <div class="form-horizontal">
+
+    @*//MGC 26-11-2018 Visualizar caratula --------------------------------------------------->*@
+
+    <div class="row right-align" id="div_caratula">
+        @*<a class="btn-small" href="#" onClick="fcaratula(this)" data-assigned-id="@Model.D.NUM_DOC"><si style="cursor:pointer" class="material-icons right">print</si>Caratula</a>*@
+        <a id="ReportUrl_Performance" class="btn-small" href="@Url.Action("ReportTemplate", "Report", new { id = @Model.D.NUM_DOC })"><si style="cursor:pointer" class="material-icons right">print</si>Caratula</a>
+    </div>
+
+    @*//MGC 26-11-2018 Visualizar caratula ---------------------------------------------------<*@
+
     @*Encabezado*@
     <div id="Encabezado_cont" class="col s12" style="font-size:12px;">
         <div class="row">
@@ -629,12 +683,6 @@
                             <table class="table display mdl-data-table striped" id="table_ret" style="width:100%;">
                                 <thead>
                                     <tr>
-                                        <th class="lbl_socret leftAlignement">
-                                            Sociedad Retención
-                                        </th>
-                                        <th class="lbl_provret leftAlignement">
-                                            Proveedor Retención
-                                        </th>
                                         <th class="lbl_tret leftAlignement">
                                             Tipo Retención
                                         </th>
@@ -660,8 +708,6 @@
                                         for (var i = 0; i < drets.Count; i++)
                                         {
                                             <tr>
-                                                <td></td>
-                                                <td></td>
                                                 <td class="leftAlignement">
                                                     @Html.DisplayFor(m => drets[i].WITHT)
                                                 </td>
@@ -700,231 +746,230 @@
                 <div class="card-panel">
                     <h5 id="head_cabecera">Detalle</h5>
                     <div class="row" style="margin-bottom:0">
-                        <div style="overflow:auto;">
-                            @*aQUI PONES LA TABLA*@
-                            <table class="table display mdl-data-table striped" id="table_info" style="width:100%;">
-                                <thead>
-                                    <tr>
-                                        <th></th>
-                                        <th class="">
-                                            Pos
-                                        </th>
-                                        <th class="">
-                                            A1
-                                        </th>
-                                        <th class="">
-                                            A2
-                                        </th>
-                                        <th class="">
-                                            A3
-                                        </th>
-                                        <th class="">
-                                            A4
-                                        </th>
-                                        <th class="">
-                                            A5
-                                        </th>
-                                        <th class="">
-                                            Texto
-                                        </th>
-                                        <th class="">
-                                            D/H
-                                        </th>
-                                        <th class="">
-                                            Factura
-                                        </th>
-                                        <th class="">
-                                            Concepto
-                                        </th>
-                                        <th class="">
-                                            Cuenta
-                                        </th>
-                                        <th class="">
-                                            Centro de Costo
-                                        </th>
-                                        <th class="">
-                                            nombre de cuenta
-                                        </th>
-                                        <th class="">
-                                            tipo imp.
-                                        </th>
-                                        <th class="">
-                                            imputación
-                                        </th>
-                                        <th class="">
-                                            Monto
-                                        </th>
-                                        <th class="">
-                                            Impuesto
-                                        </th>
-                                        <th class="">
-                                            IVA
-                                        </th>
-                                        @for (int i = 0; i < colsret.Count; i++)
-                                        {
-                                            <th class="">
-                                                @colsret[i] B.I.
-                                            </th>
-                                            <th class="">
-                                                @colsret[i] I.R.
-                                            </th>
-                                        }
-                                        <th class="">
-                                            Total
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-
-                                    @if (@Model.D.DOCUMENTOPSTR != null)
+                        @*aQUI PONES LA TABLA*@
+                        <table class="table display mdl-data-table striped" id="table_info" style="width:100%;">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th class="">
+                                        Pos
+                                    </th>
+                                    <th class="">
+                                        A1
+                                    </th>
+                                    <th class="">
+                                        A2
+                                    </th>
+                                    <th class="">
+                                        A3
+                                    </th>
+                                    <th class="">
+                                        A4
+                                    </th>
+                                    <th class="">
+                                        A5
+                                    </th>
+                                    <th class="">
+                                        Texto
+                                    </th>
+                                    <th class="">
+                                        D/H
+                                    </th>
+                                    <th class="">
+                                        Factura
+                                    </th>
+                                    <th class="">
+                                        Concepto
+                                    </th>
+                                    <th class="">
+                                        Cuenta
+                                    </th>
+                                    <th class="">
+                                        Centro de Costo
+                                    </th>
+                                    <th class="">
+                                        nombre de cuenta
+                                    </th>
+                                    <th class="">
+                                        tipo imp.
+                                    </th>
+                                    <th class="">
+                                        imputación
+                                    </th>
+                                    <th class="">
+                                        Monto
+                                    </th>
+                                    <th class="">
+                                        Impuesto
+                                    </th>
+                                    <th class="">
+                                        IVA
+                                    </th>
+                                    @for (int i = 0; i < colsret.Count; i++)
                                     {
-                                        for (int i = 0; i < @Model.D.DOCUMENTOPSTR.Count; i++)
-                                        {
-                                            <tr>
-                                                @*@if (colsret.Count == 0)
-                                                    {
-                                                        <td></td>
-                                                    }*@
-                                                <td></td>
-                                                <td> @Model.D.DOCUMENTOPSTR[i].POS</td>
-                                                @if (@Model.D.Anexo != null)
-                                                {
-                                                    <td>@Model.D.Anexo[i].a1</td>
-                                                    <td>@Model.D.Anexo[i].a2</td>
-                                                    <td>@Model.D.Anexo[i].a3</td>
-                                                    <td>@Model.D.Anexo[i].a4</td>
-                                                    <td>@Model.D.Anexo[i].a5</td>
-                                                }
-                                                else
-                                                {
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                }
-
-
-                                                @if (Model.D.DOCUMENTOPSTR[i].TEXTO != null)
-                                                {
-                                                    <td> <textarea class="materialize-textarea" style="font-size:12px;width:150px;height:0px;" type="text" value="" disabled>@Model.D.DOCUMENTOPSTR[i].TEXTO </textarea></td>
-
-                                                }
-                                                else
-                                                {
-                                                    <td></td>
-                                                }
-
-
-                                                @if (Model.D.DOCUMENTOPSTR[i].ACCION != null)
-                                                {
-                                                    <td>@Model.D.DOCUMENTOPSTR[i].ACCION</td> }
-                                                else
-                                                {
-                                                    <td></td>}
-
-                                                @if (Model.D.DOCUMENTOPSTR[i].FACTURA != null)
-                                                {
-                                                    <td>@Model.D.DOCUMENTOPSTR[i].FACTURA</td> }
-                                                else
-                                                {
-                                                    <td></td>}
-
-                                                <td> @Model.D.DOCUMENTOPSTR[i].TCONCEPTO@Model.D.DOCUMENTOPSTR[i].GRUPO</td>
-
-                                                @if (Model.D.DOCUMENTOPSTR[i].CUENTA != null)
-                                                {
-                                                    <td>@Model.D.DOCUMENTOPSTR[i].CUENTA</td> }
-                                                else
-                                                {
-                                                    <td></td>}
-
-
-                                                @if (Model.D.DOCUMENTOPSTR[i].CCOSTO != null)
-                                                {
-                                                    <td>@Model.D.DOCUMENTOPSTR[i].CCOSTO</td> }
-                                                else
-                                                {
-                                                    <td></td>}
-
-
-                                                @if (Model.D.DOCUMENTOPSTR[i].NOMCUENTA != null)
-                                                {
-                                                    <td>@Model.D.DOCUMENTOPSTR[i].NOMCUENTA</td> }
-                                                else
-                                                {
-                                                    <td></td>}
-
-                                                @if (Model.D.DOCUMENTOPSTR[i].TIPOIMP != null)
-                                                {
-                                                    <td>@Model.D.DOCUMENTOPSTR[i].TIPOIMP</td> }
-                                                else
-                                                {
-                                                    <td></td>}
-
-
-
-
-                                                @if (Model.D.DOCUMENTOPSTR[i].IMPUTACION != null)
-                                                {
-                                                    <td>@Model.D.DOCUMENTOPSTR[i].IMPUTACION</td> }
-                                                else
-                                                {
-                                                    <td></td>}
-
-
-                                                @if (Model.D.DOCUMENTOPSTR[i].MONTO != null)
-                                                {
-                                                    <td>@Model.D.DOCUMENTOPSTR[i].MONTO</td> }
-                                                else
-                                                {
-                                                    <td></td>}
-
-
-
-                                                @if (Model.D.DOCUMENTOPSTR[i].IMPUESTOT != null)
-                                                {
-                                                    <td>@Model.D.DOCUMENTOPSTR[i].IMPUESTOT</td> }
-                                                else
-                                                {
-                                                    <td></td>}
-
-
-                                                @if (Model.D.DOCUMENTOPSTR[i].IVA != null)
-                                                {
-                                                    <td>@Model.D.DOCUMENTOPSTR[i].IVA</td> }
-                                                else
-                                                {
-                                                    <td></td>}
-
-
-                                                @for (int y = 0; y < colsret.Count; y++)
-                                                {
-                                                    <td>
-                                                        @{var _v = colsret[y]; }
-                                                        @{decimal imp = 0; try { imp = decimal.Parse(lstDrp.Where(p => p.POS == (i + 1) && p.WITHT == _v).FirstOrDefault().BIMPONIBLE.ToString()); } catch (Exception e) { }; string bim = formatoc.toShow(imp, deci);}
-                                                        @bim
-                                                    </td>
-                                                    <td>
-                                                        @{decimal imp2 = 0; try { imp2 = decimal.Parse(lstDrp.Where(p => p.POS == (i + 1) && p.WITHT == _v).FirstOrDefault().IMPORTE_RET.ToString()); } catch (Exception e) { }; string bim2 = formatoc.toShow(imp2, deci);}
-                                                        @bim2
-                                                    </td>
-                                                }
-                                                <td> @Model.D.DOCUMENTOPSTR[i].TOTAL</td>
-
-                                            </tr>
-                                        }
+                                        <th class="">
+                                            @colsret[i] B.I.
+                                        </th>
+                                        <th class="">
+                                            @colsret[i] I.R.
+                                        </th>
                                     }
-                                </tbody>
-                                <tfoot>
-                                    <tr>
-                                        <th>Total: </th>
-                                        <th>@ViewBag.totalt</th>
-                                    </tr>
-                                </tfoot>
-                            </table>
-                            @*aQUI PONES LA TABLA*@
-                        </div>
+                                    <th class="">
+                                        Total
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                @if (@Model.D.DOCUMENTOPSTR != null)
+                                {
+                                    for (int i = 0; i < @Model.D.DOCUMENTOPSTR.Count; i++)
+                                    {
+                                        <tr>
+                                            @*@if (colsret.Count == 0)
+                                                {
+                                                    <td></td>
+                                                }*@
+                                            <td></td>
+                                            <td> @Model.D.DOCUMENTOPSTR[i].POS</td>
+                                            @if (@Model.D.Anexo != null)
+                                            {
+                                                <td>@Model.D.Anexo[i].a1</td>
+                                                <td>@Model.D.Anexo[i].a2</td>
+                                                <td>@Model.D.Anexo[i].a3</td>
+                                                <td>@Model.D.Anexo[i].a4</td>
+                                                <td>@Model.D.Anexo[i].a5</td>
+                                            }
+                                            else
+                                            {
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                            }
+
+
+                                            @if (Model.D.DOCUMENTOPSTR[i].TEXTO != null)
+                                            {
+                                                <td> <textarea class="materialize-textarea" style="font-size:12px;width:150px;height:0px;" type="text" value="" disabled>@Model.D.DOCUMENTOPSTR[i].TEXTO </textarea></td>
+
+                                            }
+                                            else
+                                            {
+                                                <td></td>
+                                            }
+
+
+                                            @if (Model.D.DOCUMENTOPSTR[i].ACCION != null)
+                                            {
+                                                <td>@Model.D.DOCUMENTOPSTR[i].ACCION</td> }
+                                            else
+                                            {
+                                                <td></td>}
+
+                                            @if (Model.D.DOCUMENTOPSTR[i].FACTURA != null)
+                                            {
+                                                <td>@Model.D.DOCUMENTOPSTR[i].FACTURA</td> }
+                                            else
+                                            {
+                                                <td></td>}
+
+                                            <td> @Model.D.DOCUMENTOPSTR[i].TCONCEPTO@Model.D.DOCUMENTOPSTR[i].GRUPO</td>
+
+                                            @if (Model.D.DOCUMENTOPSTR[i].CUENTA != null)
+                                            {
+                                                <td>@Model.D.DOCUMENTOPSTR[i].CUENTA</td> }
+                                            else
+                                            {
+                                                <td></td>}
+
+
+                                            @if (Model.D.DOCUMENTOPSTR[i].CCOSTO != null)
+                                            {
+                                                <td>@Model.D.DOCUMENTOPSTR[i].CCOSTO</td> }
+                                            else
+                                            {
+                                                <td></td>}
+
+
+                                            @if (Model.D.DOCUMENTOPSTR[i].NOMCUENTA != null)
+                                            {
+                                                <td>@Model.D.DOCUMENTOPSTR[i].NOMCUENTA</td> }
+                                            else
+                                            {
+                                                <td></td>}
+
+                                            @if (Model.D.DOCUMENTOPSTR[i].TIPOIMP != null)
+                                            {
+                                                <td>@Model.D.DOCUMENTOPSTR[i].TIPOIMP</td> }
+                                            else
+                                            {
+                                                <td></td>}
+
+
+
+
+                                            @if (Model.D.DOCUMENTOPSTR[i].IMPUTACION != null)
+                                            {
+                                                <td>@Model.D.DOCUMENTOPSTR[i].IMPUTACION</td> }
+                                            else
+                                            {
+                                                <td></td>}
+
+
+                                            @if (Model.D.DOCUMENTOPSTR[i].MONTO != null)
+                                            {
+                                                <td>@Model.D.DOCUMENTOPSTR[i].MONTO</td> }
+                                            else
+                                            {
+                                                <td></td>}
+
+
+
+                                            @if (Model.D.DOCUMENTOPSTR[i].IMPUESTOT != null)
+                                            {
+                                                <td>@Model.D.DOCUMENTOPSTR[i].IMPUESTOT</td> }
+                                            else
+                                            {
+                                                <td></td>}
+
+
+                                            @if (Model.D.DOCUMENTOPSTR[i].IVA != null)
+                                            {
+                                                <td>@Model.D.DOCUMENTOPSTR[i].IVA</td> }
+                                            else
+                                            {
+                                                <td></td>}
+
+
+                                            @for (int y = 0; y < colsret.Count; y++)
+                                            {
+                                                <td>
+                                                    @{var _v = colsret[y]; }
+                                                    @{decimal imp = 0; try { imp = decimal.Parse(lstDrp.Where(p => p.POS == (i + 1) && p.WITHT == _v).FirstOrDefault().BIMPONIBLE.ToString()); } catch (Exception e) { }; string bim = formatoc.toShow(imp, deci);}
+                                                    @bim
+                                                </td>
+                                                <td>
+                                                    @{decimal imp2 = 0; try { imp2 = decimal.Parse(lstDrp.Where(p => p.POS == (i + 1) && p.WITHT == _v).FirstOrDefault().IMPORTE_RET.ToString()); } catch (Exception e) { }; string bim2 = formatoc.toShow(imp2, deci);}
+                                                    @bim2
+                                                </td>
+                                            }
+                                            <td> @Model.D.DOCUMENTOPSTR[i].TOTAL</td>
+
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th>Total: </th>
+                                    <th>@ViewBag.totalt</th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                        @*aQUI PONES LA TABLA*@
+
                     </div>
                     <div style="text-align:right">
                         <label id="lbl_status">Total:</label>
@@ -1023,7 +1068,7 @@
 
         @*MGC 14-11-2018 Cadena de autorización----------------------------------------------------------------------------->*@
         <div class="row" style="font-size:12px;">
-            <div class="col s12">
+            <div class="col s12" style="padding:0px">
                 <div class="card-panel">
                     <div class="row" style="margin-bottom:0">
                         <h5>Cadena de Autorizadores</h5>
@@ -1267,6 +1312,9 @@
 
                 }
 
+
+
+
                 //MGC 18-10-2018 Firma del usuario -------------------------------------------------->
                 //Validar la firma del usuario
                 //$("#form_procesa").submit(function (e) {
@@ -1361,6 +1409,16 @@
 
     }
     @*MGC 04-10-2018 Botones para acciones WF<--*@
+
+    @*//MGC 26-11-2018 Visualizar caratula --------------------------------------------------->*@
+    <script>
+        function fcaratula(elem) {
+            var id = $(elem).data('assigned-id'); //Obtiene el id de la solicitud
+
+
+        }
+    </script>
+    @*//MGC 26-11-2018 Visualizar caratula ---------------------------------------------------<*@
 
     <input id="num_doc_send" type="text" value="@Model.D.NUM_DOC" style="display:none" />
 </div>

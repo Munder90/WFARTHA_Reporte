@@ -17,17 +17,24 @@
     <Property Name="VALUE" Type="nvarchar" MaxLength="255" />
     <Property Name="ACTIVO" Type="bit" Nullable="false" />
   </EntityType>
+  <EntityType Name="BANCOS">
+    <Key>
+      <PropertyRef Name="BANKS" />
+      <PropertyRef Name="BANKL" />
+    </Key>
+    <Property Name="BANKS" Type="nchar" MaxLength="3" Nullable="false" />
+    <Property Name="BANKL" Type="nchar" MaxLength="15" Nullable="false" />
+    <Property Name="BANKA" Type="nvarchar" MaxLength="60" />
+  </EntityType>
   <!--Errores durante la generación:
-advertencia 6013: La tabla o vista 'PAGOS.dbo.'CADENAS M$'' no tiene definida una clave principal y no es posible inferir ninguna clave principal válida. Esta tabla o vista se ha excluido. Para usar la entidad, necesitará revisar el esquema, agregar las claves correctas y quitar sus comentarios.
-        <EntityType Name="'CADENAS M$'">
+advertencia 6013: La tabla o vista 'PAGOS300I.dbo.CADENAS M2$' no tiene definida una clave principal y no es posible inferir ninguna clave principal válida. Esta tabla o vista se ha excluido. Para usar la entidad, necesitará revisar el esquema, agregar las claves correctas y quitar sus comentarios.
+        <EntityType Name="CADENAS M2$">
           <Property Name="VERSION" Type="float" />
           <Property Name="USUARIOC_ID" Type="nvarchar" MaxLength="255" />
           <Property Name="ID_RUTA_AGENTE" Type="nchar" MaxLength="10" />
           <Property Name="USUARIOA_ID" Type="nvarchar" MaxLength="255" />
           <Property Name="A1" Type="nvarchar" MaxLength="255" />
           <Property Name="A2" Type="nvarchar" MaxLength="255" />
-          <Property Name="F7" Type="nvarchar" MaxLength="255" />
-          <Property Name="F8" Type="nvarchar" MaxLength="255" />
         </EntityType>-->
   <EntityType Name="CAMPOS">
     <Key>
@@ -92,6 +99,17 @@ advertencia 6013: La tabla o vista 'PAGOS.dbo.'CADENAS M$'' no tiene definida un
     <Property Name="CUENTA" Type="nchar" MaxLength="10" />
     <Property Name="ACTIVO" Type="bit" Nullable="false" />
   </EntityType>
+  <!--Errores durante la generación:
+advertencia 6013: La tabla o vista 'PAGOS300I.dbo.CONCEPTO$' no tiene definida una clave principal y no es posible inferir ninguna clave principal válida. Esta tabla o vista se ha excluido. Para usar la entidad, necesitará revisar el esquema, agregar las claves correctas y quitar sus comentarios.
+        <EntityType Name="CONCEPTO$">
+          <Property Name="ID_CONCEPTO" Type="nchar" MaxLength="10" />
+          <Property Name="DESC_CONCEPTO" Type="nvarchar" MaxLength="80" />
+          <Property Name="TIPO_CONCEPTO" Type="nchar" MaxLength="2" />
+          <Property Name="TIPO_IMPUTACION" Type="nchar" MaxLength="1" />
+          <Property Name="ID_PRESUPUESTO" Type="nchar" MaxLength="2" />
+          <Property Name="TIPO_PRESUPUESTO" Type="nchar" MaxLength="1" />
+          <Property Name="CUENTA" Type="nchar" MaxLength="10" />
+        </EntityType>-->
   <EntityType Name="CONDICIONES_PAGO">
     <Key>
       <PropertyRef Name="COND_PAGO" />
@@ -209,6 +227,13 @@ advertencia 6013: La tabla o vista 'PAGOS.dbo.'CADENAS M$'' no tiene definida un
     <Property Name="ID_BUKRS" Type="nchar" MaxLength="4" Nullable="false" />
     <Property Name="COND_PAGO" Type="nchar" MaxLength="4" />
   </EntityType>
+  <!--Errores durante la generación:
+advertencia 6013: La tabla o vista 'PAGOS300I.dbo.DET_PROVEEDOR$' no tiene definida una clave principal y no es posible inferir ninguna clave principal válida. Esta tabla o vista se ha excluido. Para usar la entidad, necesitará revisar el esquema, agregar las claves correctas y quitar sus comentarios.
+        <EntityType Name="DET_PROVEEDOR$">
+          <Property Name="ID_LIFNR" Type="nchar" MaxLength="10" />
+          <Property Name="ID_BURKS" Type="nchar" MaxLength="4" />
+          <Property Name="COND_PAGO" Type="nchar" MaxLength="4" />
+        </EntityType>-->
   <EntityType Name="DET_PROYECTO">
     <Key>
       <PropertyRef Name="ID_PSPNR" />
@@ -242,12 +267,6 @@ advertencia 6013: La tabla o vista 'PAGOS.dbo.'CADENAS M$'' no tiene definida un
     <Property Name="ID_USER" Type="nvarchar" MaxLength="16" Nullable="false" />
     <Property Name="TIPOPRE" Type="varchar" MaxLength="1" Nullable="false" />
   </EntityType>
-  <!--Errores durante la generación:
-advertencia 6013: La tabla o vista 'PAGOS.dbo.DETK$' no tiene definida una clave principal y no es posible inferir ninguna clave principal válida. Esta tabla o vista se ha excluido. Para usar la entidad, necesitará revisar el esquema, agregar las claves correctas y quitar sus comentarios.
-        <EntityType Name="DETK$">
-          <Property Name="BUKRS" Type="nchar" MaxLength="4" />
-          <Property Name="SAKNR" Type="nchar" MaxLength="10" />
-        </EntityType>-->
   <EntityType Name="DOCUMENTO">
     <Key>
       <PropertyRef Name="NUM_DOC" />
@@ -452,50 +471,155 @@ advertencia 6013: La tabla o vista 'PAGOS.dbo.DETK$' no tiene definida una clave
     <Property Name="UUID" Type="nvarchar" MaxLength="36" Nullable="false" />
     <Property Name="ESTATUS" Type="bit" Nullable="false" />
   </EntityType>
-  <EntityType Name="EKKO_DUMM">
+  <EntityType Name="EKBE">
+    <Key>
+      <PropertyRef Name="EBELN" />
+      <PropertyRef Name="EBELP" />
+      <PropertyRef Name="ZEKKN" />
+      <PropertyRef Name="VGABE" />
+      <PropertyRef Name="GJAHR" />
+      <PropertyRef Name="BELNR" />
+      <PropertyRef Name="BUZEI" />
+    </Key>
+    <Property Name="EBELN" Type="nchar" MaxLength="10" Nullable="false" />
+    <Property Name="EBELP" Type="numeric" Precision="5" Scale="0" Nullable="false" />
+    <Property Name="ZEKKN" Type="numeric" Precision="2" Scale="0" Nullable="false" />
+    <Property Name="VGABE" Type="nchar" MaxLength="1" Nullable="false" />
+    <Property Name="GJAHR" Type="numeric" Precision="4" Scale="0" Nullable="false" />
+    <Property Name="BELNR" Type="nchar" MaxLength="10" Nullable="false" />
+    <Property Name="BUZEI" Type="numeric" Precision="4" Scale="0" Nullable="false" />
+    <Property Name="BEWTP" Type="nchar" MaxLength="1" />
+    <Property Name="WAERS" Type="nchar" MaxLength="3" />
+    <Property Name="DMBTR" Type="decimal" Precision="13" Scale="2" />
+    <Property Name="WRBTR" Type="decimal" Precision="13" Scale="2" />
+    <Property Name="BUDAT" Type="date" />
+    <Property Name="XBLNR" Type="nchar" MaxLength="16" />
+  </EntityType>
+  <EntityType Name="EKBE_DUMMY">
+    <Key>
+      <PropertyRef Name="EBELN" />
+      <PropertyRef Name="EBELP" />
+      <PropertyRef Name="ZEKKN" />
+      <PropertyRef Name="VGABE" />
+      <PropertyRef Name="GJAHR" />
+      <PropertyRef Name="BELNR" />
+      <PropertyRef Name="BUZEI" />
+    </Key>
+    <Property Name="EBELN" Type="nchar" MaxLength="10" Nullable="false" />
+    <Property Name="EBELP" Type="numeric" Precision="5" Scale="0" Nullable="false" />
+    <Property Name="ZEKKN" Type="numeric" Precision="2" Scale="0" Nullable="false" />
+    <Property Name="VGABE" Type="nchar" MaxLength="1" Nullable="false" />
+    <Property Name="GJAHR" Type="numeric" Precision="4" Scale="0" Nullable="false" />
+    <Property Name="BELNR" Type="nchar" MaxLength="10" Nullable="false" />
+    <Property Name="BUZEI" Type="numeric" Precision="4" Scale="0" Nullable="false" />
+    <Property Name="BEWTP" Type="nchar" MaxLength="1" />
+    <Property Name="WAERS" Type="nchar" MaxLength="3" />
+    <Property Name="DMBTR" Type="decimal" Precision="13" Scale="2" />
+    <Property Name="WRBTR" Type="decimal" Precision="13" Scale="2" />
+    <Property Name="BUDAT" Type="date" />
+    <Property Name="XBLNR" Type="nchar" MaxLength="16" />
+  </EntityType>
+  <EntityType Name="EKKO">
     <Key>
       <PropertyRef Name="EBELN" />
     </Key>
     <Property Name="EBELN" Type="nchar" MaxLength="10" Nullable="false" />
-    <Property Name="LIFNR" Type="nchar" MaxLength="10" />
-    <Property Name="BEDAT" Type="nchar" MaxLength="8" />
     <Property Name="BUKRS" Type="nchar" MaxLength="4" />
-    <Property Name="ZTERM" Type="nchar" MaxLength="4" />
-    <Property Name="EKORG" Type="nchar" MaxLength="4" />
-    <Property Name="WAERS" Type="nchar" MaxLength="5" />
-    <Property Name="WKURS" Type="decimal" Precision="13" Scale="5" />
-    <Property Name="RETPC" Type="decimal" Precision="13" Scale="5" />
-    <Property Name="DPPCT" Type="decimal" Precision="13" Scale="5" />
-    <Property Name="DPAMT" Type="decimal" Precision="13" Scale="5" />
-    <Property Name="FONDOG" Type="decimal" Precision="13" Scale="2" />
-    <Property Name="RET_FONDOG" Type="decimal" Precision="13" Scale="2" />
-    <Property Name="RES_FONDOG" Type="decimal" Precision="13" Scale="2" />
-    <Property Name="TOTAL" Type="decimal" Precision="13" Scale="2" />
-    <Property Name="POR_ANTICIPO" Type="decimal" Precision="13" Scale="2" />
-    <Property Name="POR_FONDO" Type="decimal" Precision="13" Scale="2" />
+    <Property Name="BSART" Type="nchar" MaxLength="4" />
+    <Property Name="LIFNR" Type="nchar" MaxLength="10" />
+    <Property Name="RETTP" Type="nchar" MaxLength="1" />
+    <Property Name="RETPC" Type="numeric" Precision="5" Scale="0" />
+    <Property Name="DPTYP" Type="nchar" MaxLength="4" />
+    <Property Name="DPPCT" Type="decimal" Precision="5" Scale="2" />
+    <Property Name="DPAMT" Type="decimal" Precision="11" Scale="2" />
+    <Property Name="ESTATUS" Type="nchar" MaxLength="2" />
   </EntityType>
-  <EntityType Name="EKPO_DUMM">
+  <EntityType Name="EKKO_DUMMY">
+    <Key>
+      <PropertyRef Name="EBELN" />
+    </Key>
+    <Property Name="EBELN" Type="nchar" MaxLength="10" Nullable="false" />
+    <Property Name="BUKRS" Type="nchar" MaxLength="4" />
+    <Property Name="BSART" Type="nchar" MaxLength="4" />
+    <Property Name="LIFNR" Type="nchar" MaxLength="10" />
+    <Property Name="RETTP" Type="nchar" MaxLength="1" />
+    <Property Name="RETPC" Type="numeric" Precision="5" Scale="0" />
+    <Property Name="DPTYP" Type="nchar" MaxLength="4" />
+    <Property Name="DPPCT" Type="decimal" Precision="5" Scale="2" />
+    <Property Name="DPAMT" Type="decimal" Precision="11" Scale="2" />
+    <Property Name="ESTATUS" Type="nchar" MaxLength="2" />
+  </EntityType>
+  <EntityType Name="EKPO">
     <Key>
       <PropertyRef Name="EBELN" />
       <PropertyRef Name="EBELP" />
     </Key>
     <Property Name="EBELN" Type="nchar" MaxLength="10" Nullable="false" />
     <Property Name="EBELP" Type="numeric" Precision="5" Scale="0" Nullable="false" />
-    <Property Name="TXZ0" Type="nvarchar" MaxLength="40" />
+    <Property Name="BEDAT" Type="date" />
     <Property Name="MATNR" Type="nvarchar" MaxLength="40" />
-    <Property Name="MENGE" Type="decimal" Precision="13" Scale="3" />
+    <Property Name="TXZ01" Type="nvarchar" MaxLength="40" />
+    <Property Name="MATKL" Type="nvarchar" MaxLength="9" />
+    <Property Name="WERKS" Type="nvarchar" MaxLength="4" />
+    <Property Name="LGORT" Type="nvarchar" MaxLength="4" />
+    <Property Name="MENGE" Type="decimal" Precision="13" Scale="2" />
     <Property Name="MEINS" Type="nvarchar" MaxLength="3" />
-    <Property Name="BPUMZ" Type="decimal" Precision="5" Scale="0" />
-    <Property Name="BPUMN" Type="decimal" Precision="5" Scale="0" />
-    <Property Name="NETWR" Type="decimal" Precision="15" Scale="2" />
-    <Property Name="BRTWR" Type="decimal" Precision="13" Scale="2" />
-    <Property Name="H_QUANTITY" Type="decimal" Precision="13" Scale="3" />
-    <Property Name="H_VAL_LOCCUR" Type="decimal" Precision="13" Scale="2" />
-    <Property Name="H_VAL_FORCUR" Type="decimal" Precision="13" Scale="2" />
-    <Property Name="H_VAL_CURRENCY" Type="nvarchar" MaxLength="5" />
-    <Property Name="H_ANT_PAG" Type="decimal" Precision="13" Scale="2" />
-    <Property Name="H_ANT_SOL" Type="decimal" Precision="13" Scale="2" />
-    <Property Name="H_ANT_AMORT" Type="decimal" Precision="13" Scale="2" />
+    <Property Name="NETPR" Type="decimal" Precision="13" Scale="2" />
+    <Property Name="WAERS" Type="nvarchar" MaxLength="5" />
+    <Property Name="PEINH" Type="numeric" Precision="5" Scale="0" />
+    <Property Name="MENGE_DEL" Type="decimal" Precision="13" Scale="2" />
+    <Property Name="NETPR_DEL" Type="decimal" Precision="13" Scale="2" />
+    <Property Name="MENGE_BIL" Type="decimal" Precision="13" Scale="2" />
+    <Property Name="NETPR_BIL" Type="decimal" Precision="13" Scale="2" />
+    <Property Name="MWSKZ" Type="nchar" MaxLength="2" />
+    <Property Name="SAKTO" Type="nvarchar" MaxLength="10" />
+    <Property Name="KNTTP" Type="nchar" MaxLength="1" />
+    <Property Name="PS_PSP_PNR" Type="nvarchar" MaxLength="30" />
+    <Property Name="KOSTL" Type="nvarchar" MaxLength="10" />
+  </EntityType>
+  <EntityType Name="EKPO_DUMMY">
+    <Key>
+      <PropertyRef Name="EBELN" />
+      <PropertyRef Name="EBELP" />
+    </Key>
+    <Property Name="EBELN" Type="nchar" MaxLength="10" Nullable="false" />
+    <Property Name="EBELP" Type="numeric" Precision="5" Scale="0" Nullable="false" />
+    <Property Name="BEDAT" Type="date" />
+    <Property Name="MATNR" Type="nvarchar" MaxLength="40" />
+    <Property Name="TXZ01" Type="nvarchar" MaxLength="40" />
+    <Property Name="MATKL" Type="nvarchar" MaxLength="9" />
+    <Property Name="WERKS" Type="nvarchar" MaxLength="4" />
+    <Property Name="LGORT" Type="nvarchar" MaxLength="4" />
+    <Property Name="MENGE" Type="decimal" Precision="13" Scale="2" />
+    <Property Name="MEINS" Type="nvarchar" MaxLength="3" />
+    <Property Name="NETPR" Type="decimal" Precision="13" Scale="2" />
+    <Property Name="WAERS" Type="nvarchar" MaxLength="5" />
+    <Property Name="PEINH" Type="numeric" Precision="5" Scale="0" />
+    <Property Name="MENGE_DEL" Type="decimal" Precision="13" Scale="2" />
+    <Property Name="NETPR_DEL" Type="decimal" Precision="13" Scale="2" />
+    <Property Name="MENGE_BIL" Type="decimal" Precision="13" Scale="2" />
+    <Property Name="NETPR_BIL" Type="decimal" Precision="13" Scale="2" />
+    <Property Name="MWSKZ" Type="nchar" MaxLength="2" />
+  </EntityType>
+  <EntityType Name="ESTATUS_PAGO">
+    <Key>
+      <PropertyRef Name="BELNR" />
+      <PropertyRef Name="GJAHR" />
+      <PropertyRef Name="BUKRS" />
+      <PropertyRef Name="TIPO" />
+    </Key>
+    <Property Name="BELNR" Type="nchar" MaxLength="10" Nullable="false" />
+    <Property Name="GJAHR" Type="nchar" MaxLength="4" Nullable="false" />
+    <Property Name="BUKRS" Type="nchar" MaxLength="4" Nullable="false" />
+    <Property Name="BELNR_P" Type="nchar" MaxLength="10" Nullable="false" />
+    <Property Name="GJAHR_P" Type="nchar" MaxLength="4" Nullable="false" />
+    <Property Name="BUKRS_P" Type="nchar" MaxLength="4" Nullable="false" />
+    <Property Name="BUZEI" Type="nchar" MaxLength="3" />
+    <Property Name="LIFNR" Type="nchar" MaxLength="10" />
+    <Property Name="TIPO" Type="nchar" MaxLength="2" Nullable="false" />
+    <Property Name="BLDAT_P" Type="nchar" MaxLength="10" />
+    <Property Name="WRBTR_P" Type="numeric" Precision="18" Scale="2" />
+    <Property Name="WAERS" Type="nchar" MaxLength="5" />
   </EntityType>
   <EntityType Name="FLUJO">
     <Key>
@@ -557,7 +681,7 @@ advertencia 6013: La tabla o vista 'PAGOS.dbo.DETK$' no tiene definida una clave
     <Property Name="MAIL" Type="bit" />
   </EntityType>
   <!--Errores durante la generación:
-advertencia 6002: La tabla o vista 'PAGOS.dbo.IIMPUESTO' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
+advertencia 6002: La tabla o vista 'PAGOS300I.dbo.IIMPUESTO' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
   <EntityType Name="IIMPUESTO">
     <Key>
       <PropertyRef Name="MWSKZ" />
@@ -663,12 +787,33 @@ advertencia 6002: La tabla o vista 'PAGOS.dbo.IIMPUESTO' no tiene definida ningu
     <Property Name="STCD2" Type="nchar" MaxLength="11" />
     <Property Name="ACTIVO" Type="bit" />
   </EntityType>
+  <EntityType Name="PROVEEDOR_BANCO">
+    <Key>
+      <PropertyRef Name="LIFNR" />
+      <PropertyRef Name="BKVID" />
+    </Key>
+    <Property Name="LIFNR" Type="nchar" MaxLength="10" Nullable="false" />
+    <Property Name="BANKS" Type="nchar" MaxLength="3" />
+    <Property Name="BANKL" Type="nchar" MaxLength="15" />
+    <Property Name="BANKN" Type="nchar" MaxLength="18" />
+    <Property Name="BKVID" Type="nchar" MaxLength="4" Nullable="false" />
+    <Property Name="KOINH" Type="nvarchar" MaxLength="60" />
+    <Property Name="BKEXT" Type="nchar" MaxLength="20" />
+  </EntityType>
+  <!--Errores durante la generación:
+advertencia 6013: La tabla o vista 'PAGOS300I.dbo.PROVEEDORES$' no tiene definida una clave principal y no es posible inferir ninguna clave principal válida. Esta tabla o vista se ha excluido. Para usar la entidad, necesitará revisar el esquema, agregar las claves correctas y quitar sus comentarios.
+        <EntityType Name="PROVEEDORES$">
+          <Property Name="LIFNR" Type="nchar" MaxLength="10" />
+          <Property Name="LAND1" Type="nchar" MaxLength="3" />
+          <Property Name="NAME1" Type="nchar" MaxLength="35" />
+          <Property Name="RFC" Type="nchar" MaxLength="16" />
+        </EntityType>-->
   <EntityType Name="PROYECTO">
     <Key>
       <PropertyRef Name="ID_PSPNR" />
     </Key>
     <Property Name="ID_PSPNR" Type="nvarchar" MaxLength="8" Nullable="false" />
-    <Property Name="NOMBRE" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="NOMBRE" Type="nvarchar" MaxLength="80" />
     <Property Name="ACTIVO" Type="bit" Nullable="false" />
   </EntityType>
   <EntityType Name="PUESTO">
@@ -686,6 +831,14 @@ advertencia 6002: La tabla o vista 'PAGOS.dbo.IIMPUESTO' no tiene definida ningu
     <Property Name="SPRAS_ID" Type="nchar" MaxLength="2" Nullable="false" />
     <Property Name="PUESTO_ID" Type="int" Nullable="false" />
     <Property Name="TXT50" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="RAMA_PEP">
+    <Key>
+      <PropertyRef Name="ID_RAMA" />
+      <PropertyRef Name="BUKRS" />
+    </Key>
+    <Property Name="ID_RAMA" Type="nchar" MaxLength="24" Nullable="false" />
+    <Property Name="BUKRS" Type="nchar" MaxLength="4" Nullable="false" />
   </EntityType>
   <EntityType Name="RANGO">
     <Key>
@@ -723,6 +876,14 @@ advertencia 6002: La tabla o vista 'PAGOS.dbo.IIMPUESTO' no tiene definida ningu
     <Property Name="WITHT" Type="nchar" MaxLength="2" Nullable="false" />
     <Property Name="WT_WITHCD" Type="nchar" MaxLength="2" Nullable="false" />
   </EntityType>
+  <!--Errores durante la generación:
+advertencia 6013: La tabla o vista 'PAGOS300I.dbo.RETENCION_PROV$' no tiene definida una clave principal y no es posible inferir ninguna clave principal válida. Esta tabla o vista se ha excluido. Para usar la entidad, necesitará revisar el esquema, agregar las claves correctas y quitar sus comentarios.
+        <EntityType Name="RETENCION_PROV$">
+          <Property Name="LIFNR" Type="nchar" MaxLength="10" />
+          <Property Name="BURKS" Type="nchar" MaxLength="4" />
+          <Property Name="WITH" Type="nchar" MaxLength="2" />
+          <Property Name="WT_WITHCD" Type="nchar" MaxLength="2" />
+        </EntityType>-->
   <EntityType Name="RETENCIONT">
     <Key>
       <PropertyRef Name="SPRAS_ID" />
@@ -769,10 +930,23 @@ advertencia 6002: La tabla o vista 'PAGOS.dbo.IIMPUESTO' no tiene definida ningu
     <Property Name="STCD1" Type="nchar" MaxLength="16" />
   </EntityType>
   <!--Errores durante la generación:
-advertencia 6013: La tabla o vista 'PAGOS.dbo.SOCIEDADRFC$' no tiene definida una clave principal y no es posible inferir ninguna clave principal válida. Esta tabla o vista se ha excluido. Para usar la entidad, necesitará revisar el esquema, agregar las claves correctas y quitar sus comentarios.
-        <EntityType Name="SOCIEDADRFC$">
+advertencia 6013: La tabla o vista 'PAGOS300I.dbo.SOCIEDAD$' no tiene definida una clave principal y no es posible inferir ninguna clave principal válida. Esta tabla o vista se ha excluido. Para usar la entidad, necesitará revisar el esquema, agregar las claves correctas y quitar sus comentarios.
+        <EntityType Name="SOCIEDAD$">
           <Property Name="BURKS" Type="nchar" MaxLength="4" />
-          <Property Name="STCD1" Type="nchar" MaxLength="16" />
+          <Property Name="BUTXT" Type="nvarchar" MaxLength="100" />
+          <Property Name="RFC" Type="nchar" MaxLength="16" />
+        </EntityType>-->
+  <!--Errores durante la generación:
+advertencia 6013: La tabla o vista 'PAGOS300I.dbo.SOCIEDADESP$' no tiene definida una clave principal y no es posible inferir ninguna clave principal válida. Esta tabla o vista se ha excluido. Para usar la entidad, necesitará revisar el esquema, agregar las claves correctas y quitar sus comentarios.
+        <EntityType Name="SOCIEDADESP$">
+          <Property Name="BURKS" Type="nchar" MaxLength="4" />
+          <Property Name="F2" Type="nvarchar" MaxLength="255" />
+        </EntityType>-->
+  <!--Errores durante la generación:
+advertencia 6013: La tabla o vista 'PAGOS300I.dbo.SOCIEDADESPP$' no tiene definida una clave principal y no es posible inferir ninguna clave principal válida. Esta tabla o vista se ha excluido. Para usar la entidad, necesitará revisar el esquema, agregar las claves correctas y quitar sus comentarios.
+        <EntityType Name="SOCIEDADESPP$">
+          <Property Name="BURKS" Type="nchar" MaxLength="4" />
+          <Property Name="BUTXT" Type="nvarchar" MaxLength="100" />
         </EntityType>-->
   <EntityType Name="SPRAS">
     <Key>
@@ -881,6 +1055,15 @@ advertencia 6013: La tabla o vista 'PAGOS.dbo.SOCIEDADRFC$' no tiene definida un
     <Property Name="BUNIT" Type="nchar" MaxLength="4" Nullable="false" />
     <Property Name="FIRMA" Type="nvarchar" MaxLength="50" />
   </EntityType>
+  <!--Errores durante la generación:
+advertencia 6013: La tabla o vista 'PAGOS300I.dbo.USUARIOS$' no tiene definida una clave principal y no es posible inferir ninguna clave principal válida. Esta tabla o vista se ha excluido. Para usar la entidad, necesitará revisar el esquema, agregar las claves correctas y quitar sus comentarios.
+        <EntityType Name="USUARIOS$">
+          <Property Name="ID_USUARIO" Type="nvarchar" MaxLength="16" />
+          <Property Name="NOMBRE" Type="nvarchar" MaxLength="50" />
+          <Property Name="APELLIDO_P" Type="nvarchar" MaxLength="50" />
+          <Property Name="APELLIDO_M" Type="nvarchar" MaxLength="50" />
+          <Property Name="EMAIL" Type="nvarchar" MaxLength="256" />
+        </EntityType>-->
   <EntityType Name="WARNING">
     <Key>
       <PropertyRef Name="PAGINA_ID" />
@@ -956,7 +1139,7 @@ advertencia 6013: La tabla o vista 'PAGOS.dbo.SOCIEDADRFC$' no tiene definida un
     <Property Name="FECHAC" Type="datetime" />
   </EntityType>
   <!--Errores durante la generación:
-advertencia 6002: La tabla o vista 'PAGOS.dbo.ASIGN_PROY_SOC' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
+advertencia 6002: La tabla o vista 'PAGOS300I.dbo.ASIGN_PROY_SOC' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
   <EntityType Name="ASIGN_PROY_SOC">
     <Key>
       <PropertyRef Name="ID_PSPNR" />
@@ -966,7 +1149,7 @@ advertencia 6002: La tabla o vista 'PAGOS.dbo.ASIGN_PROY_SOC' no tiene definida 
     <Property Name="ID_BUKRS" Type="nchar" MaxLength="4" Nullable="false" />
   </EntityType>
   <!--Errores durante la generación:
-advertencia 6002: La tabla o vista 'PAGOS.dbo.CARPETAV' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
+advertencia 6002: La tabla o vista 'PAGOS300I.dbo.CARPETAV' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
   <EntityType Name="CARPETAV">
     <Key>
       <PropertyRef Name="USUARIO_ID" />
@@ -979,7 +1162,7 @@ advertencia 6002: La tabla o vista 'PAGOS.dbo.CARPETAV' no tiene definida ningun
     <Property Name="ICON" Type="nvarchar" MaxLength="20" />
   </EntityType>
   <!--Errores durante la generación:
-advertencia 6002: La tabla o vista 'PAGOS.dbo.DET_APROBV' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
+advertencia 6002: La tabla o vista 'PAGOS300I.dbo.DET_APROBV' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
   <EntityType Name="DET_APROBV">
     <Key>
       <PropertyRef Name="VERSION" />
@@ -997,7 +1180,7 @@ advertencia 6002: La tabla o vista 'PAGOS.dbo.DET_APROBV' no tiene definida ning
     <Property Name="STEP_FASE" Type="int" Nullable="false" />
   </EntityType>
   <!--Errores durante la generación:
-advertencia 6002: La tabla o vista 'PAGOS.dbo.DET_PROVEEDORV' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
+advertencia 6002: La tabla o vista 'PAGOS300I.dbo.DET_PROVEEDORV' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
   <EntityType Name="DET_PROVEEDORV">
     <Key>
       <PropertyRef Name="ID_LIFNR" />
@@ -1008,7 +1191,7 @@ advertencia 6002: La tabla o vista 'PAGOS.dbo.DET_PROVEEDORV' no tiene definida 
     <Property Name="COND_PAGO" Type="nchar" MaxLength="4" />
   </EntityType>
   <!--Errores durante la generación:
-advertencia 6002: La tabla o vista 'PAGOS.dbo.DET_PROYECTO_DEC_V' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
+advertencia 6002: La tabla o vista 'PAGOS300I.dbo.DET_PROYECTO_DEC_V' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
   <EntityType Name="DET_PROYECTO_DEC_V">
     <Key>
       <PropertyRef Name="ID_PSPNR" />
@@ -1022,7 +1205,7 @@ advertencia 6002: La tabla o vista 'PAGOS.dbo.DET_PROYECTO_DEC_V' no tiene defin
     <Property Name="BUTXT" Type="nvarchar" MaxLength="107" Nullable="false" />
   </EntityType>
   <!--Errores durante la generación:
-advertencia 6002: La tabla o vista 'PAGOS.dbo.DET_PROYECTOV' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
+advertencia 6002: La tabla o vista 'PAGOS300I.dbo.DET_PROYECTOV' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
   <EntityType Name="DET_PROYECTOV">
     <Key>
       <PropertyRef Name="ID_PSPNR" />
@@ -1032,7 +1215,7 @@ advertencia 6002: La tabla o vista 'PAGOS.dbo.DET_PROYECTOV' no tiene definida n
     <Property Name="ID_BUKRS" Type="nchar" MaxLength="4" Nullable="false" />
   </EntityType>
   <!--Errores durante la generación:
-advertencia 6002: La tabla o vista 'PAGOS.dbo.DET_TIPOPRESUPUESTOV' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
+advertencia 6002: La tabla o vista 'PAGOS300I.dbo.DET_TIPOPRESUPUESTOV' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
   <EntityType Name="DET_TIPOPRESUPUESTOV">
     <Key>
       <PropertyRef Name="BUKRS" />
@@ -1049,7 +1232,7 @@ advertencia 6002: La tabla o vista 'PAGOS.dbo.DET_TIPOPRESUPUESTOV' no tiene def
     <Property Name="DESC" Type="nvarchar" MaxLength="30" />
   </EntityType>
   <!--Errores durante la generación:
-advertencia 6002: La tabla o vista 'PAGOS.dbo.DOCUMENTOV' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
+advertencia 6002: La tabla o vista 'PAGOS300I.dbo.DOCUMENTOV' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
   <EntityType Name="DOCUMENTOV">
     <Key>
       <PropertyRef Name="POS" />
@@ -1110,7 +1293,7 @@ advertencia 6002: La tabla o vista 'PAGOS.dbo.DOCUMENTOV' no tiene definida ning
     <Property Name="EXPR2" Type="nchar" MaxLength="1" />
   </EntityType>
   <!--Errores durante la generación:
-advertencia 6002: La tabla o vista 'PAGOS.dbo.PAGINAV' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
+advertencia 6002: La tabla o vista 'PAGOS300I.dbo.PAGINAV' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
   <EntityType Name="PAGINAV">
     <Key>
       <PropertyRef Name="ID" />
@@ -1131,7 +1314,7 @@ advertencia 6002: La tabla o vista 'PAGOS.dbo.PAGINAV' no tiene definida ninguna
     <Property Name="USUARIO_SPRAS" Type="nchar" MaxLength="2" Nullable="false" />
   </EntityType>
   <!--Errores durante la generación:
-advertencia 6002: La tabla o vista 'PAGOS.dbo.WARNINGV' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
+advertencia 6002: La tabla o vista 'PAGOS300I.dbo.WARNINGV' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
   <EntityType Name="WARNINGV">
     <Key>
       <PropertyRef Name="PAGINA_ID" />
@@ -1534,18 +1717,6 @@ advertencia 6002: La tabla o vista 'PAGOS.dbo.WARNINGV' no tiene definida ningun
       </Principal>
       <Dependent Role="DOCUMENTOUUID">
         <PropertyRef Name="NUM_DOC" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_EKPO_DUMM_EKKO_DUMM">
-    <End Role="EKKO_DUMM" Type="Self.EKKO_DUMM" Multiplicity="1" />
-    <End Role="EKPO_DUMM" Type="Self.EKPO_DUMM" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="EKKO_DUMM">
-        <PropertyRef Name="EBELN" />
-      </Principal>
-      <Dependent Role="EKPO_DUMM">
-        <PropertyRef Name="EBELN" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -2129,9 +2300,25 @@ advertencia 6002: La tabla o vista 'PAGOS.dbo.WARNINGV' no tiene definida ningun
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Function Name="SP_CABECERA" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="NUM_DOC" Type="numeric" Mode="In" />
+  </Function>
+  <Function Name="SP_DETALLE" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="NUM_DOC" Type="numeric" Mode="In" />
+  </Function>
+  <Function Name="SP_FIRMAS" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="NUM_DOC" Type="numeric" Mode="In" />
+  </Function>
+  <Function Name="SP_REPORTESOLS" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="NUM_DOC" Type="numeric" Mode="In" />
+    <Parameter Name="BUKRS" Type="nchar" Mode="In" />
+    <Parameter Name="USER" Type="nvarchar" Mode="In" />
+    <Parameter Name="num" Type="int" Mode="In" />
+  </Function>
   <EntityContainer Name="WFARTHAModelStoreContainer">
     <EntitySet Name="ACCION" EntityType="Self.ACCION" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="APPSETTING" EntityType="Self.APPSETTING" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="BANCOS" EntityType="Self.BANCOS" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="CAMPOS" EntityType="Self.CAMPOS" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="CARPETA" EntityType="Self.CARPETA" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="CARPETAT" EntityType="Self.CARPETAT" Schema="dbo" store:Type="Tables" />
@@ -2162,8 +2349,13 @@ advertencia 6002: La tabla o vista 'PAGOS.dbo.WARNINGV' no tiene definida ningun
     <EntitySet Name="DOCUMENTORP" EntityType="Self.DOCUMENTORP" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="DOCUMENTOSAP" EntityType="Self.DOCUMENTOSAP" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="DOCUMENTOUUID" EntityType="Self.DOCUMENTOUUID" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="EKKO_DUMM" EntityType="Self.EKKO_DUMM" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="EKPO_DUMM" EntityType="Self.EKPO_DUMM" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="EKBE" EntityType="Self.EKBE" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="EKBE_DUMMY" EntityType="Self.EKBE_DUMMY" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="EKKO" EntityType="Self.EKKO" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="EKKO_DUMMY" EntityType="Self.EKKO_DUMMY" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="EKPO" EntityType="Self.EKPO" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="EKPO_DUMMY" EntityType="Self.EKPO_DUMMY" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ESTATUS_PAGO" EntityType="Self.ESTATUS_PAGO" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="FLUJO" EntityType="Self.FLUJO" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="FORMATO" EntityType="Self.FORMATO" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="FORO" EntityType="Self.FORO" Schema="dbo" store:Type="Tables" />
@@ -2177,9 +2369,11 @@ advertencia 6002: La tabla o vista 'PAGOS.dbo.WARNINGV' no tiene definida ningun
     <EntitySet Name="PERMISO_PAGINA" EntityType="Self.PERMISO_PAGINA" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="POSICION" EntityType="Self.POSICION" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="PROVEEDOR" EntityType="Self.PROVEEDOR" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="PROVEEDOR_BANCO" EntityType="Self.PROVEEDOR_BANCO" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="PROYECTO" EntityType="Self.PROYECTO" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="PUESTO" EntityType="Self.PUESTO" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="PUESTOT" EntityType="Self.PUESTOT" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="RAMA_PEP" EntityType="Self.RAMA_PEP" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="RANGO" EntityType="Self.RANGO" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="RETENCION" EntityType="Self.RETENCION" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="RETENCION_PROV" EntityType="Self.RETENCION_PROV" Schema="dbo" store:Type="Tables" />
@@ -2476,10 +2670,6 @@ advertencia 6002: La tabla o vista 'PAGOS.dbo.WARNINGV' no tiene definida ningun
     <AssociationSet Name="FK_DOCUMENTOUUID_DOCUMENTO" Association="Self.FK_DOCUMENTOUUID_DOCUMENTO">
       <End Role="DOCUMENTO" EntitySet="DOCUMENTO" />
       <End Role="DOCUMENTOUUID" EntitySet="DOCUMENTOUUID" />
-    </AssociationSet>
-    <AssociationSet Name="FK_EKPO_DUMM_EKKO_DUMM" Association="Self.FK_EKPO_DUMM_EKKO_DUMM">
-      <End Role="EKKO_DUMM" EntitySet="EKKO_DUMM" />
-      <End Role="EKPO_DUMM" EntitySet="EKPO_DUMM" />
     </AssociationSet>
     <AssociationSet Name="FK_FLUJO_DOCUMENTO" Association="Self.FK_FLUJO_DOCUMENTO">
       <End Role="DOCUMENTO" EntitySet="DOCUMENTO" />

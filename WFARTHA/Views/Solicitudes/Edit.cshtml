@@ -66,24 +66,24 @@
 <input id="pacc" name="pacc" type="hidden" value="@ViewBag.pacc" />
 <div class="row" style="margin-bottom:0">
 
-    @*@{WFARTHA.Entities.USUARIO us = ViewBag.usuario;
+    @{WFARTHA.Entities.USUARIO us = ViewBag.usuario;
 
-            <div class="col s12 m3 l2">
-                <div class="row" style="margin-bottom:0">
-                    <div class="input-field col s12">
-                        @Html.EditorFor(model => model.USUARIOC_ID, "Usuario", new { htmlAttributes = new { @disabled = "disabled", @Value = us.ID, @id = "txt_user" } })
-                        @Html.LabelFor(model => model.USUARIOC_ID, "Usuario", new { @id = "lbl_userid" })
-                    </div>
+        <div class="col s12 m3 l2">
+            <div class="row" style="margin-bottom:0">
+                <div class="input-field col s12">
+                    @Html.EditorFor(model => model.USUARIOC_ID, "Usuario", new { htmlAttributes = new { @disabled = "disabled", @Value = us.ID, @id = "txt_user" } })
+                    @Html.LabelFor(model => model.USUARIOC_ID, "Usuario", new { @id = "lbl_userid" })
                 </div>
             </div>
-            <div class="col s12 m4 l2">
-                <div class="input-field col s6">
-                    <input type="text" id="txt_status" value="Nuevo" disabled="disabled" />
-                    <label for="txt_status" id="lbl_status">Estatus</label>
-                </div>
+        </div>
+        <div class="col s12 m4 l2">
+            <div class="input-field col s6">
+                <input type="text" id="txt_status" value="Nuevo" disabled="disabled" />
+                <label for="txt_status" id="lbl_status">Estatus</label>
             </div>
-        }*@
-    
+        </div>
+    }
+
     <style>
         div.dataTables_wrapper {
             margin: 0 auto;
@@ -160,17 +160,16 @@
         }
     </style>
 
-    <div class="col s12 right-align">
+    <div class="col s8 right-align">
         <a href="@Url.Action("Index", "Home" )" class="btn btn-small">Cancelar</a>
         <a id="btn_guardarh" class="btn btn-small">Enviar</a>
-    </div>   
-    <div class="col s7" style="display:inline;">
-        @*FRT 02112018 Agregar titulos*@
-        <div>
-            <h5 id="head_cabecera" style="display:inline-block">@ViewBag.pid - </h5>
-            <h5 id="head_cabecera" style="display:inline-block">@ViewBag.PrSl</h5>
+    </div>
+    <div class="right-align">
+        <br />
+        <br />
+        <h5 id="head_cabecera" style="display:inline-block">@ViewBag.pid - </h5>
+        <h5 id="head_cabecera" style="display:inline-block">@ViewBag.PrSl</h5>
 
-        </div>
     </div>
     <div class="div_bottom">
         <hr class="hr_bw" />
@@ -182,9 +181,9 @@
     <div class="col s12">
         <ul class="tabs" id="tabs">
             <li class="tab col s2 tabs_menu"><a id="tab_enc" href="#Encabezado_cont" class="">Encabezado</a></li>
-            <li class="tab col s3 tabs_menu"><a id="tab_con" class="tabDet" href="#Contable_cont">Detalle</a></li>
+            <li class="tab col s3 tabs_menu"><a id="tab_con" href="#Contable_cont">Detalle</a></li>
             <li class="tab col s3 tabs_menu"><a id="tab_sop" href="#Informacion_cont">Autorización</a></li>
-            <li class="tab col s3 tabs_menu"><a id="tab_sop" class="" href="#Informacion_sap">Información SAP</a></li>
+            <li class="tab col s3 tabs_menu"><a id="tab_sop" href="#Informacion_sap">Información SAP</a></li>
         </ul>
     </div>
 </div>
@@ -476,7 +475,7 @@
                             </div>
                         </div>
                     </div>
-                    @*<div class="col s12">*@
+                    <div class="col s12">
                         <div class="card-panel">
                             <div id="file_facturat" class="file-field input-field" style="display:none">
                                 <div class="btn">
@@ -578,7 +577,7 @@
                                 </table>
                             </div>
                         </div>
-                    @*</div>*@
+                    </div>
                 </div>
             </div>
         </div>
@@ -603,9 +602,8 @@
                                 <a class="btn"><i class="material-icons left">add</i><span id="addRowInfo">Registros Add</span></a>
                                 <a class="btn"><i class="material-icons left">clear</i><span id="delRowInfo">Registro Del</span></a>
                             </div>
-                            <div style="overflow:auto;">
-                                <table class="table display mdl-data-table striped" id="table_info" style="width:100%;">
-                                </table>
+                            <div>
+                                <table class="table display mdl-data-table striped" id="table_info" style="width:100%;"></table>
                             </div>
                             <table class="table display mdl-data-table striped" id="table_infoh" style="width:100%; display:none">
                                 <thead>
@@ -865,7 +863,7 @@
 
             @*MGC 14-11-2018 Cadena de autorización----------------------------------------------------------------------------->*@
             <div class="row" style="font-size:12px;">
-                <div class="col s12">
+                <div class="col s12" style="padding:0px">
                     <div class="card-panel">
                         <div class="row" style="margin-bottom:0">
                             <h5>Cadena de Autorizadores</h5>

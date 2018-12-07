@@ -292,6 +292,12 @@ namespace WFARTHA.Controllers
 
             //FRT END 
 
+
+
+
+
+
+
             var monedal = db.MONEDAs.Where(m => m.ACTIVO == true).Select(m => new { m.WAERS, TEXT = m.WAERS + " - " + m.LTEXT }).ToList();
 
             var impuestol = db.IMPUESTOes.Where(i => i.ACTIVO == true).Select(i => new { i.MWSKZ });
@@ -349,7 +355,39 @@ namespace WFARTHA.Controllers
             List<DOCUMENTOR_MOD> retlt = new List<DOCUMENTOR_MOD>();
 
             retl = db.DOCUMENTORs.Where(x => x.NUM_DOC == id).ToList();
-                        
+
+            //retlt = (from r in retl
+            //         join rt in db.RETENCIONTs
+            //         on r.WITHT equals rt.WITHT
+            //         into jj
+            //         from rt in jj.DefaultIfEmpty()
+            //         where rt.SPRAS_ID.Equals("ES")
+            //         select new DOCUMENTOR_MOD
+            //         {
+            //             WITHT = r.WITHT,
+            //             DESC = rt.TXT50 == null ? String.Empty : "",
+            //             WT_WITHCD = r.WT_WITHCD,
+            //             BIMPONIBLE = r.BIMPONIBLE,
+            //             IMPORTE_RET = r.IMPORTE_RET
+
+            //         }).ToList();
+
+            //List<DOCUMENTOR_MOD> _relt = new List<DOCUMENTOR_MOD>();
+            //var _retl = db.RETENCIONs.Where(rt => rt.ESTATUS == true)
+            //    .Join(
+            //    db.RETENCION_PROV.Where(rtp => rtp.LIFNR == dOCUMENTO.PAYER_ID && rtp.BUKRS == dOCUMENTO.SOCIEDAD_ID),
+            //    ret => ret.WITHT,
+            //    retp => retp.WITHT,
+            //    (ret, retp) => new
+            //    {
+            //        LIFNR = retp.LIFNR,
+            //        BUKRS = retp.BUKRS,
+            //        WITHT = retp.WITHT,
+            //        DESC = ret.DESCRIPCION,
+            //        WT_WITHCD = retp.WT_WITHCD
+
+            //    }).ToList();
+
             //FRT06112018 Se agregan las lineas para obtener nombre del proyecto
             var id_pspnr = dOCUMENTO.ID_PSPNR;
             var nombre = db.PROYECTOes.Where(a => a.ID_PSPNR == id_pspnr).FirstOrDefault().NOMBRE;
@@ -425,26 +463,7 @@ namespace WFARTHA.Controllers
                 retlt[i].BIMPONIBLE = _bi;
                 retlt[i].IMPORTE_RET = _iret;
             }
-
-            //LEJGG26-11-2018----------------
-            for (int i = 0; i < retlt.Count; i++)
-            {
-                var _a = retlt[i].WITHT;
-                var _b = retlt[i].WT_WITHCD;
-                var ret = db.RETENCIONs.Where(x => x.WITHT == _a && x.WT_WITHCD == _b).FirstOrDefault().WITHT_SUB;
-                if (ret != null)
-                {
-                    for (int x = 0; x < retlt.Count; x++)
-                    {
-                        if (retlt[x].WITHT == ret)
-                        {
-                            retlt.Remove(retlt[x]);
-                        }
-                    }
-                }
-            }
-            //LEJGG26-11-2018-----------------
-
+            //ViewBag.ret = retlt;
             ViewBag.ret = retlt;
 
             //Obtener datos del proveedor
@@ -2157,12 +2176,11 @@ namespace WFARTHA.Controllers
 
             try
             {
-               /* string p = Session["pr"].ToString();
+                string p = Session["pr"].ToString();
                 string pid = Session["id_pr"].ToString();
                 ViewBag.PrSl = p;
                 pselG = pid;//MGC 16-10-2018 Obtener las sociedades asignadas al usuario
-                ViewBag.pid = pid;//MGC 29-10-2018 Guardar el proyecto en el create*/
-               
+                ViewBag.pid = pid;//MGC 29-10-2018 Guardar el proyecto en el create
             }
             catch
             {
@@ -2174,10 +2192,6 @@ namespace WFARTHA.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             DOCUMENTO dOCUMENTO = db.DOCUMENTOes.Find(id);
-            var id_pspnr = dOCUMENTO.ID_PSPNR;
-            var nombre = db.PROYECTOes.Where(x => x.ID_PSPNR == id_pspnr).FirstOrDefault().NOMBRE;
-            ViewBag.PrSl = id_pspnr;
-            ViewBag.pid = nombre;
             if (dOCUMENTO.TIPO_CAMBIO == null)//Lejgg 15-11-2018
             { dOCUMENTO.TIPO_CAMBIO = 0; }
             //Documento a documento mod //Copiar valores del post al nuevo objeto
@@ -2379,24 +2393,7 @@ namespace WFARTHA.Controllers
                     retlt[i].IMPORTE_RET = _res.IMPORTE_RET;
                 }
             }
-            //LEJGG26-11-2018----------------
-            for (int i = 0; i < retlt.Count; i++)
-            {
-                var _a = retlt[i].WITHT;
-                var _b = retlt[i].WT_WITHCD;
-                var ret = db.RETENCIONs.Where(x => x.WITHT == _a && x.WT_WITHCD == _b).FirstOrDefault().WITHT_SUB;
-                if (ret != null)
-                {
-                    for (int x = 0; x < retlt.Count; x++)
-                    {
-                        if (retlt[x].WITHT == ret)
-                        {
-                            retlt.Remove(retlt[x]);
-                        }
-                    }
-                }
-            }
-            //LEJGG26-11-2018-----------------
+            //ViewBag.ret = retlt;
             ViewBag.ret = retlt;
             //Obtener datos del proveedor
             PROVEEDOR prov = db.PROVEEDORs.Where(pr => pr.LIFNR == doc.PAYER_ID).FirstOrDefault();
@@ -6747,7 +6744,7 @@ namespace WFARTHA.Controllers
         {
             try
             {
-                var c = (from N in db.EKKO_DUMM
+                var c = (from N in db.EKKO_DUMMY
                          where (N.LIFNR == lifnr)// & N.EBELN.Contains(Prefix))
                          select new { N.EBELN }).ToList();
 
@@ -6763,27 +6760,27 @@ namespace WFARTHA.Controllers
         [HttpPost]
         public JsonResult getPedidosPos(string ebeln)
         {
-            var c = (from N in db.EKPO_DUMM
+            var c = (from N in db.EKPO_DUMMY
                      where (N.EBELN.Equals(ebeln))
                      select new
                      {
-                         N.BPUMN,
-                         N.BPUMZ,
-                         N.BRTWR,
-                         N.EBELN,
-                         N.EBELP,
-                         N.H_ANT_AMORT,
-                         N.H_ANT_PAG,
-                         N.H_ANT_SOL,
-                         N.H_QUANTITY,
-                         N.H_VAL_CURRENCY,
-                         N.H_VAL_FORCUR,
-                         N.H_VAL_LOCCUR,
-                         N.MATNR,
-                         N.MEINS,
-                         N.MENGE,
-                         N.NETWR,
-                         N.TXZ0
+                         //N.BPUMN,
+                         //N.BPUMZ,
+                         //N.BRTWR,
+                         //N.EBELN,
+                         //N.EBELP,
+                         //N.H_ANT_AMORT,
+                         //N.H_ANT_PAG,
+                         //N.H_ANT_SOL,
+                         //N.H_QUANTITY,
+                         //N.H_VAL_CURRENCY,
+                         //N.H_VAL_FORCUR,
+                         //N.H_VAL_LOCCUR,
+                         //N.MATNR,
+                         //N.MEINS,
+                         //N.MENGE,
+                         //N.NETWR,
+                         //N.TXZ0
                      }).ToList();
 
             JsonResult jc = Json(c, JsonRequestBehavior.AllowGet);
@@ -6794,17 +6791,17 @@ namespace WFARTHA.Controllers
         [HttpPost]
         public JsonResult getFondos(string ebeln)
         {
-            var c = (from N in db.EKKO_DUMM
+            var c = (from N in db.EKKO_DUMMY
                      where (N.EBELN.Equals(ebeln))
                      select new
                      {
-                         N.EBELN,
-                         N.FONDOG,
-                         N.RES_FONDOG,
-                         N.RET_FONDOG,
-                         N.TOTAL,
-                         N.POR_ANTICIPO,
-                         N.POR_FONDO
+                         //N.EBELN,
+                         //N.FONDOG,
+                         //N.RES_FONDOG,
+                         //N.RET_FONDOG,
+                         //N.TOTAL,
+                         //N.POR_ANTICIPO,
+                         //N.POR_FONDO
                      });
             JsonResult jc = Json(c, JsonRequestBehavior.AllowGet);
             return jc;

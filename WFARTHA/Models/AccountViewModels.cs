@@ -48,7 +48,7 @@ namespace WFARTHA.Models
 
     public class LoginViewModel
     {
-        [Required(ErrorMessage= "El campo Usuario es obligatorio.")]
+        [Required(ErrorMessage="uno")]
         [Display(Name = "Usuario")]
         public string ID { get; set; }
 

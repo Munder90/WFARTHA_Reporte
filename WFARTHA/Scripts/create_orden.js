@@ -1575,9 +1575,8 @@ function llenarRetencionesIRetP() {
             if ($(this).find("td." + _v2 + " input").hasClass(_var)) {
                 centi = x;
                 var colex = $(this).find("td." + _v2 + " input").val().replace("$", "").replace(',', '');
-                while (colex.indexOf(',') > -1) {
-                    colex = colex.replace('$', '').replace(',', '');
-                }
+                //de esta manera saco el renglon y la celad en especifico
+                //var er = $('#table_ret tbody tr').eq(x).find('td').eq(3).text().replace('$', '');
                 var txbi = $.trim(colex);
                 var sum = parseFloat(txbi);
                 _t[x] = parseFloat(_t[x]) + sum;

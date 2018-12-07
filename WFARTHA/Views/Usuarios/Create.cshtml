@@ -18,11 +18,11 @@
             <button type="submit" id="btn_guardar" class="btn btn-default">Guardar NT</button>
         </div>
     </div>
-    <div class="row">
+        <div class="row">
         <div class="col s12 left-align">
             @if (@TempData["MensajeUsuario"] != null)
             {
-            <label id="lbl_mensajeusuario" style='font-size: 12pt; color: red;'>El usuario ya existe. Introduzca un ID de usuario diferente</label>
+            <label id="lbl_mensajeusuario"></label>
             }
         </div>
     </div>
@@ -38,7 +38,7 @@
                     </div>
 
                     <div class="input-field col s12">
-                        @Html.PasswordFor(model => model.PASS, new { @class = "form-control", @id = "txt_pass", required = true, @maxlength = 16, @minlength = 5 })
+                        @Html.PasswordFor(model => model.PASS, new { @class = "form-control", @id = "txt_pass", required=true, @maxlength=16, @minlength=5 })
                         @Html.LabelFor(model => model.PASS, htmlAttributes: new { @id = "lbl_pass" })
                         @Html.ValidationMessageFor(model => model.PASS, "", new { @class = "text-danger" })
                     </div>
@@ -48,14 +48,6 @@
                         @Html.LabelFor(model => model.MANAGER, "Confirmar contraseña", htmlAttributes: new { @id = "lbl_conf" })
                         @Html.ValidationMessageFor(model => model.MANAGER, "", new { @class = "text-danger", id = "lbl_mensajepass" })
                         @*<span class="helper-text" id="lbl_mensajepass" data-error="No coinciden" data-success=""></span>*@
-                    </div>
-                    <div class="row">
-                        <div class="col s12 left-align">
-                            @if (@TempData["MensajePass"] != null)
-                            {
-                            <label class="alert-dismissable" id="lbl_confirpass" style='font-size: 12pt; color: red;'>La contraseña no coincide</label>
-                            }
-                        </div>
                     </div>
                 </div>
                 <script>
@@ -102,7 +94,7 @@
                     </div>
 
                     <div class="input-field col s12">
-                        @Html.EditorFor(model => model.APELLIDO_P, new { htmlAttributes = new { @class = "form-control", required = true } })
+                        @Html.EditorFor(model => model.APELLIDO_P, new { htmlAttributes = new { @class = "form-control",required=true } })
                         @Html.LabelFor(model => model.APELLIDO_P, htmlAttributes: new { @id = "lbl_appPat" })
                         @Html.ValidationMessageFor(model => model.APELLIDO_P, "", new { @class = "text-danger" })
                     </div>
@@ -114,17 +106,17 @@
                     </div>
 
                     <div class="input-field col s12">
-                        @Html.EditorFor(model => model.EMAIL, new { htmlAttributes = new { @id = "EMAIL", @type = "email", required = true } })
+                        @Html.EditorFor(model => model.EMAIL, new { htmlAttributes = new { @type = "email", required = true } })
                         @Html.LabelFor(model => model.EMAIL, htmlAttributes: new { @id = "lbl_email" })
                         @Html.ValidationMessageFor(model => model.EMAIL, "", new { @class = "text-danger" })
                     </div>
 
                     @*//MGC 24-10-2018 Usuarios*@
                     @*<div class="input-field col s12">
-                            @Html.DropDownList("SPRAS_ID", null, htmlAttributes: new { @class = "form-control" })
-                            <label id="lbl_spras">SPRAS</label>
-
-                        </div>*@
+                        @Html.DropDownList("SPRAS_ID", null, htmlAttributes: new { @class = "form-control" })
+                        <label id="lbl_spras">SPRAS</label>
+                       
+                    </div>*@
                     @*//MGC 24-10-2018 Usuarios*@
 
                     @*<div class="form-group">
@@ -160,17 +152,16 @@
 
                     @*//MGC 24-10-2018 Usuarios*@
                     @*<div class="input-field col s12">
-                            @Html.DropDownList("BUNIT", null, htmlAttributes: new { @class = "form-control" })
-                            @Html.LabelFor(model => model.BUNIT, htmlAttributes: new { @id = "lbl_bukrs" })
-                            @Html.ValidationMessageFor(model => model.BUNIT, "", new { @class = "text-danger" })
-                        </div>*@
+                        @Html.DropDownList("BUNIT", null, htmlAttributes: new { @class = "form-control" })
+                        @Html.LabelFor(model => model.BUNIT, htmlAttributes: new { @id = "lbl_bukrs" })
+                        @Html.ValidationMessageFor(model => model.BUNIT, "", new { @class = "text-danger" })
+                    </div>*@
                     @*//MGC 24-10-2018 Usuarios*@
 
 
                     <div class="input-field col s12">
-                        @*@Html.DropDownList("PUESTO_ID", null, htmlAttributes: new { @class = "form-control" })*@
-                        @Html.EditorFor(model => model.PUESTO_ID, new { htmlAttributes = new { @class = "text", @id = "input_puesto" } })
-                        @Html.LabelFor(model => model.PUESTO_ID, htmlAttributes: new { @id = "lbl_puesto" })
+                        @Html.DropDownList("PUESTO_ID", null, htmlAttributes: new { @class = "form-control" })
+                        @Html.LabelFor(model => model.PUESTO_ID, "PUESTO_ID", htmlAttributes: new { @id = "lbl_puesto" })
                         @Html.ValidationMessageFor(model => model.PUESTO_ID, "", new { @class = "text-danger" })
                     </div>
 
@@ -179,20 +170,16 @@
                             @Html.LabelFor(model => model.ROL, "ROL", htmlAttributes: new { @id = "lbl_rol" })
                             @Html.ValidationMessageFor(model => model.ROL, "", new { @class = "text-danger" })
                         </div>*@
-                    @*<script>
+                    <script>
                         var elem = document.querySelectorAll('select');
                         var instance = M.FormSelect.init(elem, []);
-                    </script>*@
+                    </script>
                 </div>
             </div>
         </div>
     </div>
-    //----- OMC 28-11-18
-    <script src="~/Scripts/autocomplete1.10.2.js"></script>
-    <script src="~/Scripts/autocomplete1.11.4.js"></script>
-    <link href="~/Content/autocomplete.css" rel="stylesheet" />
+    //OCG 11/10/18 Validacion de email
     <script>
-        $("#input_puesto").attr("type", "text");
 
         $('#EMAIL').on("focusout", function () {
             var email = $('#EMAIL').val();
@@ -210,69 +197,10 @@
             var re = /^(([^<>()\[\]\\.,;:\s@@"]+(\.[^<>()\[\]\\.,;:\s@@"]+)*)|(".+"))@@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
             return re.test(String(email).toLowerCase());
         }
-
-        $('#txt_pass2').on("focusout", function () {
-            var pass = $('#txt_pass').val();
-            var pass2 = $('#txt_pass2').val();
-            $('#txt_pass2').removeClass("valid");
-            $('#txt_pass2').removeClass("invalid");
-            if (pass == pass2 && (pass != "" || pass2 != "")) {
-                $('#txt_pass2').addClass("valid");
-            }
-            else {
-                $('#txt_pass2').addClass("invalid");
-            }
-        });
-
-        $("#btn_guardar").on("click", function () {
-            var clase = $('#txt_pass2').attr('class');
-            if (clase == "invalid") {
-                $("form").clearQueue();
-                $("form").stop();
-                M.toast({ html: "La contraseña no coincide" });
-            }
-        });
-
-        $('body').on('keydown.autocomplete', '#input_puesto', function () {
-
-            auto(this).autocomplete({
-                source: function (request, response) {
-                    auto.ajax({
-                        type: "POST",
-                        url: 'Nivel',
-                        dataType: "json",
-                        data: { "Prefix": request.term },
-                        success: function (data) {
-                            response(auto.map(data, function (item) {
-                                return { label: item.ID + " | " + item.TEXTO, value: item.ID };
-                            }))
-                        }
-                    })
-                },
-
-                messages: {
-                    noResults: '',
-                    results: function (resultsCount) { }
-                },
-
-                change: function (e, ui) {
-                    if (!(ui.item)) {
-                        e.target.value = "";
-                    }
-                },
-
-                select: function (event, ui) {
-                }
-            });
-        });
     </script>
-    <script>
-        var auto = $.noConflict();
-    </script>
-    //-----FIN OMC 28-11-18
 }
 <div>
-    @Html.ActionLink("Back to List", "Index", null, new { id = "lbl_regresar" })
+    @Html.ActionLink("Back to List", "Index",null,new { id="lbl_regresar"})
 </div>
 @if (ViewBag.Error != null)
 {
