@@ -26,6 +26,16 @@
     <Property Name="BANKL" Type="nchar" MaxLength="15" Nullable="false" />
     <Property Name="BANKA" Type="nvarchar" MaxLength="60" />
   </EntityType>
+  <!--Errores durante la generación:
+advertencia 6013: La tabla o vista 'PAGOS300I.dbo.CADENAS M2$' no tiene definida una clave principal y no es posible inferir ninguna clave principal válida. Esta tabla o vista se ha excluido. Para usar la entidad, necesitará revisar el esquema, agregar las claves correctas y quitar sus comentarios.
+        <EntityType Name="CADENAS M2$">
+          <Property Name="VERSION" Type="float" />
+          <Property Name="USUARIOC_ID" Type="nvarchar" MaxLength="255" />
+          <Property Name="ID_RUTA_AGENTE" Type="nchar" MaxLength="10" />
+          <Property Name="USUARIOA_ID" Type="nvarchar" MaxLength="255" />
+          <Property Name="A1" Type="nvarchar" MaxLength="255" />
+          <Property Name="A2" Type="nvarchar" MaxLength="255" />
+        </EntityType>-->
   <EntityType Name="CAMPOS">
     <Key>
       <PropertyRef Name="PAGINA_ID" />
@@ -89,6 +99,17 @@
     <Property Name="CUENTA" Type="nchar" MaxLength="10" />
     <Property Name="ACTIVO" Type="bit" Nullable="false" />
   </EntityType>
+  <!--Errores durante la generación:
+advertencia 6013: La tabla o vista 'PAGOS300I.dbo.CONCEPTO$' no tiene definida una clave principal y no es posible inferir ninguna clave principal válida. Esta tabla o vista se ha excluido. Para usar la entidad, necesitará revisar el esquema, agregar las claves correctas y quitar sus comentarios.
+        <EntityType Name="CONCEPTO$">
+          <Property Name="ID_CONCEPTO" Type="nchar" MaxLength="10" />
+          <Property Name="DESC_CONCEPTO" Type="nvarchar" MaxLength="80" />
+          <Property Name="TIPO_CONCEPTO" Type="nchar" MaxLength="2" />
+          <Property Name="TIPO_IMPUTACION" Type="nchar" MaxLength="1" />
+          <Property Name="ID_PRESUPUESTO" Type="nchar" MaxLength="2" />
+          <Property Name="TIPO_PRESUPUESTO" Type="nchar" MaxLength="1" />
+          <Property Name="CUENTA" Type="nchar" MaxLength="10" />
+        </EntityType>-->
   <EntityType Name="CONDICIONES_PAGO">
     <Key>
       <PropertyRef Name="COND_PAGO" />
@@ -206,6 +227,13 @@
     <Property Name="ID_BUKRS" Type="nchar" MaxLength="4" Nullable="false" />
     <Property Name="COND_PAGO" Type="nchar" MaxLength="4" />
   </EntityType>
+  <!--Errores durante la generación:
+advertencia 6013: La tabla o vista 'PAGOS300I.dbo.DET_PROVEEDOR$' no tiene definida una clave principal y no es posible inferir ninguna clave principal válida. Esta tabla o vista se ha excluido. Para usar la entidad, necesitará revisar el esquema, agregar las claves correctas y quitar sus comentarios.
+        <EntityType Name="DET_PROVEEDOR$">
+          <Property Name="ID_LIFNR" Type="nchar" MaxLength="10" />
+          <Property Name="ID_BURKS" Type="nchar" MaxLength="4" />
+          <Property Name="COND_PAGO" Type="nchar" MaxLength="4" />
+        </EntityType>-->
   <EntityType Name="DET_PROYECTO">
     <Key>
       <PropertyRef Name="ID_PSPNR" />
@@ -652,8 +680,8 @@
     <Property Name="COMENTARIO" Type="varchar" MaxLength="200" />
     <Property Name="MAIL" Type="bit" />
   </EntityType>
-  <!--Errors Found During Generation:
-warning 6002: The table/view 'PAGOS300I.dbo.IIMPUESTO' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <!--Errores durante la generación:
+advertencia 6002: La tabla o vista 'PAGOS300I.dbo.IIMPUESTO' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
   <EntityType Name="IIMPUESTO">
     <Key>
       <PropertyRef Name="MWSKZ" />
@@ -772,6 +800,14 @@ warning 6002: The table/view 'PAGOS300I.dbo.IIMPUESTO' does not have a primary k
     <Property Name="KOINH" Type="nvarchar" MaxLength="60" />
     <Property Name="BKEXT" Type="nchar" MaxLength="20" />
   </EntityType>
+  <!--Errores durante la generación:
+advertencia 6013: La tabla o vista 'PAGOS300I.dbo.PROVEEDORES$' no tiene definida una clave principal y no es posible inferir ninguna clave principal válida. Esta tabla o vista se ha excluido. Para usar la entidad, necesitará revisar el esquema, agregar las claves correctas y quitar sus comentarios.
+        <EntityType Name="PROVEEDORES$">
+          <Property Name="LIFNR" Type="nchar" MaxLength="10" />
+          <Property Name="LAND1" Type="nchar" MaxLength="3" />
+          <Property Name="NAME1" Type="nchar" MaxLength="35" />
+          <Property Name="RFC" Type="nchar" MaxLength="16" />
+        </EntityType>-->
   <EntityType Name="PROYECTO">
     <Key>
       <PropertyRef Name="ID_PSPNR" />
@@ -840,6 +876,14 @@ warning 6002: The table/view 'PAGOS300I.dbo.IIMPUESTO' does not have a primary k
     <Property Name="WITHT" Type="nchar" MaxLength="2" Nullable="false" />
     <Property Name="WT_WITHCD" Type="nchar" MaxLength="2" Nullable="false" />
   </EntityType>
+  <!--Errores durante la generación:
+advertencia 6013: La tabla o vista 'PAGOS300I.dbo.RETENCION_PROV$' no tiene definida una clave principal y no es posible inferir ninguna clave principal válida. Esta tabla o vista se ha excluido. Para usar la entidad, necesitará revisar el esquema, agregar las claves correctas y quitar sus comentarios.
+        <EntityType Name="RETENCION_PROV$">
+          <Property Name="LIFNR" Type="nchar" MaxLength="10" />
+          <Property Name="BURKS" Type="nchar" MaxLength="4" />
+          <Property Name="WITH" Type="nchar" MaxLength="2" />
+          <Property Name="WT_WITHCD" Type="nchar" MaxLength="2" />
+        </EntityType>-->
   <EntityType Name="RETENCIONT">
     <Key>
       <PropertyRef Name="SPRAS_ID" />
@@ -885,8 +929,27 @@ warning 6002: The table/view 'PAGOS300I.dbo.IIMPUESTO' does not have a primary k
     <Property Name="REGION" Type="nchar" MaxLength="10" />
     <Property Name="STCD1" Type="nchar" MaxLength="16" />
   </EntityType>
-  <!--Errors Found During Generation:
-warning 6013: The table/view 'PAGOS300I.dbo.SPFIRMA' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+  <!--Errores durante la generación:
+advertencia 6013: La tabla o vista 'PAGOS300I.dbo.SOCIEDAD$' no tiene definida una clave principal y no es posible inferir ninguna clave principal válida. Esta tabla o vista se ha excluido. Para usar la entidad, necesitará revisar el esquema, agregar las claves correctas y quitar sus comentarios.
+        <EntityType Name="SOCIEDAD$">
+          <Property Name="BURKS" Type="nchar" MaxLength="4" />
+          <Property Name="BUTXT" Type="nvarchar" MaxLength="100" />
+          <Property Name="RFC" Type="nchar" MaxLength="16" />
+        </EntityType>-->
+  <!--Errores durante la generación:
+advertencia 6013: La tabla o vista 'PAGOS300I.dbo.SOCIEDADESP$' no tiene definida una clave principal y no es posible inferir ninguna clave principal válida. Esta tabla o vista se ha excluido. Para usar la entidad, necesitará revisar el esquema, agregar las claves correctas y quitar sus comentarios.
+        <EntityType Name="SOCIEDADESP$">
+          <Property Name="BURKS" Type="nchar" MaxLength="4" />
+          <Property Name="F2" Type="nvarchar" MaxLength="255" />
+        </EntityType>-->
+  <!--Errores durante la generación:
+advertencia 6013: La tabla o vista 'PAGOS300I.dbo.SOCIEDADESPP$' no tiene definida una clave principal y no es posible inferir ninguna clave principal válida. Esta tabla o vista se ha excluido. Para usar la entidad, necesitará revisar el esquema, agregar las claves correctas y quitar sus comentarios.
+        <EntityType Name="SOCIEDADESPP$">
+          <Property Name="BURKS" Type="nchar" MaxLength="4" />
+          <Property Name="BUTXT" Type="nvarchar" MaxLength="100" />
+        </EntityType>-->
+  <!--Errores durante la generación:
+advertencia 6013: La tabla o vista 'PAGOS300I.dbo.SPFIRMA' no tiene definida una clave principal y no es posible inferir ninguna clave principal válida. Esta tabla o vista se ha excluido. Para usar la entidad, necesitará revisar el esquema, agregar las claves correctas y quitar sus comentarios.
         <EntityType Name="SPFIRMA">
           <Property Name="fasen" Type="int" />
           <Property Name="num_doc" Type="numeric" Precision="10" Scale="0" />
@@ -1006,6 +1069,15 @@ warning 6013: The table/view 'PAGOS300I.dbo.SPFIRMA' does not have a primary key
     <Property Name="BUNIT" Type="nchar" MaxLength="4" Nullable="false" />
     <Property Name="FIRMA" Type="nvarchar" MaxLength="50" />
   </EntityType>
+  <!--Errores durante la generación:
+advertencia 6013: La tabla o vista 'PAGOS300I.dbo.USUARIOS$' no tiene definida una clave principal y no es posible inferir ninguna clave principal válida. Esta tabla o vista se ha excluido. Para usar la entidad, necesitará revisar el esquema, agregar las claves correctas y quitar sus comentarios.
+        <EntityType Name="USUARIOS$">
+          <Property Name="ID_USUARIO" Type="nvarchar" MaxLength="16" />
+          <Property Name="NOMBRE" Type="nvarchar" MaxLength="50" />
+          <Property Name="APELLIDO_P" Type="nvarchar" MaxLength="50" />
+          <Property Name="APELLIDO_M" Type="nvarchar" MaxLength="50" />
+          <Property Name="EMAIL" Type="nvarchar" MaxLength="256" />
+        </EntityType>-->
   <EntityType Name="WARNING">
     <Key>
       <PropertyRef Name="PAGINA_ID" />
@@ -1080,8 +1152,8 @@ warning 6013: The table/view 'PAGOS300I.dbo.SPFIRMA' does not have a primary key
     <Property Name="USUARIO_ID" Type="nvarchar" MaxLength="16" />
     <Property Name="FECHAC" Type="datetime" />
   </EntityType>
-  <!--Errors Found During Generation:
-warning 6002: The table/view 'PAGOS300I.dbo.ASIGN_PROY_SOC' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <!--Errores durante la generación:
+advertencia 6002: La tabla o vista 'PAGOS300I.dbo.ASIGN_PROY_SOC' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
   <EntityType Name="ASIGN_PROY_SOC">
     <Key>
       <PropertyRef Name="ID_PSPNR" />
@@ -1090,8 +1162,8 @@ warning 6002: The table/view 'PAGOS300I.dbo.ASIGN_PROY_SOC' does not have a prim
     <Property Name="ID_PSPNR" Type="nvarchar" MaxLength="8" Nullable="false" />
     <Property Name="ID_BUKRS" Type="nchar" MaxLength="4" Nullable="false" />
   </EntityType>
-  <!--Errors Found During Generation:
-warning 6002: The table/view 'PAGOS300I.dbo.CARPETAV' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <!--Errores durante la generación:
+advertencia 6002: La tabla o vista 'PAGOS300I.dbo.CARPETAV' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
   <EntityType Name="CARPETAV">
     <Key>
       <PropertyRef Name="USUARIO_ID" />
@@ -1103,8 +1175,8 @@ warning 6002: The table/view 'PAGOS300I.dbo.CARPETAV' does not have a primary ke
     <Property Name="TXT50" Type="nvarchar" MaxLength="50" />
     <Property Name="ICON" Type="nvarchar" MaxLength="20" />
   </EntityType>
-  <!--Errors Found During Generation:
-warning 6002: The table/view 'PAGOS300I.dbo.DET_APROBV' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <!--Errores durante la generación:
+advertencia 6002: La tabla o vista 'PAGOS300I.dbo.DET_APROBV' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
   <EntityType Name="DET_APROBV">
     <Key>
       <PropertyRef Name="VERSION" />
@@ -1121,8 +1193,8 @@ warning 6002: The table/view 'PAGOS300I.dbo.DET_APROBV' does not have a primary 
     <Property Name="USUARIO" Type="nvarchar" MaxLength="171" Nullable="false" />
     <Property Name="STEP_FASE" Type="int" Nullable="false" />
   </EntityType>
-  <!--Errors Found During Generation:
-warning 6002: The table/view 'PAGOS300I.dbo.DET_PROVEEDORV' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <!--Errores durante la generación:
+advertencia 6002: La tabla o vista 'PAGOS300I.dbo.DET_PROVEEDORV' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
   <EntityType Name="DET_PROVEEDORV">
     <Key>
       <PropertyRef Name="ID_LIFNR" />
@@ -1132,8 +1204,8 @@ warning 6002: The table/view 'PAGOS300I.dbo.DET_PROVEEDORV' does not have a prim
     <Property Name="ID_BUKRS" Type="nchar" MaxLength="4" Nullable="false" />
     <Property Name="COND_PAGO" Type="nchar" MaxLength="4" />
   </EntityType>
-  <!--Errors Found During Generation:
-warning 6002: The table/view 'PAGOS300I.dbo.DET_PROYECTO_DEC_V' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <!--Errores durante la generación:
+advertencia 6002: La tabla o vista 'PAGOS300I.dbo.DET_PROYECTO_DEC_V' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
   <EntityType Name="DET_PROYECTO_DEC_V">
     <Key>
       <PropertyRef Name="ID_PSPNR" />
@@ -1146,8 +1218,8 @@ warning 6002: The table/view 'PAGOS300I.dbo.DET_PROYECTO_DEC_V' does not have a 
     <Property Name="ID_BUKRS" Type="nchar" MaxLength="4" Nullable="false" />
     <Property Name="BUTXT" Type="nvarchar" MaxLength="107" Nullable="false" />
   </EntityType>
-  <!--Errors Found During Generation:
-warning 6002: The table/view 'PAGOS300I.dbo.DET_PROYECTOV' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <!--Errores durante la generación:
+advertencia 6002: La tabla o vista 'PAGOS300I.dbo.DET_PROYECTOV' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
   <EntityType Name="DET_PROYECTOV">
     <Key>
       <PropertyRef Name="ID_PSPNR" />
@@ -1156,8 +1228,8 @@ warning 6002: The table/view 'PAGOS300I.dbo.DET_PROYECTOV' does not have a prima
     <Property Name="ID_PSPNR" Type="nvarchar" MaxLength="8" Nullable="false" />
     <Property Name="ID_BUKRS" Type="nchar" MaxLength="4" Nullable="false" />
   </EntityType>
-  <!--Errors Found During Generation:
-warning 6002: The table/view 'PAGOS300I.dbo.DET_TIPOPRESUPUESTOV' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <!--Errores durante la generación:
+advertencia 6002: La tabla o vista 'PAGOS300I.dbo.DET_TIPOPRESUPUESTOV' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
   <EntityType Name="DET_TIPOPRESUPUESTOV">
     <Key>
       <PropertyRef Name="BUKRS" />
@@ -1173,8 +1245,8 @@ warning 6002: The table/view 'PAGOS300I.dbo.DET_TIPOPRESUPUESTOV' does not have 
     <Property Name="TIPOPRE" Type="varchar" MaxLength="1" Nullable="false" />
     <Property Name="DESC" Type="nvarchar" MaxLength="30" />
   </EntityType>
-  <!--Errors Found During Generation:
-warning 6002: The table/view 'PAGOS300I.dbo.DOCUMENTOV' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <!--Errores durante la generación:
+advertencia 6002: La tabla o vista 'PAGOS300I.dbo.DOCUMENTOV' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
   <EntityType Name="DOCUMENTOV">
     <Key>
       <PropertyRef Name="POS" />
@@ -1234,8 +1306,8 @@ warning 6002: The table/view 'PAGOS300I.dbo.DOCUMENTOV' does not have a primary 
     <Property Name="USUARIOA_ID" Type="nvarchar" MaxLength="16" />
     <Property Name="EXPR2" Type="nchar" MaxLength="1" />
   </EntityType>
-  <!--Errors Found During Generation:
-warning 6002: The table/view 'PAGOS300I.dbo.PAGINAV' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <!--Errores durante la generación:
+advertencia 6002: La tabla o vista 'PAGOS300I.dbo.PAGINAV' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
   <EntityType Name="PAGINAV">
     <Key>
       <PropertyRef Name="ID" />
@@ -1255,8 +1327,8 @@ warning 6002: The table/view 'PAGOS300I.dbo.PAGINAV' does not have a primary key
     <Property Name="SPRAS_ID" Type="nchar" MaxLength="2" Nullable="false" />
     <Property Name="USUARIO_SPRAS" Type="nchar" MaxLength="2" Nullable="false" />
   </EntityType>
-  <!--Errors Found During Generation:
-warning 6002: The table/view 'PAGOS300I.dbo.WARNINGV' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <!--Errores durante la generación:
+advertencia 6002: La tabla o vista 'PAGOS300I.dbo.WARNINGV' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
   <EntityType Name="WARNINGV">
     <Key>
       <PropertyRef Name="PAGINA_ID" />

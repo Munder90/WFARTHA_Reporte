@@ -1269,7 +1269,22 @@
         </ComplexTypeMapping>
       </ResultMapping>
     </FunctionImportMapping>
-    <FunctionImportMapping FunctionImportName="SP_FIRMAS" FunctionName="WFARTHAModel.Store.SP_FIRMAS" />
+    <FunctionImportMapping FunctionImportName="SP_FIRMAS" FunctionName="WFARTHAModel.Store.SP_FIRMAS">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="WFARTHAModel.SP_FIRMAS_Result">
+          <ScalarProperty Name="fasen" ColumnName="fasen" />
+          <ScalarProperty Name="num_doc" ColumnName="num_doc" />
+          <ScalarProperty Name="faseletrero" ColumnName="faseletrero" />
+          <ScalarProperty Name="loop" ColumnName="loop" />
+          <ScalarProperty Name="usuariocadena" ColumnName="usuariocadena" />
+          <ScalarProperty Name="usuarioa_id" ColumnName="usuarioa_id" />
+          <ScalarProperty Name="usuariod_id" ColumnName="usuariod_id" />
+          <ScalarProperty Name="estatus" ColumnName="estatus" />
+          <ScalarProperty Name="fechac" ColumnName="fechac" />
+          <ScalarProperty Name="fecham" ColumnName="fecham" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
     <FunctionImportMapping FunctionImportName="SP_REPORTESOLS" FunctionName="WFARTHAModel.Store.SP_REPORTESOLS" />
   </EntityContainerMapping>
 </Mapping>

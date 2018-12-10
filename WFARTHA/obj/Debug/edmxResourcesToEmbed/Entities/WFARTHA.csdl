@@ -2743,7 +2743,7 @@
     <FunctionImport Name="SP_DETALLE" ReturnType="Collection(WFARTHAModel.SP_DETALLE_Result)">
       <Parameter Name="NUM_DOC" Mode="In" Type="Decimal" />
     </FunctionImport>
-    <FunctionImport Name="SP_FIRMAS">
+    <FunctionImport Name="SP_FIRMAS" ReturnType="Collection(WFARTHAModel.SP_FIRMAS_Result)">
       <Parameter Name="NUM_DOC" Mode="In" Type="Decimal" />
     </FunctionImport>
     <FunctionImport Name="SP_REPORTESOLS">
@@ -2798,5 +2798,17 @@
     <Property Type="Decimal" Name="MONTO" Nullable="true" Precision="18" Scale="5" />
     <Property Type="Decimal" Name="TOTAL" Nullable="true" Precision="18" Scale="5" />
     <Property Type="String" Name="TEXTO" Nullable="true" MaxLength="500" />
+  </ComplexType>
+  <ComplexType Name="SP_FIRMAS_Result">
+    <Property Type="Int32" Name="fasen" Nullable="true" />
+    <Property Type="Decimal" Name="num_doc" Nullable="true" Precision="10" Scale="0" />
+    <Property Type="String" Name="faseletrero" Nullable="true" MaxLength="20" />
+    <Property Type="Int32" Name="loop" Nullable="true" />
+    <Property Type="String" Name="usuariocadena" Nullable="true" MaxLength="16" />
+    <Property Type="String" Name="usuarioa_id" Nullable="true" MaxLength="16" />
+    <Property Type="String" Name="usuariod_id" Nullable="true" MaxLength="16" />
+    <Property Type="String" Name="estatus" Nullable="true" MaxLength="1" />
+    <Property Type="DateTime" Name="fechac" Nullable="true" Precision="23" />
+    <Property Type="DateTime" Name="fecham" Nullable="true" Precision="23" />
   </ComplexType>
 </Schema>
