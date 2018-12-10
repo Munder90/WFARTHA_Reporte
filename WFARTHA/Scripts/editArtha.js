@@ -2,12 +2,19 @@
 var posinfo = 0;
 var posrows = 0;  //FRT08112018
 var inicio = 0;   //FRT08112018  
+var statSend = false;//FRT02122018 PARA PODER MANDAR ALERTA DE QUE EL FORMULARIO SE ESTA ENVIANDO
+
 
 var tRet = [];//Agrego a un array los tipos de retenciones
 var tRet2 = [];
 $(document).ready(function () {
     var elem = document.querySelectorAll('select');
     var instance = M.Select.init(elem, []);
+
+    //---
+    var _fd = $('#FECHAD').val().split(' ');
+    $('#FECHAD').val(_fd[0]);
+    //---
     $("#list_detaa").trigger("change");
     //Formato a campo tipo_cambio
     var _Tc = $('#TIPO_CAMBIO').val();
@@ -23,9 +30,62 @@ $(document).ready(function () {
         tamanosRenglones();
     });
 
-    $('#Contable_cont').change(function () {
+    $('#tab_enc').on('click', function () {
         tamanosRenglones();
     });
+
+    $('#tab_con').on("click", function (e) {
+        var proveedor = $("#PAYER_ID").val();
+        if (proveedor == "" | proveedor == null) {
+            M.toast({ html: "Falta ingresar proveedor" });
+            return false;
+        } else {
+            //$(this).tab('show')
+
+        }
+    });
+
+    $('#tab_sop').on("click", function (e) {
+        var proveedor = $("#PAYER_ID").val();
+        if (proveedor == "" | proveedor == null) {
+            M.toast({ html: "Falta ingresar proveedor" });
+            return false;
+        } else {
+            //$(this).tab('show')
+
+        }
+    });
+
+    $('#tab_sap').on("click", function (e) {
+        var proveedor = $("#PAYER_ID").val();
+        if (proveedor == "" | proveedor == null) {
+            M.toast({ html: "Falta ingresar proveedor" });
+            return false;
+        } else {
+            //$(this).tab('show')
+
+        }
+    });
+
+    $('.tabDet').on('click', function () {
+        tamanosRenglones();
+    });
+
+    ////FRT02122018 Para no dejar avanzar si no existe proveedor
+    //$('.tabs a').click(function () {
+
+
+    //    var proveedor = $("#PAYER_ID").val();
+    //    if (proveedor == "" | proveedor == null) {
+    //        alert("Falta ingresar proveedor");
+    //        return false;
+    //    } else {
+    //        $(this).tab('show')
+
+    //    }
+
+    //})
+    //    //ENDFRT02122018 Para no dejar avanzar si no existe proveedor
 
     //FRT21112018.3 Se añade para obtener el Tipo de Cambio
     $("#MONEDA_ID").change(function () {
@@ -45,7 +105,7 @@ $(document).ready(function () {
     $('#table_anexa').DataTable({
         language: {
             //"url": "../Scripts/lang/@Session["spras"].ToString()" + ".json"
-            "url": "../Scripts/lang/ES.json"
+            "url": "../../Scripts/lang/ES.json"
         },
         "paging": false,
         "info": false,
@@ -58,7 +118,7 @@ $(document).ready(function () {
                 "orderable": false
             },
             {
-                "name": 'POS',
+                "name": 'Fila',
                 "className": 'POS',
                 "orderable": false
             },
@@ -92,10 +152,8 @@ $(document).ready(function () {
 
     //Tabla de Retenciones
     $('#table_ret').DataTable({
-        scrollX: true,
-        scrollCollapse: true,
         language: {
-            "url": "../Scripts/lang/ES.json"
+            "url": "../../Scripts/lang/ES.json"
         },
         "paging": false,
         "info": false,
@@ -138,6 +196,12 @@ $(document).ready(function () {
                 "className": 'IMPRET',
                 "orderable": false
             }
+        ],
+        columnDefs: [
+            {
+                targets: [0, 1, 2, 3, 4, 5, 6],
+                className: 'mdl-data-table__cell--non-numeric'
+            }
         ]
     });
 
@@ -146,293 +210,571 @@ $(document).ready(function () {
 
     solicitarDatos();
     insertarCondicion();
-    $('#btn_guardarh').on("click", function (e) {
-        //LEJGG 06-11-18
-        //Aqui verificare si es invoice o factura
-        var val3 = $('#tsol').val();
-        val3 = "[" + val3 + "]";
-        val3 = val3.replace("{", "{ \"");
-        val3 = val3.replace("}", "\" }");
-        val3 = val3.replace(/\,/g, "\" , \"");
-        val3 = val3.replace(/\=/g, "\" : \"");
-        val3 = val3.replace(/\ /g, "");
-        var jsval = $.parseJSON(val3);
-        if (jsval[0].ID === "SSO") {
-            var res = validarFacs();//Lejgg 23-10-2018
-            if (res) {//si es true signfica que si hay factura
-                //Fechade la factura
-                var _fdo = $("#FECHADO").val();
-            } else {
-                //si es false signfica que es invoice(fecha de la creacion)
-                var fdo = $("#FECHADO").val();
-            }
 
+
+    $('#btn_cancelar').on("click", function (e) {
+        if (statSend) {
+            alert("Favor de esperar. Se esta generando Solicitud...");
         }
-        //CODIGO
-        //dar formato al monto
-        var enca_monto = $("#MONTO_DOC_MD").val();
-        enca_monto = enca_monto.replace(/\s/g, '');
-        //enca_monto = toNum(enca_monto);
-        //enca_monto = parseFloat(enca_monto);
-        $("#MONTO_DOC_MD").val(enca_monto);
-        var _b = false;
-        var _vs = [];
-        var msgerror = "";
-        var _rni = 0;
-        //Validar que los anexos existan
-        $("#table_anexa > tbody  > tr[role='row']").each(function () {
-            var pos = $(this).find("td.POS").text().trim();
-            _vs.push(pos);
-        });
 
-        //LEJ 11.09.2018
-        //dar formato al T CAMBIO
-        var tcambio = $("#TIPO_CAMBIO").val();
-        tcambio = tcambio.replace(/\s/g, '');
-        tcambio = toNum(tcambio);
-        tcambio = parseFloat(tcambio);
-        $("#TIPO_CAMBIO").val(tcambio);
-        var t = $('#table_info').DataTable();
-        var tabble = "table_info";
-        if ($("table#table_info tbody tr[role='row']").length === 0) { tabble = "table_infoP"; }
-        $("#" + tabble + " > tbody  > tr[role='row']").each(function () {
+    });
 
-            _rni++;
-            //Obtener valores visibles en la tabla
-            var na1 = $(this).find("td.NumAnexo input").val();
-            var na2 = $(this).find("td.NumAnexo2 input").val();
-            var na3 = $(this).find("td.NumAnexo3 input").val();
-            var na4 = $(this).find("td.NumAnexo4 input").val();
-            var na5 = $(this).find("td.NumAnexo5 input").val();
+    $('#btn_guardarh').on("click", function (e) {
+        if (!statSend) {
+            statSend = true;
+            //LEJGG 06-11-18
+            //Aqui verificare si es invoice o factura
+            var val3 = $('#tsol').val();
+            val3 = "[" + val3 + "]";
+            val3 = val3.replace("{", "{ \"");
+            val3 = val3.replace("}", "\" }");
+            val3 = val3.replace(/\,/g, "\" , \"");
+            val3 = val3.replace(/\=/g, "\" : \"");
+            val3 = val3.replace(/\ /g, "");
+            var jsval = $.parseJSON(val3);
+            if (jsval[0].ID === "SSO") {
+                var res = validarFacs();//Lejgg 23-10-2018
+                if (res) {//si es true signfica que si hay factura
+                    //Fechade la factura
+                    var _fdo = $("#FECHADO").val();
+                } else {
+                    //si es false signfica que es invoice(fecha de la creacion)
+                    var fdo = $("#FECHADO").val();
+                }
 
-            //frt05112018 validacion de CECOS vacion en Tipo Imp. "K"
-            var ceco = $(this).find("td.CCOSTO input").val();
-            var tr = $(this);
-            var indexopc = t.row(tr).index();
-
-            //FRT20112018 iNGRESAR VALIDACION DE CONCEPTO
-            //var concepto = t.row(indexopc).data()[13]; 
-            var concepto = $(this).find("td.GRUPO input").val(); //FRT21112018
-
-            if (concepto == "" | concepto == "") {
-                msgerror = "Falta ingresar Conecepto";
-                _b = false;
-            } else {
-                _b = true;
             }
-            if (_b === false) {
-                return false;
-            }
-            //ENDFRT20112018 iNGRESAR VALIDACION DE CONCEPTO
+            //CODIGO
+            //dar formato al monto
+            var enca_monto = $("#MONTO_DOC_MD").val();
+            enca_monto = enca_monto.replace(/\s/g, '');
+            //enca_monto = toNum(enca_monto);
+            //enca_monto = parseFloat(enca_monto);
+            $("#MONTO_DOC_MD").val(enca_monto);
+            var _b = false;
+            var _m = true;
+            var _g = true;
+            var _f = true;
+            
+
+            var _anull = true //FRT06122018
+            var _asnull = true //FRT06122018
+            _aduplicados = true; //FRT07122018 
+            var _vs = [];
+            var msgerror = "";
+            var _rni = 0;
+            //Validar que los anexos existan
+            $("#table_anexa > tbody  > tr[role='row']").each(function () {
+                var pos = $(this).find("td.POS").text().trim();
+                _vs.push(pos);
+            });
+
+            //LEJ 11.09.2018
+            //dar formato al T CAMBIO
+            var tcambio = $("#TIPO_CAMBIO").val();
+            tcambio = tcambio.replace(/\s/g, '');
+            tcambio = toNum(tcambio);
+            tcambio = parseFloat(tcambio);
+            $("#TIPO_CAMBIO").val(tcambio);
+            var t = $('#table_info').DataTable();
+            var tabble = "table_info";
+            var borrador = $("#borr").val();
+            if ($("table#table_info tbody tr[role='row']").length === 0) { tabble = "table_infoP"; }
+            $("#" + tabble + " > tbody  > tr[role='row']").each(function () {
+
+                var _anexos = []; //FRT07122018
+                _rni++;
+                //Obtener valores visibles en la tabla
+                var na1 = $(this).find("td.NumAnexo input").val();
+                _anexos.push(na1);
+                var na2 = $(this).find("td.NumAnexo2 input").val();
+                _anexos.push(na2);
+                var na3 = $(this).find("td.NumAnexo3 input").val();
+                _anexos.push(na3);
+                var na4 = $(this).find("td.NumAnexo4 input").val();
+                _anexos.push(na4);
+                var na5 = $(this).find("td.NumAnexo5 input").val();
+                _anexos.push(na5);
+
+                var _as = true; //FRT05122018 Para anexos asociados en detalles
+                //frt05112018 validacion de CECOS vacion en Tipo Imp. "K"
+                var ceco = $(this).find("td.CCOSTO input").val();
+                var tr = $(this);
+                var indexopc = t.row(tr).index();
+
+                //FRT20112018 iNGRESAR VALIDACION DE CONCEPTO
+                //var concepto = t.row(indexopc).data()[13]; 
+                var concepto = $(this).find("td.GRUPO input").val(); //FRT21112018
+
+                if (concepto == "" | concepto == "") {
+                    msgerror = "Fila " + _rni + ": Falta ingresar Concepto";
+                    statSend = false;
+                    _g = false;
+                    _b = false;
+                } else {
+                    _b = true;
+                }
+                if (_b === false) {
+                    return false;
+                }
+                //ENDFRT20112018 iNGRESAR VALIDACION DE CONCEPTO
 
 
-            //FRT21112018.3 Se realizara validación del monto > 0
+                //FRT21112018.3 Se realizara validación del monto > 0
 
-            var monto = $(this).find("td.MONTO input").val().replace('$', '').replace(',', '');
-            while (monto.indexOf(',') > -1) {
-                monto = monto.replace('$', '').replace(',', '');
-            }
+                var monto = $(this).find("td.MONTO input").val().replace('$', '').replace(',', '');
+                while (monto.indexOf(',') > -1) {
+                    monto = monto.replace('$', '').replace(',', '');
+                }
 
-            if (monto == " 0.00" | monto == null | monto == "") { //MGC 07-11-2018 Validación en el monto
-                msgerror = "El monto debe ser MAYOR a cero";
-                _b = false;
-            } else {
-                _b = true;
-            }
-            if (_b === false) {
-                return false;
-            }
-            //END FRT06112018.3
-            //LEJGG 24112018 Para validar el Monto contra las F
-            if (tRet2[0] != null) {
-                monto = parseFloat(monto);
-                var lengthT1 = $("table#table_ret tbody tr[role='row']").length;
-                $("#table_info tbody tr[role='row']").each(function () {
-                    var _t = $(this);
-                    for (var x = 0; x < tRet2.length; x++) {
-                        var _montobase = _t.find("td.BaseImp" + tRet2[x] + " input").val().replace('$', '').replace(',', '');
-                        while (_montobase.indexOf(',') > -1) {
-                            _montobase = _montobase.replace('$', '').replace(',', '');
+                if (borrador != "B") {
+                    if (monto == " 0.00" | monto == null | monto == "") { //MGC 07-11-2018 Validación en el monto
+                        statSend = false;
+                        msgerror = "Fila " + _rni + ": El monto debe ser mayor a cero";
+                        _b = false;
+                    } else {
+                        _b = true;
+                    }
+                    if (_b === false) {
+                        return false;
+                    }
+                }
+
+
+                //END FRT06112018.3
+
+                //FRT02122018 PARA VALIDAR QUE LA FACTURA NO ESTE VACIA
+
+                if (borrador != "B") {
+                    var factura = $(this).find("td.FACTURA input").val().trim();
+
+
+                    if (factura == "" | factura == null) {
+                        statSend = false;
+                        msgerror = "Fila " + _rni + ": Falta ingresar numero de factura";
+                        _b = false;
+                    } else {
+                        _b = true;
+                    }
+                    if (_b === false) {
+                        return false;
+                    }
+                }
+
+                //ENDFRT02122018 PAA VALIDAR QUE LA FACTURA NO ESTE VACIA
+
+
+                //LEJGG 24112018 Para validar el Monto contra las F
+                if (tRet2[0] != null) {
+                    monto = parseFloat(monto);
+                    var lengthT1 = $("table#table_ret tbody tr[role='row']").length;
+                    $("#table_info tbody tr[role='row']").each(function () {
+                        var _t = $(this);
+                        var findexopc = t.row(_t).index();
+                        findexopc++;
+                        if (findexopc == _rni) {
+                            for (var x = 0; x < tRet2.length; x++) {
+                                var _montobase = _t.find("td.BaseImp" + tRet2[x] + " input").val().replace('$', '').replace(',', '');
+                                while (_montobase.indexOf(',') > -1) {
+                                    _montobase = _montobase.replace('$', '').replace(',', '');
+                                }
+                                var montobase = parseFloat(_montobase);
+
+                                if (monto < montobase) {
+                                    statSend = false;
+                                    msgerror = "Fila " + _rni + ": Monto base de retencion (" + montobase + ") no debe ser mayor al monto antes de IVA (" + monto + ")";
+                                    _m = false;
+                                    break
+                                } else {
+                                    _m = true;
+                                }
+                                if (_m === false) {
+                                    return false;
+                                }
+                            }
                         }
-                        var montobase = parseFloat(_montobase);
+                    });
+                } else {
+                    _m = true;
+                }
 
-                        if (monto < montobase) {
-                            msgerror = "Monto base de retencion (" + monto + ") no debe ser mayor al monto antes de IVA (" + montobase + ") posición " + _rni + " ";
-                            _m = false;
-                            break
-                        } else {
-                            _m = true;
-                        }
-                        if (_m === false) {
+
+                if (_m === false) {
+                    return false;
+                }
+                //LEJGG 24112018
+
+
+                ////FRT2311208 PARA VALIDACION DE 50 CARACTERES  FRT06122018 se queita validacion en detales
+
+                //if (borrador != "B") {
+                //    var texto = $(this).find("td.TEXTO textarea").val().trim();
+                //    var ct = texto.length;
+                //    ct = parseFloat(ct)
+                //    if (ct < 50) {
+                //        _b = false;
+                //        statSend = false;
+                //        msgerror = "Fila " + _rni + ": Falta explicación del egreso en texto";
+                //    } else {
+                //        _b = true;
+                //    }
+                //    if (_b === false) {
+                //        return false;
+                //    }
+                //}
+
+                ////END FRT2311208 PARA VALIDACION DE 50 CARACTERES
+
+                if (borrador != "B") {
+                    var tipoimp = t.row(indexopc).data()[14];
+
+                    if (tipoimp == "K" & (ceco == "" | ceco == null)) {
+                        msgerror = "Fila " + _rni + ": Falta ingresar Centro de Costo";
+                        statSend = false;
+                        _b = false;
+                    } else {
+                        _b = true;
+                    }
+                    if (_b === false) {
+                        return false;
+                    }
+                }
+
+
+                //FRT05122018 Para validar que si tiene anexos debemos tener al menos uno asociado por detalle
+                if (borrador != "B") {
+                    if (_vs.length > 0) {
+                        if (na1 === "") {
+                            _as = false;
+                            statSend = false;
+                            _b = false;
+                            msgerror = "Fila " + _rni + " :  Falta asociar numero de anexo en la columna A1";
                             return false;
                         }
                     }
-                });
-            } else {
-                _m = true;
-            }
-            //LEJGG 24112018
+                    if (_b === false) {
+                        return false;
+                    }
+
+                }
+                //ENDFRT05122018 Para validar que si tiene anexos debemos tener al menos uno asociado por detalle
 
 
-            //FRT2311208 PARA VALIDACION DE 50 CARACTERES
-            var texto = $(this).find("td.TEXTO textarea").val().trim();
-            var ct = texto.length;
-            ct = parseFloat(ct)
-            if (ct < 50) {
-                _b = false;
-                msgerror = "Falta explicación en posición  " + _rni + " ";
-            } else {
-                _b = true;
-            }
-            if (_b === false) {
-                return false;
-            }
-            //END FRT2311208 PARA VALIDACION DE 50 CARACTERES
+                //frt07122018 para validar que no metan dos veces el anexo asociado en la misma fila
 
+                for (var k = 0; k < 5; k++) {
+                    var duplicado = false;
+                    for (var z = 0; z < k; z++) {
+                        if (_anexos[k] != "") {
+                            if (_anexos[z] == _anexos[k]) {
+                                duplicado = true;
+                                break;
+                            }
+                        }
 
-            var tipoimp = t.row(indexopc).data()[14];
-
-            if (tipoimp == "K" & (ceco == "" | ceco == null)) {
-                msgerror = "Falta ingresar Centro de Costo";
-                _b = false;
-            } else {
-                _b = true;
-            }
-            if (_b === false) {
-                return false;
-            }
-
-            if (_vs.length > 0) {
-                for (var i = 0; i < _vs.length; i++) {
-                    if (na1 === _vs[i] || na1 === "") {
-                        _b = true;
-                        break;
-                    } else {
+                    }
+                    if (duplicado) {
                         _b = false;
-                        msgerror = "Error en el renglon " + _rni + " valor: " + na1 + " Columna 2";
+                        _aduplicados = false;
+                        statSend = false;
+                        msgerror = "Fila " + _rni + " : No es posible duplicar anexo asociado " + _anexos[z];
+                        break;
                     }
                 }
                 if (_b === false) {
                     return false;
                 }
-                for (var i2 = 0; i2 < _vs.length; i2++) {
-                    if (na2 === _vs[i2] || na2 === "") {
-                        _b = true;
-                        break;
-                    } else {
+
+                //endfrt07122018
+
+                //FRT06122018 Para validar que si no hay anexos no se pueda asociar
+                if (_vs.length == 0) {
+                    if (na1 != "" || na2 != "" || na3 != "" || na4 != "" || na5 != "") {
                         _b = false;
-                        msgerror = "Error en el renglon " + _rni + " valor: " + na2 + " Columna 3";
+                        _anull = false;
+                        msgerror = "Fila " + _rni + " : No existe numero de anexo " + na1 + " por asociar ";
+
                     }
                 }
-                if (_b === false) {
+
+                if (_anull === false) {
                     return false;
                 }
-                for (var i3 = 0; i3 < _vs.length; i3++) {
-                    if (na3 === _vs[i3] || na3 === "") {
-                        _b = true;
-                        break;
-                    } else {
-                        _b = false;
-                        msgerror = "Error en el renglon " + _rni + " valor: " + na3 + " Columna 4";
+                //ENDFRT06122018 Para validar que si no hay anexos no se pueda asociar
+
+
+                if (_vs.length > 0) {
+                    for (var i = 0; i < _vs.length; i++) {
+                        if (na1 === _vs[i] || na1 === "") {
+                            _b = true;
+                            _asnull = true;
+                            break;
+                        } else {
+                            _b = false;
+                            _asnull = false;
+                            //msgerror = "Error en el renglon " + _rni + " valor: " + na1 + " Columna 2";
+                            statSend = false;
+                            msgerror = "Fila " + _rni + " : El valor ingresado en la columna A1 no es un Anexo";
+                        }
                     }
-                }
-                if (_b === false) {
-                    return false;
-                }
-                for (var i4 = 0; i4 < _vs.length; i4++) {
-                    if (na4 === _vs[i4] || na4 === "") {
-                        _b = true;
-                        break;
-                    } else {
-                        _b = false;
-                        msgerror = "Error en el renglon " + _rni + " valor: " + na4 + " Columna 5";
+                    if (_b === false) {
+                        return false;
                     }
-                }
-                if (_b === false) {
-                    return false;
-                }
-                for (var i5 = 0; i5 < _vs.length; i5++) {
-                    if (na5 === _vs[i5] || na5 === "") {
-                        _b = true;
-                        break;
-                    } else {
-                        _b = false;
-                        msgerror = "Error en el renglon " + _rni + " valor: " + na5 + " Columna 6";
+                    if (_asnull === false) {
+                        return false;
                     }
-                }
-                if (_b === false) {
-                    return false;
-                }
-            } else {
-                _b = true;
-            }
-        });
-
-
-        //FRT21112018 Para validar cantidad de anexos solamente al enviar
-        var lengthT = $("table#table_anexa tbody tr[role='row']").length;
-        _a = true;
-
-        if (lengthT == 0) {
-            msgerror = "Es necesario agregar por lo menos 1 Anexo";
-            _a = false;
-        } else {
-            _a = true;
-        }
-
-
-        //ENDFRT21112018
-
-        //FRT2311208 PARA VALIDACION DE 50 CARACTERES
-        var texto1 = $("#CONCEPTO").val();
-        var ct1 = texto1.length;
-        ct1 = parseFloat(ct1);
-        if (ct1 < 50) {
-            _ct = false;
-            msgerror = "Falta explicación en cabecera";
-        } else {
-            _ct = true;
-        }
-        //END FRT2311208 PARA VALIDACION DE 50 CARACTERES
-
-
-        if (_b) {
-            if (_m) {
-                if (_a) {
-                    if (_ct) {
-                        //Guardar los valores de la tabla en el modelo para enviarlos al controlador
-                        copiarTableInfoControl(); //copiarTableInfoPControl();
-                        //copiarTableSopControl();
-                        copiarTableRet();
-                        $('#btn_guardar').trigger("click");
-                    } else {
-                        M.toast({ html: msgerror });
+                    for (var i2 = 0; i2 < _vs.length; i2++) {
+                        if (na2 === _vs[i2] || na2 === "") {
+                            _b = true;
+                            _asnull = true;
+                            break;
+                        } else {
+                            _b = false;
+                            _asnull = false;
+                            //msgerror = "Error en el renglon " + _rni + " valor: " + na2 + " Columna 3";
+                            statSend = false;
+                            msgerror = "Fila " + _rni + " : El valor ingresado en la columna A2 no es un Anexo";
+                        }
+                    }
+                    if (_b === false) {
+                        return false;
+                    }
+                    if (_asnull === false) {
+                        return false;
+                    }
+                    for (var i3 = 0; i3 < _vs.length; i3++) {
+                        if (na3 === _vs[i3] || na3 === "") {
+                            _b = true;
+                            _asnull = true;
+                            break;
+                        } else {
+                            _b = false;
+                            _asnull = false;
+                            //msgerror = "Error en el renglon " + _rni + " valor: " + na3 + " Columna 4";
+                            statSend = false;
+                            msgerror = "Fila " + _rni + " : El valor ingresado en la columna A3 no es un Anexo";
+                        }
+                    }
+                    if (_b === false) {
+                        return false;
+                    }
+                    if (_asnull === false) {
+                        return false;
+                    }
+                    for (var i4 = 0; i4 < _vs.length; i4++) {
+                        if (na4 === _vs[i4] || na4 === "") {
+                            _b = true;
+                            _asnull = true;
+                            break;
+                        } else {
+                            _b = false;
+                            _asnull = false;
+                            //msgerror = "Error en el renglon " + _rni + " valor: " + na4 + " Columna 5";
+                            statSend = false;
+                            msgerror = "Fila " + _rni + " : El valor ingresado en la columna A4 no es un Anexo";
+                        }
+                    }
+                    if (_b === false) {
+                        return false;
+                    }
+                    if (_asnull === false) {
+                        return false;
+                    }
+                    for (var i5 = 0; i5 < _vs.length; i5++) {
+                        if (na5 === _vs[i5] || na5 === "") {
+                            _b = true;
+                            _asnull = true;
+                            break;
+                        } else {
+                            _b = false;
+                            _asnull = false;
+                            //msgerror = "Error en el renglon " + _rni + " valor: " + na5 + " Columna 6";
+                            statSend = false;
+                            msgerror = "Fila " + _rni + " : El valor ingresado en la columna A5 no es un Anexo";
+                        }
+                    }
+                    if (_b === false) {
+                        return false;
+                    }
+                    if (_asnull === false) {
+                        return false;
                     }
                 } else {
+                    _b = true;
+                }
+
+
+            });
+            var rn = $("table#table_info tbody tr[role='row']").length;
+            if (rn == 0) {
+                statSend = false;
+                _f = false;
+                msgerror = "No hay filas con egresos";
+            } else {
+                _f = true;
+            }
+
+            //FRT21112018 Para validar cantidad de anexos solamente al enviar
+
+            var borra = $("#borr").val(); //FRT03122018 para calidar anexos solamente en Enviar
+
+            var lengthT = $("table#table_anexa tbody tr[role='row']").length;
+            _a = true;
+            if (borra != "B") {
+                if (lengthT == 0) {
+                    msgerror = "Es necesario agregar por lo menos 1 Anexo";
+                    statSend = false;
+                    _a = false;
+                } else {
+                    _a = true;
+                }
+            }
+
+
+
+
+
+            //ENDFRT21112018
+
+            //FRT2311208 PARA VALIDACION DE 50 CARACTERES
+
+            if (borrador != "B") {
+                var texto1 = $("#CONCEPTO").val();
+                var ct1 = texto1.length;
+                ct1 = parseFloat(ct1);
+                if (ct1 < 50) {
+                    _ct = false;
+                    statSend = false;
+                    msgerror = "Falta explicación en cabecera";
+                } else {
+                    _ct = true;
+                }
+            }
+
+            //END FRT2311208 PARA VALIDACION DE 50 CARACTERES
+
+            //FRT02122018 para validar solamente en borrador
+
+            if (_m) {
+                if (_g) {
+                    if (_f) {
+                        if (_anull) {
+                            if (_asnull) {
+                                if (_aduplicados) {
+                                    if (borra != "B") {
+                                        if (_b) {
+                                            if (_a) {
+                                                if (_ct) {
+                                                    //Guardar los valores de la tabla en el modelo para enviarlos al controlador
+                                                    copiarTableInfoControl(); //copiarTableInfoPControl();
+                                                    //copiarTableSopControl();
+                                                    copiarTableRet();
+                                                    $('#btn_guardar').trigger("click");
+                                                } else {
+                                                    statSend = false
+                                                    M.toast({ html: msgerror });
+                                                }
+                                            } else {
+                                                statSend = false
+                                                M.toast({ html: msgerror });
+                                            }
+                                        } else {
+                                            statSend = false
+                                            M.toast({ html: msgerror });
+                                        }
+                                    } else {
+                                        //Guardar los valores de la tabla en el modelo para enviarlos al controlador
+                                        copiarTableInfoControl(); //copiarTableInfoPControl();
+                                        //copiarTableSopControl();
+                                        copiarTableRet();
+                                        $('#btn_guardar').trigger("click");
+                                    }
+                                }
+                                else {
+                                    statSend = false
+                                    M.toast({ html: msgerror });
+                                }
+
+
+
+                            } else {
+                                statSend = false
+                                M.toast({ html: msgerror });
+                            }
+
+                        } else {
+                            statSend = false
+                            M.toast({ html: msgerror });
+                        }
+                    } else {
+                        statSend = false
+                        M.toast({ html: msgerror });
+                    }
+                    
+
+                }
+                else {
+
+                    statSend = false
                     M.toast({ html: msgerror });
                 }
 
 
+
             } else {
+                statSend = false
                 M.toast({ html: msgerror });
+
             }
+
+
+
+            $("#borr").val(''); //FRT05122018 para  saber cuando es borrador y cuando envio
+
+
+
+
+            //ENDFRT02122018 para validar solamente eb el borrador
+
+
+            //Termina provisional
+            // $('#btn_guardar').click();
+
         } else {
-            M.toast({ html: msgerror });
+            alert("Favor de esperar. Se esta generando Solicitud...");
+
         }
-        //Termina provisional
-        // $('#btn_guardar').click();
+
     });
+
+
+    //FRT03122018 para poder validar el guardado de borrador
+    $('#btn_borradorh').on("click", function (e) {
+        document.getElementById("loader").style.display = "initial";
+        guardarBorrador(false);
+        document.getElementById("loader").style.display = "none";
+    });
+
+
+    function guardarBorrador(asyncv) {
+        $("#borr").val('B');
+        $('#btn_guardarh').trigger("click");
+    }
+
+    //ENDFRT03122018 Para poder guardar el borrador
 
     $('#addRowInfo').on('click', function () {
 
         var t = $('#table_info').DataTable();
+        var _numrow = t.rows().count();
+        _numrow++; //frt04122018
 
-        var addedRowInfo = addRowInfo(t, "1", "", "", "", "", "", "D", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "");//Lej 13.09.2018
 
-        posinfo++;
+        var addedRowInfo = addRowInfo(t, _numrow, "", "", "", "", "", "D", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "");//Lej 13.09.2018
+
+        //posinfo++;  frt04122018
 
         //FRT08112018 AGREGAR Y QUE SE MIREN LAS 
-        posinfot = posrows + posinfo++;
+        posinfot = _numrow + _numrow++;
 
         //Obtener el select de impuestos en la cabecera
         var idselect = "infoSel" + posinfot;
@@ -466,26 +808,31 @@ $(document).ready(function () {
 
         for (var t = 0; t < lengthtemp; t++) {
             var filetemp = $(this).get(0).files[t];
-            var datatemp = new FormData();
-            datatemp.append('file', filetemp);
-            $.ajax({
-                type: "POST",
-                url: '../subirTemporalEditar',
-                data: datatemp,
-                dataType: "json",
-                cache: false,
-                contentType: false,
-                processData: false,
-                success: function (datatemp) {
-                    if (datatemp !== null || datatemp !== "") {
+            var filetemp = $(this).get(0).files[t];
+            var ft = filetemp.name.substr(filetemp.name.lastIndexOf('.') + 1);
+            if (ft.toLowerCase() == "jpg" || ft.toLowerCase() == "png" || ft.toLowerCase() == "jpeg" || ft.toLowerCase() == "doc" || ft.toLowerCase() == "xls" || ft.toLowerCase() == "ppt" ||
+                ft.toLowerCase() == "xml" || ft.toLowerCase() == "pdf" || ft.toLowerCase() == "txt" || ft.toLowerCase() == "docx" || ft.toLowerCase() == "xlsx" || ft.toLowerCase() == "pptx") {
+                var datatemp = new FormData();
+                datatemp.append('file', filetemp);
+                $.ajax({
+                    type: "POST",
+                    url: '../subirTemporalEditar',
+                    data: datatemp,
+                    dataType: "json",
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    success: function (datatemp) {
+                        if (datatemp !== null || datatemp !== "") {
 
-                    }
-                },
-                error: function (xhr, httpStatusMessage, customErrorMessage) {
-                    M.toast({ html: httpStatusMessage });
-                },
-                async: false
-            });
+                        }
+                    },
+                    error: function (xhr, httpStatusMessage, customErrorMessage) {
+                        M.toast({ html: httpStatusMessage });
+                    },
+                    async: false
+                });
+            }
         }
 
         //END FRT13112018
@@ -510,130 +857,14 @@ $(document).ready(function () {
                     var file = $(this).get(0).files[i];
                     var fileName = file.name;
                     var fileNameExt = fileName.substr(fileName.lastIndexOf('.') + 1);
-                    tdata = "<tr><td></td><td>" + (i + 1) + "</td><td>OK</td><td>" + file.name + "</td><td>" + fileNameExt + "</td><td><input name=\"labels_desc\" class=\"Descripcion\" style=\"font-size:12px;\" type=\"text\" id=\"\" name=\"\" value=\"\"></td><td></td></tr>";
-                    //Lejgg 22-10-2018
-                    if (fileNameExt.toLowerCase() === "xml") {
-                        var data = new FormData();
-                        var _fbool = false;
-                        var _resVu = false;
-                        data.append('file', file);
-                        $.ajax({
-                            type: "POST",
-                            url: '../procesarXML',
-                            data: data,
-                            dataType: "json",
-                            cache: false,
-                            contentType: false,
-                            processData: false,
-                            success: function (data) {
-                                //FRT20112018 Para validar los RFC
-                                if (data[0] == "1") {
-                                    _bcorrecto = true;
-                                    _resVu = validarUuid(data[5]);
-                                    if (!_resVu) {
-                                        _bemisor = validarRFCEmisor(data[4]);
-                                        _breceptor = validarRFCReceptor(data[3], data[7]);
-                                        if (_bemisor & _breceptor) {
-                                            $('#Uuid').val(data[5]);
-                                            $('#FECHAD').val(data[1]);
-                                            $('#FECHADO').val(data[1]);
-                                            $("#FECHAD").trigger("change");
-                                            data[2];//Monto Total
-                                            //FRT14112018.3 Para Tipo de Cambio en XML
-                                            if (data[6] != "MXN") {
-                                                tipo = data[8];
-                                                $('#TIPO_CAMBIO').val(tipo);
-                                                $('#TIPO_CAMBIO').trigger("change");
-                                                var objSelect = document.getElementById("MONEDA_ID");
-                                                objSelect.options[1].selected = true;
-                                            }
-                                        }
+                    if (fileNameExt.toLowerCase() == "jpg" || fileNameExt.toLowerCase() == "png" || fileNameExt.toLowerCase() == "jpeg" || fileNameExt.toLowerCase() == "doc" || fileNameExt.toLowerCase() == "xls" || fileNameExt.toLowerCase() == "ppt" ||
+                        fileNameExt.toLowerCase() == "xml" || fileNameExt.toLowerCase() == "pdf" || fileNameExt.toLowerCase() == "txt" || fileNameExt.toLowerCase() == "docx" || fileNameExt.toLowerCase() == "xlsx" || fileNameExt.toLowerCase() == "pptx") {
+                        tdata = "<tr><td></td><td style=\"text - align: left\">" + (i + 1) + "</td><td style=\"text - align: left\">OK</td><td style=\"text - align: left\">" + file.name + "</td><td style=\"text - align: left\">" + fileNameExt.toLowerCase() + "</td><td style=\"text - align: left\"><input name=\"labels_desc\" class=\"Descripcion\" style=\"font-size:12px;\" type=\"text\" id=\"\" name=\"\" value=\"\"></td><td></td></tr>";
 
-                                    }
-
-                                } else {
-                                    _bcorrecto = false;
-                                }
-                            },
-                            error: function (xhr, httpStatusMessage, customErrorMessage) {
-                                //
-                            },
-                            async: false
-                        });
-                    }
-                    if (fileNameExt.toLowerCase() === "xml") {
-                        if (_resVu) {
-                            //Alert no se metio porque ya hay un xml en la tabla
-                            M.toast({ html: "UUID existente en BD" });
-                            document.getElementById('file_sopAnexar').value = '';
-                        }
-                        else {
-                            //quiere decir que es true y que el rfc coincide, por lo tanto hace el pintado de datos en la tabla
-                            //FRT20112018 Para saber de donde sale el error
-                            if (_bcorrecto) {
-                                if (!_bemisor & !_breceptor) {
-                                    //Alert no se metio porque ya hay un xml en la tabla
-                                    M.toast({ html: "El RFC de Receptor y Emisor no coinciden" });
-                                    document.getElementById('file_sopAnexar').value = '';
-                                } else {
-                                    if (_bemisor) {
-                                        if (_breceptor) {
-                                            _tab.row.add(
-                                                $(tdata)
-                                            ).draw(false).node();
-                                        }
-                                        else {
-                                            //Alert no se metio porque ya hay un xml en la tabla
-                                            M.toast({ html: "El RFC de Receptor no coincide" });
-                                            document.getElementById('file_sopAnexar').value = '';
-                                        }
-
-                                    } else {
-                                        //Alert no se metio porque ya hay un xml en la tabla
-                                        M.toast({ html: "El RFC de Emisor no coincide" });
-                                        document.getElementById('file_sopAnexar').value = '';
-                                    }
-                                }
-                            } else {
-                                //Alert no se metio porque ya hay un xml en la tabla
-                                M.toast({ html: "El XML no tiene formato correcto" });
-                                document.getElementById('file_sopAnexar').value = '';
-                            }
-                        }
-                    }
-                    else {
-                        _tab.row.add(
-                            $(tdata)
-                        ).draw(false).node();
-                    }
-                } else {
-                    var file = $(this).get(0).files[i];
-                    var fileName = file.name;
-                    var fileNameExt = fileName.substr(fileName.lastIndexOf('.') + 1);
-                    var _ban = false;
-                    //Lejgg 22-10-2018------------------------------------------------>
-                    $("#table_anexa > tbody  > tr[role='row']").each(function () {
-                        var t = $("#table_anexa").DataTable();
-                        //Obtener el row para el plugin
-                        var tr = $(this);
-                        var indexopc = t.row(tr).index();
-
-                        //Obtener valores visibles en la tabla
-                        var _tipoAr = $(this).find("td.TYPE").text();
-                        if (fileNameExt.toLowerCase() === _tipoAr.trim()) {
-                            _ban = true;
-                        }
-                        if (_ban)
-                            return;
-                    });
-                    //Si el archivo es xml entra
-                    //LEJGG23/10/18---------------------------------------------------->
-                    if (fileNameExt.toLowerCase() === "xml") {
-                        var _fbool = false;
-                        //Si ban es false, no hay ningun otro archivo xml, entonces metere el registro
-                        if (!_ban) {
-                            tdata = "<tr><td></td><td>" + (nr + 1) + "</td><td>OK</td><td>" + file.name + "</td><td>" + fileNameExt + "</td><td><input name=\"labels_desc\" class=\"Descripcion\" style=\"font-size:12px;\" type=\"text\" id=\"\" name=\"\" value=\"\"></td><td></td></tr>";
+                        //Lejgg 22-10-2018
+                        if (fileNameExt.toLowerCase() === "xml") {
                             var data = new FormData();
+                            var _fbool = false;
                             var _resVu = false;
                             data.append('file', file);
                             $.ajax({
@@ -667,7 +898,9 @@ $(document).ready(function () {
                                                     objSelect.options[1].selected = true;
                                                 }
                                             }
+
                                         }
+
                                     } else {
                                         _bcorrecto = false;
                                     }
@@ -677,6 +910,8 @@ $(document).ready(function () {
                                 },
                                 async: false
                             });
+                        }
+                        if (fileNameExt.toLowerCase() === "xml") {
                             if (_resVu) {
                                 //Alert no se metio porque ya hay un xml en la tabla
                                 M.toast({ html: "UUID existente en BD" });
@@ -689,7 +924,7 @@ $(document).ready(function () {
                                     if (!_bemisor & !_breceptor) {
                                         //Alert no se metio porque ya hay un xml en la tabla
                                         M.toast({ html: "El RFC de Receptor y Emisor no coinciden" });
-                                        document.getElementById('file_sopAnexar').value = '';
+                                        //document.getElementById('file_sopAnexar').value = '';
                                     } else {
                                         if (_bemisor) {
                                             if (_breceptor) {
@@ -700,38 +935,186 @@ $(document).ready(function () {
                                             else {
                                                 //Alert no se metio porque ya hay un xml en la tabla
                                                 M.toast({ html: "El RFC de Receptor no coincide" });
-                                                document.getElementById('file_sopAnexar').value = '';
+                                                //document.getElementById('file_sopAnexar').value = '';
                                             }
 
                                         } else {
                                             //Alert no se metio porque ya hay un xml en la tabla
                                             M.toast({ html: "El RFC de Emisor no coincide" });
-                                            document.getElementById('file_sopAnexar').value = '';
+                                            //document.getElementById('file_sopAnexar').value = '';
                                         }
                                     }
                                 } else {
                                     //Alert no se metio porque ya hay un xml en la tabla
                                     M.toast({ html: "El XML no tiene formato correcto" });
-                                    document.getElementById('file_sopAnexar').value = '';
+                                    //document.getElementById('file_sopAnexar').value = '';
                                 }
                             }
                         }
                         else {
-                            //Alert no se metio porque ya hay un xml en la tabla
-                            M.toast({ html: "Ya existe una factura" });
-                            document.getElementById('file_sopAnexar').value = '';
+                            _tab.row.add(
+                                $(tdata)
+                            ).draw(false).node();
                         }
                     }
-                    //LEJGG23/10/18----------------------------------------------------<
                     else {
-                        tdata = "<tr><td></td><td>" + (nr + 1) + "</td><td>OK</td><td>" + file.name + "</td><td>" + fileNameExt + "</td><td><input name=\"labels_desc\" class=\"Descripcion\" style=\"font-size:12px;\" type=\"text\" id=\"\" name=\"\" value=\"\"></td><td></td></tr>";
-                        _tab.row.add(
-                            $(tdata)
-                        ).draw(false).node();
+                        M.toast({ html: "Tipo de archivo no valido: " + fileName });
                     }
-                    //Lejgg 22-10-2018------------------------------------------------>
+                } else {
+                    var file = $(this).get(0).files[i];
+                    var fileName = file.name;
+                    var fileNameExt = fileName.substr(fileName.lastIndexOf('.') + 1);
+                    if (fileNameExt.toLowerCase() == "jpg" || fileNameExt.toLowerCase() == "png" || fileNameExt.toLowerCase() == "jpeg" || fileNameExt.toLowerCase() == "doc" || fileNameExt.toLowerCase() == "xls" || fileNameExt.toLowerCase() == "ppt" ||
+                        fileNameExt.toLowerCase() == "xml" || fileNameExt.toLowerCase() == "pdf" || fileNameExt.toLowerCase() == "txt" || fileNameExt.toLowerCase() == "docx" || fileNameExt.toLowerCase() == "xlsx" || fileNameExt.toLowerCase() == "pptx") {
+                        var _ban = false;
+                        var _dupli = false;
+                        //Lejgg 22-10-2018------------------------------------------------>
+                        $("#table_anexa > tbody  > tr[role='row']").each(function () {
+                            var t = $("#table_anexa").DataTable();
+                            //Obtener el row para el plugin
+                            var tr = $(this);
+                            var indexopc = t.row(tr).index();
+
+                            //Obtener valores visibles en la tabla
+                            var _tipoAr = $(this).find("td.TYPE").text();
+                            if (fileNameExt.toLowerCase() === _tipoAr.trim()) {
+                                _ban = true;
+                            }
+                            if (_ban)
+                                return;
+                        });
+
+                        //FRT09122018 para no permitir anexar dos veces el archivo
+                        $("#table_anexa > tbody  > tr[role='row']").each(function () {
+                            var t = $("#table_anexa").DataTable();
+                            //Obtener el row para el plugin
+                            var tr = $(this);
+                            var indexopc = t.row(tr).index();
+                            //Verificar si existe el archivo en la tabla FRT09122018
+                            var _namefile = $(this).find("td.NAME").text();
+                            if (fileName == _namefile) {
+                                _dupli = true;
+                            }
+                            if (_dupli)
+                                return;
+                        });
+
+                        if (!_dupli) {
+                            //Si el archivo es xml entra
+                            //LEJGG23/10/18---------------------------------------------------->
+                            if (fileNameExt.toLowerCase() === "xml") {
+                                var _fbool = false;
+                                //Si ban es false, no hay ningun otro archivo xml, entonces metere el registro
+                                if (!_ban) {
+                                    tdata = "<tr><td></td><td style=\"text - align: left\">" + (nr + 1) + "</td><td style=\"text - align: left\">OK</td><td style=\"text - align: left\">" + file.name + "</td><td style=\"text - align: left\">" + fileNameExt.toLowerCase() + "</td><td style=\"text - align: left\"><input name=\"labels_desc\" class=\"Descripcion\" style=\"font-size:12px;\" type=\"text\" id=\"\" name=\"\" value=\"\"></td><td></td></tr>";
+                                    var data = new FormData();
+                                    var _resVu = false;
+                                    data.append('file', file);
+                                    $.ajax({
+                                        type: "POST",
+                                        url: '../procesarXML',
+                                        data: data,
+                                        dataType: "json",
+                                        cache: false,
+                                        contentType: false,
+                                        processData: false,
+                                        success: function (data) {
+                                            //FRT20112018 Para validar los RFC
+                                            if (data[0] == "1") {
+                                                _bcorrecto = true;
+                                                _resVu = validarUuid(data[5]);
+                                                if (!_resVu) {
+                                                    _bemisor = validarRFCEmisor(data[4]);
+                                                    _breceptor = validarRFCReceptor(data[3], data[7]);
+                                                    if (_bemisor & _breceptor) {
+                                                        $('#Uuid').val(data[5]);
+                                                        $('#FECHAD').val(data[1]);
+                                                        $('#FECHADO').val(data[1]);
+                                                        $("#FECHAD").trigger("change");
+                                                        data[2];//Monto Total
+                                                        //FRT14112018.3 Para Tipo de Cambio en XML
+                                                        if (data[6] != "MXN") {
+                                                            tipo = data[8];
+                                                            $('#TIPO_CAMBIO').val(tipo);
+                                                            $('#TIPO_CAMBIO').trigger("change");
+                                                            var objSelect = document.getElementById("MONEDA_ID");
+                                                            objSelect.options[1].selected = true;
+                                                        }
+                                                    }
+                                                }
+                                            } else {
+                                                _bcorrecto = false;
+                                            }
+                                        },
+                                        error: function (xhr, httpStatusMessage, customErrorMessage) {
+                                            //
+                                        },
+                                        async: false
+                                    });
+                                    if (_resVu) {
+                                        //Alert no se metio porque ya hay un xml en la tabla
+                                        M.toast({ html: "UUID existente en BD" });
+                                        //document.getElementById('file_sopAnexar').value = '';
+                                    }
+                                    else {
+                                        //quiere decir que es true y que el rfc coincide, por lo tanto hace el pintado de datos en la tabla
+                                        //FRT20112018 Para saber de donde sale el error
+                                        if (_bcorrecto) {
+                                            if (!_bemisor & !_breceptor) {
+                                                //Alert no se metio porque ya hay un xml en la tabla
+                                                M.toast({ html: "El RFC de Receptor y Emisor no coinciden" });
+                                                //document.getElementById('file_sopAnexar').value = '';
+                                            } else {
+                                                if (_bemisor) {
+                                                    if (_breceptor) {
+                                                        _tab.row.add(
+                                                            $(tdata)
+                                                        ).draw(false).node();
+                                                    }
+                                                    else {
+                                                        //Alert no se metio porque ya hay un xml en la tabla
+                                                        M.toast({ html: "El RFC de Receptor no coincide" });
+                                                        document.getElementById('file_so/*p*/Anexar').value = '';
+                                                    }
+
+                                                } else {
+                                                    //Alert no se metio porque ya hay un xml en la tabla
+                                                    M.toast({ html: "El RFC de Emisor no coincide" });
+                                                    //document.getElementById('file_sopAnexar').value = '';
+                                                }
+                                            }
+                                        } else {
+                                            //Alert no se metio porque ya hay un xml en la tabla
+                                            M.toast({ html: "El XML no tiene formato correcto" });
+                                            //document.getElementById('file_sopAnexar').value = '';
+                                        }
+                                    }
+                                }
+                                else {
+                                    //Alert no se metio porque ya hay un xml en la tabla
+                                    M.toast({ html: "Ya existe una factura" });
+                                    document.getElementById('file_sopAnexar').value = '';
+                                }
+                            }
+                            //LEJGG23/10/18----------------------------------------------------<
+                            else {
+                                tdata = "<tr><td></td><td style=\"text - align: left\">" + (nr + 1) + "</td><td style=\"text - align: left\">OK</td><td style=\"text - align: left\">" + file.name + "</td><td style=\"text - align: left\">" + fileNameExt.toLowerCase() + "</td><td style=\"text - align: left\"><input name=\"labels_desc\" class=\"Descripcion\" style=\"font-size:12px;\" type=\"text\" id=\"\" name=\"\" value=\"\"></td><td></td></tr>";
+                                _tab.row.add(
+                                    $(tdata)
+                                ).draw(false).node();
+                            }
+                        //Lejgg 22-10-2018------------------------------------------------>
+                        } else {
+                            M.toast({ html: "No se pueden repetir el anexo: " + fileName });
+                        }
+                        
+                    }
+                    else {
+                        M.toast({ html: "Tipo de archivo no valido: " + fileName });
+                    }
                 }
             }
+            document.getElementById('file_sopAnexar').value = '';
         }
         if (jsval[0].ID === "SRE") {
             var _length = $(this).get(0).files.length;
@@ -742,37 +1125,42 @@ $(document).ready(function () {
                     var file = $(this).get(0).files[i];
                     var fileName = file.name;
                     var fileNameExt = fileName.substr(fileName.lastIndexOf('.') + 1);
-                    var nr = _tab2.rows().count();
-                    var file = $(this).get(0).files[i];
-                    var _data = new FormData();
-                    _data.append('file', file);
-                    if (fileNameExt.toLowerCase() === "xml") {
-                        //Se saca el UUID
-                        $.ajax({
-                            type: "POST",
-                            url: '../procesarXML',
-                            data: _data,
-                            dataType: "json",
-                            cache: false,
-                            contentType: false,
-                            processData: false,
-                            success: function (data) {
-                                if (data !== null || data !== "") {
-                                    data[4];//UUID
-                                }
-                            },
-                            error: function (xhr, httpStatusMessage, customErrorMessage) {
-                                //
-                            },
-                            async: false
-                        });
+                    if (fileNameExt.toLowerCase() == "jpg" || fileNameExt.toLowerCase() == "png" || fileNameExt.toLowerCase() == "jpeg" || fileNameExt.toLowerCase() == "doc" || fileNameExt.toLowerCase() == "xls" || fileNameExt.toLowerCase() == "ppt" ||
+                        fileNameExt.toLowerCase() == "xml" || fileNameExt.toLowerCase() == "pdf" || fileNameExt.toLowerCase() == "txt" || fileNameExt.toLowerCase() == "docx" || fileNameExt.toLowerCase() == "xlsx" || fileNameExt.toLowerCase() == "pptx") {
+                        var nr = _tab2.rows().count();
+                        var file = $(this).get(0).files[i];
+                        var _data = new FormData();
+                        _data.append('file', file);
+                        if (fileNameExt.toLowerCase() === "xml") {
+                            //Se saca el UUID
+                            $.ajax({
+                                type: "POST",
+                                url: '../procesarXML',
+                                data: _data,
+                                dataType: "json",
+                                cache: false,
+                                contentType: false,
+                                processData: false,
+                                success: function (data) {
+                                    if (data !== null || data !== "") {
+                                        data[4];//UUID
+                                    }
+                                },
+                                error: function (xhr, httpStatusMessage, customErrorMessage) {
+                                    //
+                                },
+                                async: false
+                            });
+                        }
+                    }
+                    else {
+                        M.toast({ html: "Tipo de archivo no valido: " + fileName });
                     }
                 }
             }
         }
+        alinearEstilo();
     });
-
- 
 
     $('#table_anexa tbody').on('click', 'td.select_row', function () {
         //var t = $('#table_anexa').DataTable();
@@ -799,16 +1187,47 @@ $(document).ready(function () {
         updateFooter();
         event.returnValue = false;
         event.cancel = true;
+
         if (tRet2.length > 0) {
             updateTableRet();
         }
+
+        //FRT04122018
+        var _num = t.rows().count();
+        for (i = 1; i < _num + 1; i++) {
+            document.getElementById("table_info").rows[i].cells[1].innerHTML = i;
+        }
+
     });
 
     $('#delRowAnex').click(function (e) {
         var t = $('#table_anexa').DataTable();
+
+        //FRT27112018 ----------------->
+        var tr = $(this);
+        var indexopc = t.row(tr).index();
+        var num_doc = $('#NUM_DOC').val();
+        var type = t.row(indexopc).data()[4];
+
+        if (type == "xml") {
+            $.ajax({
+                type: "POST",
+                url: '../deleteUuid',
+                data: { "num_doc": num_doc },
+                success: function () {
+
+                },
+                error: function (xhr, httpStatusMessage, customErrorMessage) {
+                    M.toast({ html: httpStatusMessage });
+                },
+                async: false
+            });
+        }
+        //FRT27112018------------------------------<
         t.rows('.selected').remove().draw(false);
         event.returnValue = false;
         event.cancel = true;//FRT 12112018  Para recorrer los numero borrados de los anexos
+
         var _num = t.rows().count();
         for (i = 1; i < _num + 1; i++) {
             document.getElementById("table_anexa").rows[i].cells[1].innerHTML = i;
@@ -816,6 +1235,7 @@ $(document).ready(function () {
     });
 
     tamanoTextArea();
+    alinearEstilo();
 });
 
 //MGC 03-11-2018 Cadena de autorización
@@ -833,18 +1253,17 @@ $(window).on('load', function () {
     val3 = val3.replace(/\,/g, "\" , \"");
     val3 = val3.replace(/\=/g, "\" : \"");
     val3 = val3.replace(/\ /g, "");
-    var jsval = $.parseJSON(val3)
+    var jsval = $.parseJSON(val3);
 
     $.each(jsval, function (i, dataj) {
         $("#DETTA_VERSION").val(dataj.VERSION);
         $("#DETTA_USUARIOC_ID").val(dataj.USUARIOC_ID);
         $("#DETTA_ID_RUTA_AGENTE").val(dataj.ID_RUTA_AGENTE);
         $("#DETTA_USUARIOA_ID").val(dataj.USUARIOA_ID);
-
     });
 
     $('.materialize-textarea').css("height", "0px");
-
+    tamanosRenglones();
 });
 
 //Cadena de autorización
@@ -903,7 +1322,7 @@ $('body').on('change', '.IMPUESTO_SELECT', function (event, param1) {
         var tr = $(this).closest('tr'); //Obtener el row 
 
         //Obtener el valor del impuesto
-        var imp = tr.find("td.IMPUESTO input").val();
+        var imp = tr.find("td.IMPUESTO option:selected").text();
 
         //Calcular impuesto y subtotal
         var impimp = impuestoVal(imp);
@@ -959,7 +1378,7 @@ $('body').on('focusout', '.OPER', function (e) {
     var tr = $(this).closest('tr'); //Obtener el row 
 
     //Obtener el valor del impuesto
-    var imp = tr.find("td.IMPUESTO input").val();
+    var imp = tr.find("td.IMPUESTO option:selected").text();
 
     //Calcular impuesto y subtotal
     var impimp = impuestoVal(imp);
@@ -1219,6 +1638,511 @@ function selectCeco(val, tr) {
     }
 }
 
+//LEJGG 05-12-2018--------------------------------------------------------------------I
+$('body').on('keydown.autocomplete', '#PAYER_ID', function () {
+    var tr = $(this).closest('tr'); //Obtener el row
+
+    //Obtener el id de la sociedad
+    var soc = $("#SOCIEDAD_ID").val();
+
+    auto(this).autocomplete({
+        source: function (request, response) {
+            auto.ajax({
+                type: "POST",
+                url: '../getProveedor',
+                dataType: "json",
+                data: { "Prefix": request.term, bukrs: soc },
+                success: function (data) {
+                    response(auto.map(data, function (item) {
+
+                        //return { label: trimStart('0', item.LIFNR) + " - " + item.NAME1, value: trimStart('0', item.LIFNR) };
+                        return { label: trimStart('0', item.LIFNR) + " - " + item.NAME1, value: item.LIFNR };
+                    }));
+                }
+            });
+        },
+        messages: {
+            noResults: '',
+            results: function (resultsCount) { }
+        },
+        change: function (e, ui) {
+            if (!(ui.item)) {
+                e.target.value = "";
+            }
+        },
+        select: function (event, ui) {
+            var label = ui.item.label;
+            var value = ui.item.value;
+            selectProveedor(value);
+        }
+    });
+});
+
+function selectProveedor(val) {
+
+    //Obtener las sociedad//MGC 19-10-2018 Condiciones
+    var soc = $("#SOCIEDAD_ID").val();//MGC 19-10-2018 Condiciones
+
+    //Add MGC Validar que los proveedores no existan duplicados en la tabla
+    var prov = getProveedorC(val, "", soc);//MGC 19-10-2018 Condiciones
+
+    $('#rfc_proveedor').val("");
+    $('#nom_proveedor').val("");
+    $('#condiciones_prov').val("");//MGC 19-10-2018.2 Condiciones
+    $('#condiciones_provt').val("");//MGC 30-10-2018 Condiciones
+    $('#MONTO_DOC_MD').val("");//MGC 07-11-2018 Condiciones
+
+    if (prov != null & prov != "") {
+
+        //MGC 30-10-2018 Quitar los espacios de las condiciones
+        var cond = "";
+        if (prov.COND_PAGO != null) {
+            cond = $.trim(prov.COND_PAGO);
+        }
+
+
+        //Asignar valores
+        $('#PAYER_ID').val(prov.LIFNR);
+        $('#rfc_proveedor').val(prov.STCD1);
+        $('#nom_proveedor').val(prov.NAME1);
+        //$('#condiciones_prov').val(prov.COND_PAGO);//MGC 19-10-2018.2 Condiciones//MGC 30-10-2018 Quitar los espacios de las condiciones
+        $('#condiciones_prov').val(cond);//MGC 19-10-2018.2 Condiciones//MGC 30-10-2018 Quitar los espacios de las condiciones
+
+        //MGC 30-10-2018 Condiciones ---------------------------------------------------->
+        //Obtener la descpción de las retenciones
+
+        if (cond != null & cond != "") {
+            selectCondicionP(cond);
+        }
+
+        if (!conOrden())
+            obtenerRetenciones(false);//LEJ 05.09.2018
+        else
+            obtenerRetencionesP(false);//LEJ 05.09.2018
+    }
+}
+
+function trimStart(character, string) {
+    var startIndex = 0;
+
+    while (string[startIndex] === character) {
+        startIndex++;
+    }
+
+    return string.substr(startIndex);
+}
+
+function getProveedorC(prov, message, soc) {//MGC 19-10-2018 Condiciones
+    proveedorValC = "";
+    var localval = "";
+    if (prov != "") {
+        $.ajax({
+            type: "POST",
+            url: '../getProveedorD',
+            dataType: "json",
+            data: { "lifnr": prov, "soc": soc },//MGC 19-10-2018 Condiciones
+
+            success: function (data) {
+
+                if (data !== null || data !== "") {
+                    asignarValProvC(data);
+                }
+
+            },
+            error: function (xhr, httpStatusMessage, customErrorMessage) {
+                if (message == "X") {
+                    M.toast({ html: "Valor no encontrado" });
+                }
+            },
+            async: false
+        });
+    }
+
+    localval = proveedorValC;
+    return localval;
+}
+
+function asignarValProvC(val) {
+    proveedorValC = val;
+}
+
+function conOrden() {
+    if ($("#conOrden").val() === "X")
+        return true;
+    else
+        return false;
+}
+
+function obtenerRetenciones(flag) {
+    //Obtener la sociedad
+    var sociedad_id = $("#SOCIEDAD_ID").val();
+    var proveedor = $("#PAYER_ID").val();//lej 05.09.2018
+
+    //Validar que los campos tengan valores
+    if ((sociedad_id != "" & sociedad_id != null) & (proveedor != "" & proveedor != null)) {
+        //Enviar los valores actuales de la tabla de retenciones
+        var lengthT = $("table#table_ret tbody tr[role='row']").length;
+        var docsenviar = {};
+        var jsonObjDocs = [];
+        if (lengthT > 0) {
+            //Obtener los valores de la tabla para agregarlos a la tabla oculta y agregarlos al json
+            //Se tiene que jugar con los index porque las columnas (ocultas) en vista son diferentes a las del plugin
+
+            var i = 1;
+            var t = $('#table_ret').DataTable();
+
+            $("#table_ret > tbody  > tr[role='row']").each(function () {
+
+                //Obtener el row para el plugin
+                var tr = $(this);
+                var indexopc = t.row(tr).index();
+
+                //Obtener la sociedad oculta
+                var soc = t.row(indexopc).data()[0];
+
+                //Obtener el proveedor oculto
+                var prov = t.row(indexopc).data()[1];
+
+                //Obtener valores visibles en la tabla
+                var tret = toNum($(this).find("td.TRET").text());
+                var indret = toNum($(this).find("td.INDRET").text());
+                var bimponible = $(this).find("td.BIMPONIBLE").text();
+                var imret = $(this).find("td.IMPRET").text();
+
+                //Quitar espacios
+                bimponible = bimponible.replace(/\s/g, '');
+                imret = imret.replace(/\s/g, '');
+
+                //Conversión a número
+                var bimponible = toNum(bimponible);
+                var imret = toNum(imret);
+
+                var item = {};
+
+                //Agregar los valores para enviarlos al modelo
+                item["LIFNR"] = prov;
+                item["BUKRS"] = soc;
+                item["WITHT"] = tret;
+                item["WT_WITHCD"] = indret;
+                item["POS"] = i;
+                item["BIMPONIBLE"] = bimponible;
+                item["IMPORTE_RET"] = imret;
+
+                jsonObjDocs.push(item);
+                i++;
+                item = "";
+            });
+        }
+
+        //Variable para saber cuantos tipos de impuestos tiene
+        tRet = [];
+        tRet2 = [];
+        docsenviar = JSON.stringify({ 'items': jsonObjDocs, "bukrs": sociedad_id, "lifnr": proveedor });
+        var t = $('#table_ret').DataTable();
+        t.rows().remove().draw(false);
+        var agRowRet = [];
+        $.ajax({
+            type: "POST",
+            url: '../getRetenciones',
+            contentType: "application/json; charset=UTF-8",
+            data: docsenviar,
+            success: function (data) {
+                if (data !== null || data !== "") {
+                    $.each(data, function (i, dataj) {
+                        var bimp = toShow(dataj.BIMPONIBLE);
+                        var imp = toShow(dataj.IMPORTE_RET);
+                        tRet.push(dataj.WITHT);//Lej 12.09.18
+                        //agRowRet.push(addRowRet(t, dataj.BUKRS, dataj.LIFNR, dataj.WITHT, dataj.DESC, dataj.WT_WITHCD, bimp, imp));
+                        agRowRet.push({ t, dataj });
+                    }); //Fin de for
+                }
+
+            },
+            error: function (xhr, httpStatusMessage, customErrorMessage) {
+                M.toast({ html: httpStatusMessage });
+            },
+            async: false
+        });
+        //Lej 26-11-18---------------------------------------------------->
+        //Para quitar las ligadas
+        for (var i = 0; i < agRowRet.length; i++) {
+            $.ajax({
+                type: "POST",
+                url: '../getRetLigadas',
+                data: { 'id': agRowRet[i].dataj.WITHT },
+                dataType: "json",
+                success: function (data) {
+                    if (data !== null || data !== "") {
+                        if (data != "Null") {
+                            for (var a = 0; a < agRowRet.length; a++) {
+                                if (agRowRet[a].dataj.WITHT == data) {
+                                    agRowRet.splice($.inArray(agRowRet[a], agRowRet), 1);
+                                }
+                            }
+                        }
+                        else {
+                        }
+                    }
+                },
+                error: function (xhr, httpStatusMessage, customErrorMessage) {
+                    M.toast({ html: httpStatusMessage });
+                },
+                async: false
+            });
+        }
+        //Para agregar los renglones de retenciones
+        for (var i = 0; i < agRowRet.length; i++) {
+            var bimp = toShow(agRowRet[i].dataj.BIMPONIBLE);
+            var imp = toShow(agRowRet[i].dataj.IMPORTE_RET);
+            addRowRet(t, agRowRet[i].dataj.BUKRS, agRowRet[i].dataj.LIFNR, agRowRet[i].dataj.WITHT, agRowRet[i].dataj.DESC, agRowRet[i].dataj.WT_WITHCD, bimp, imp);
+        }
+        //Mandar llamar un metodo para que realinie los renglones a la izquierda
+
+        //Lej 26-11-18----------------------------------------------------<
+        //Lej 12.09.18-------------------------------------------------------
+        //Aqui se agregaran las columnas extras a la tabla de detalle
+        //$('#table_info').DataTable().clear().draw();//Reinicio la tabla
+        if (parseInt(flag) !== 99) {
+            $('#table_info').DataTable().destroy();
+            $('#table_info').empty();
+        }
+        var arrCols = [
+            {
+                "className": 'select_row',
+                "data": null,
+                "defaultContent": '',
+                "orderable": false
+            },
+            {
+                "name": 'Fila',
+                "className": 'POS',
+                "orderable": false,
+                "visible": true //MGC 04092018 Conceptos FRT 041223018
+            },
+            {
+                "name": 'A1',//MGC 22-10-2018 Etiquetas
+                "className": 'NumAnexo',
+                "orderable": false,
+                "width": "1px"
+            },
+            {
+                "name": 'A2',//MGC 22-10-2018 Etiquetas
+                "className": 'NumAnexo2',
+                "orderable": false
+            },
+            {
+                "name": 'A3',//MGC 22-10-2018 Etiquetas
+                "className": 'NumAnexo3',
+                "orderable": false
+            },
+            {
+                "name": 'A4',//MGC 22-10-2018 Etiquetas
+                "className": 'NumAnexo4',
+                "orderable": false
+            },
+            {
+                "name": 'A5',//MGC 22-10-2018 Etiquetas
+                "className": 'NumAnexo5',
+                "orderable": false
+            },
+            {
+                "name": 'TEXTO',
+                "className": 'TEXTO',
+                "orderable": false
+            },
+            {
+                "name": 'CA',
+                "className": 'CA',
+                "orderable": false,
+                "visible": false
+            },
+            {
+                "name": 'FACTURA',
+                "className": 'FACTURA',
+                "orderable": false
+            },
+            {
+                "name": 'TCONCEPTO',
+                "className": 'TCONCEPTO',
+                "orderable": false,
+                "visible": false//MGC 22-10-2018 Etiquetas
+            },
+            {
+                "name": 'CONCEPTO',
+                "className": 'GRUPO',
+                "orderable": false
+            },
+            {
+                "name": 'CUENTA',
+                "className": 'CUENTA',
+                "orderable": false,
+                "visible": false//lej 11.09.2018
+            },
+            {
+                "name": 'CUENTANOM',
+                "className": 'CUENTANOM',
+                "orderable": false,
+                "visible": false//lej 11.09.2018
+            },
+            {
+                "name": 'TIPOIMP',
+                "className": 'TIPOIMP',
+                "orderable": false,
+                "visible": false//MGC 22-10-2018 Etiquetas
+            },
+            {
+                "name": 'IMPUTACION',
+                "className": 'IMPUTACION',
+                "orderable": false,
+                "visible": false//lej 11.09.2018
+            },
+            {
+                "name": 'CCOSTO',
+                "className": 'CCOSTO',
+                "orderable": false
+
+            },
+            {
+                "name": 'MONTO',
+                "className": 'MONTO',
+                "orderable": false
+            },
+            {
+                "name": 'IMPUESTO',
+                "className": 'IMPUESTO',
+                "orderable": false
+            },
+            {
+                "name": 'IVA',
+                "className": 'IVA',
+                "orderable": false
+            }
+        ];
+        //Se rearmara la tabla en HTML
+        var taInf = $("#table_info");
+        taInf.append($("<thead />"));
+        taInf.append($("<tbody />"));
+        taInf.append($("<tfoot />"));
+        var thead = $("#table_info thead");
+        thead.append($("<tr />"));
+        //Theads
+        $("#table_info>thead>tr").append("<th></th>");
+        $("#table_info>thead>tr").append("<th class=\"lbl_pos\">Fila</th>");
+        $("#table_info>thead>tr").append("<th class=\"lbl_NmAnexo\">A1</th>");
+        $("#table_info>thead>tr").append("<th class=\"lbl_NmAnexo\">A2</th>");
+        $("#table_info>thead>tr").append("<th class=\"lbl_NmAnexo\">A3</th>");
+        $("#table_info>thead>tr").append("<th class=\"lbl_NmAnexo\">A4</th>");
+        $("#table_info>thead>tr").append("<th class=\"lbl_NmAnexo\">A5</th>");
+        $("#table_info>thead>tr").append("<th class=\"lbl_Texto\">Texto</th>");//FRT08112018
+        $("#table_info>thead>tr").append("<th class=\"lbl_cargoAbono\">D/H</th>");
+        $("#table_info>thead>tr").append("<th class=\"lbl_factura\">Factura</th>");
+        $("#table_info>thead>tr").append("<th class=\"lbl_tconcepto\">TIPO CONCEPTO</th>");
+        $("#table_info>thead>tr").append("<th class=\"lbl_grupo\">Concepto</th>");//FRT08112018
+        $("#table_info>thead>tr").append("<th class=\"lbl_cuenta\">Cuenta</th>");
+        $("#table_info>thead>tr").append("<th class=\"lbl_cuentaNom\">Nombre de cuenta</th>");
+        $("#table_info>thead>tr").append("<th class=\"lbl_tipoimp\">Tipo Imp.</th>");
+        $("#table_info>thead>tr").append("<th class=\"lbl_imputacion\">Imputación</th>");
+        $("#table_info>thead>tr").append("<th class=\"lbl_ccosto\">Centro de Costo</th>"); //FRT08112018
+        $("#table_info>thead>tr").append("<th class=\"lbl_monto\">Monto</th>");
+        $("#table_info>thead>tr").append("<th class=\"lbl_impuesto\">Impuesto  </th>");
+        $("#table_info>thead>tr").append("<th class=\"lbl_iva\">IVA</th>");
+        var colspan = 20;
+        tRet2 = tRet;
+        for (i = 0; i < tRet.length; i++) {//Revisare las retenciones que tienes ligadas
+            $.ajax({
+                type: "POST",
+                url: '../getRetLigadas',
+                data: { 'id': tRet[i] },
+                dataType: "json",
+                success: function (data) {
+                    if (data !== null || data !== "") {
+                        if (data != "Null") {
+                            tRet2 = jQuery.grep(tRet2, function (value) {
+                                return value != data;
+                            });
+                        }
+                        else {
+                        }
+                    }
+                },
+                error: function (xhr, httpStatusMessage, customErrorMessage) {
+                    M.toast({ html: httpStatusMessage });
+                },
+                async: false
+            });
+        }
+        for (i = 0; i < tRet2.length; i++) {//Agregare las columnas extras
+            $("#table_info>thead>tr").append("<th class=\"bi" + tRet2[i] + "\">" + tRet2[i] + "B. I.</th>");
+            $("#table_info>thead>tr").append("<th class=\"ir" + tRet2[i] + "\">" + tRet2[i] + "I. R.</th>");
+            colspan++;
+            colspan++;
+        }
+        $("#table_info>thead>tr").append("<th class=\"lbl_total\">Total</th>");
+        $("#table_info>thead>tr").append("<th class=\"lbl_check\">Check</th>");
+        //Tfoot       
+        var tfoot = $("#table_info tfoot");
+        tfoot.append($("<tr />"));
+        //$("#table_info>tfoot>tr").append("<th colspan=\"" + colspan + "\" style=\"text-align:right\"></th>");FRT22112018 para quitar el footer
+        //$("#table_info>tfoot>tr").append("<th id=\"total_info\"></th>");FRT22112018 para quitar el footer
+        //Se hara un push al arreglo de columnas original
+        for (i = 0; i < tRet2.length; i++) {
+            arrCols.push({
+                "name": tRet2[i] + " B.Imp.",
+                "orderable": false
+            }, {
+                    "name": tRet2[i] + " I. Ret.",
+                    "orderable": false
+                });
+        }
+        //Lej 17.09.18
+        //Para agregar columna texto al final
+        arrCols.push({
+            "name": 'TOTAL',
+            "className": 'TOTAL',
+            "orderable": false
+        });
+
+        //MGC ADD 03-10-2018 solicitud con orden de compra
+        arrCols.push({
+            "name": 'CHECK',
+            "className": 'CHECK',
+            "orderable": false,
+            "visible": false//MGC 22-10-2018 Etiquetas
+        });
+
+        //Lej 17.09.18
+        extraCols = tRet2.length;
+        $('#table_info').DataTable({
+            language: {
+                "url": "../Scripts/lang/ES.json"
+            },
+            "destroy": true,
+            "paging": false,
+            "info": false,
+            "searching": false,
+            "columns": arrCols,
+            columnDefs: [
+                {
+                    targets: [17, 19],
+                    className: 'mdl-data-table__cell--non-numeric'
+                }
+            ]
+        });
+
+        //tamanosRenglones();
+        //MGC 22-10-2018 Etiquetas------------------------------------------>
+        //Columna tipo de concepto y columna tipo imputación ocultarlas
+
+        //MGC 22-10-2018 Etiquetas------------------------------------------<
+        //Lej 12.09.18-------------------------------------------------------
+    } else {
+        //Enviar mensaje de error true
+    }
+    //tamanosRenglones();
+    // alinearEstiloR();
+}
+//LEJGG 05-12-2018--------------------------------------------------------------------T
+
 $('body').on('keydown.autocomplete', '#condiciones_prov', function () {
 
     auto(this).autocomplete({
@@ -1275,27 +2199,29 @@ function selectCondicion(val, text) {
 
 function insertarCondicion() {
     var val = $('#condiciones_prov').val();
-    $.ajax({
-        type: "POST",
-        url: '../getCondicionEdit',
-        data: { "id": val },
-        success: function (data) {
-            if (data !== null || data !== "") {
-                $('#condiciones_provt').val(data);//LEJGG 06-11-18 Condiciones
-            }
-        },
-        error: function (xhr, httpStatusMessage, customErrorMessage) {
-            M.toast({ html: httpStatusMessage });
-        },
-        async: false
-    });
+    if (val !== "") {
+        $.ajax({
+            type: "POST",
+            url: '../getCondicionEdit',
+            data: { "id": val },
+            success: function (data) {
+                if (data !== null || data !== "") {
+                    $('#condiciones_provt').val(data);//LEJGG 06-11-18 Condiciones
+                }
+            },
+            error: function (xhr, httpStatusMessage, customErrorMessage) {
+                M.toast({ html: httpStatusMessage });
+            },
+            async: false
+        });
+    }
 }
 
 function selectCondicionP(val) {
 
     $.ajax({
         type: "POST",
-        url: 'getCondicionT',
+        url: '../getCondicionT',
         //contentType: "application/json; charset=UTF-8",
         data: { "cond": val },
         success: function (data) {
@@ -1454,7 +2380,10 @@ $('body').on('focusout', '.extrasC2', function (e) {
 
 function ocultarCamposEdicion(pacc) {
     if (pacc == "B") {
-        $('#PAYER_ID').attr("disabled", "none");
+        var _v = $('#PAYER_ID').val();
+        if (_v !== "") {
+            $('#PAYER_ID').attr("disabled", "none");
+        }
     }
     if (pacc == "P") {
         $('#PAYER_ID').attr("disabled", "disabled");
@@ -1495,7 +2424,7 @@ function addSelectImpuesto(addedRowInfo, imp, idselect, disabled, clase) {
     var ar = $(addedRowInfo).find("td.IMPUESTO");
 
 
-    var sel = $("<select class = \"IMPUESTO_SELECT\" id = \"" + idselect + "\"> ").appendTo(ar);
+    var sel = $("<select class = \"IMPUESTO_SELECT  browser-default\" id = \"" + idselect + "\"> ").appendTo(ar);
     $("#IMPUESTO option").each(function () {
         var _valor = $(this).val();//lej 19.09.2018
         var _texto = $(this).text();//lej 19.09.2018
@@ -1511,8 +2440,8 @@ function addSelectImpuesto(addedRowInfo, imp, idselect, disabled, clase) {
     }
 
     //Iniciar el select agregado
-    var elem = document.getElementById(idselect);
-    var instance = M.Select.init(elem, []);
+    //var elem = document.getElementById(idselect);
+    //var instance = M.Select.init(elem, []);
     $(".IMPUESTO_SELECT").trigger("change");
 }
 
@@ -1529,7 +2458,7 @@ function copiarTableInfoControl() {
         jsonObjDocs = [];
         jsonObjDocs2 = [];
         jsonObjDocs3 = [];//lej01.10.2018
-        jsonObjDocs4 = [];//lejgg02.11.2018
+        //jsonObjDocs4 = [];//lejgg02.11.2018  frt03122018 se mueve para validar
         var i = 1;
         var t = $('#table_info').DataTable();
         //Lej 14.09.18---------------------
@@ -1608,7 +2537,8 @@ function copiarTableInfoControl() {
 
             //var imputacion = $(this).find("td.IMPUTACION").text(); //MGC 11-10-2018 Obtener valor de columnas oculta
             var ccosto = $(this).find("td.CCOSTO input").val(); //MGC 11-10-2018 Obtener valor de columnas oculta
-            var impuesto = $(this).find("td.IMPUESTO input").val();
+            // var impuesto = $(this).find("td.IMPUESTO input").val();
+            var impuesto = tr.find("td.IMPUESTO select").val();
             var monto1 = $(this).find("td.MONTO input").val();
             while (monto1.indexOf(',') > -1) {
                 monto1 = monto1.replace('$', '').replace(',', '');
@@ -1758,45 +2688,53 @@ function copiarTableInfoControl() {
             },
             async: false
         });
-        //Para mandar la tabla y comparar
-        $("#table_anexa > tbody  > tr[role='row']").each(function () {
-            //Obtener el row para el plugin
-            var tr = $(this);
-            var pos = $(this).find("td.POS").text();
-            var nombre = $(this).find("td.NAME").text();
-            var tipo = $(this).find("td.TYPE").text();
-            var desc = $(this).find("td.DESC").text();
-            if (desc === "") {
-                desc = $(this).find("td.DESC input").val();
-            }
-            var item4 = {};
-            item4["TIPO"] = tipo;
-            item4["DESC"] = desc;
-            item4["NAME"] = nombre;
-            item4["PATH"] = nombre;
-            jsonObjDocs4.push(item4);
-            item4 = "";
-        });
-        docsenviar4 = JSON.stringify({ 'docs': jsonObjDocs4, 'nd': _numdoc });
 
-        $.ajax({
-            type: "POST",
-            url: '../getPartialCon4',
-            contentType: "application/json; charset=UTF-8",
-            data: docsenviar4,
-            success: function (data) {
+        var lengthTA = $("table#table_anexa tbody tr[role='row']").length;
 
-                if (data !== null || data !== "") {
-
-                    $("table#table_anexah tbody").append(data);
+        if (lengthTA > 0) {
+            //Para mandar la tabla y comparar
+            jsonObjDocs4 = [];//lejgg02.11.2018
+            $("#table_anexa > tbody  > tr[role='row']").each(function () {
+                //Obtener el row para el plugin
+                var tr = $(this);
+                var pos = $(this).find("td.POS").text();
+                var nombre = $(this).find("td.NAME").text();
+                var tipo = $(this).find("td.TYPE").text();
+                var desc = $(this).find("td.DESC").text();
+                if (desc === "") {
+                    desc = $(this).find("td.DESC input").val();
                 }
+                var item4 = {};
+                item4["TIPO"] = tipo;
+                item4["DESC"] = desc;
+                item4["NAME"] = nombre;
+                item4["PATH"] = nombre;
+                jsonObjDocs4.push(item4);
+                item4 = "";
+            });
+            docsenviar4 = JSON.stringify({ 'docs': jsonObjDocs4, 'nd': _numdoc });
 
-            },
-            error: function (xhr, httpStatusMessage, customErrorMessage) {
-                M.toast({ html: httpStatusMessage });
-            },
-            async: false
-        });
+            $.ajax({
+                type: "POST",
+                url: '../getPartialCon4',
+                contentType: "application/json; charset=UTF-8",
+                data: docsenviar4,
+                success: function (data) {
+
+                    if (data !== null || data !== "") {
+
+                        $("table#table_anexah tbody").append(data);
+                    }
+
+                },
+                error: function (xhr, httpStatusMessage, customErrorMessage) {
+                    M.toast({ html: httpStatusMessage });
+                },
+                async: false
+            });
+        }
+
+
     }
 }
 
@@ -1991,6 +2929,9 @@ function llenarRetencionesIRet() {
             if ($(this).find("td." + _v2 + " input").hasClass(_var)) {
                 centi = x;
                 var colex = $(this).find("td." + _v2 + " input").val().replace("$", "").replace(',', '');
+                if (colex === "") {
+                    colex = parseFloat("0.0");
+                }
                 while (colex.indexOf(',') > -1) {
                     colex = colex.replace('$', '').replace(',', '');
                 }
@@ -2017,6 +2958,9 @@ function llenarRetencionesBImp() {
             _v2 = "BaseImp" + tRet2[x];
             if ($(this).find("td." + _v2 + " input").hasClass(_var)) {
                 var colex = $(this).find("td." + _v2 + " input").val().replace("$", "").replace(',', '');
+                if (colex === "") {
+                    colex = parseFloat("0.0");
+                }
                 while (colex.indexOf(',') > -1) {
                     colex = colex.replace('$', '').replace(',', '');
                 }
@@ -2041,10 +2985,10 @@ function armarTablaInfo(datos) {
             "orderable": false
         },
         {
-            "name": 'POS',
+            "name": 'Fila',
             "className": 'POS',
             "orderable": false,
-            "visible": false //MGC 04092018 Conceptos
+            "visible": true //MGC 04092018 Conceptos  frt04122018
         },
         {
             "name": 'A1',
@@ -2153,7 +3097,7 @@ function armarTablaInfo(datos) {
     thead.append($("<tr />"));
     //Theads
     $("#table_info>thead>tr").append("<th></th>");
-    $("#table_info>thead>tr").append("<th class=\"lbl_pos\">Pos NT</th>");
+    $("#table_info>thead>tr").append("<th class=\"lbl_pos\">Fila</th>");
     $("#table_info>thead>tr").append("<th class=\"lbl_NmAnexo\">A1</th>");
     $("#table_info>thead>tr").append("<th class=\"lbl_NmAnexo\">A2</th>");
     $("#table_info>thead>tr").append("<th class=\"lbl_NmAnexo\">A3</th>");
@@ -2265,14 +3209,14 @@ function armarTablaInfo(datos) {
     arrCols.push({
         "name": 'CHECK',
         "className": 'CHECK',
-        "orderable": false
+        "orderable": false,
+        "visible": false
     });
 
     //Lej 17.09.18
     extraCols = tRet2.length;
     $('#table_info').DataTable({
-        scrollX: true,
-        scrollCollapse: true,
+
         language: {
             "url": "../../Scripts/lang/ES.json"
         },
@@ -2356,7 +3300,45 @@ function armarTablaInfo(datos) {
             if (datos.DOCUMENTOPSTR[i].CCOSTO === null) {
                 datos.DOCUMENTOPSTR[i].CCOSTO = "";
             }
+            if (datos.DOCUMENTOPSTR[i].FACTURA === null) {
+                datos.DOCUMENTOPSTR[i].FACTURA = "";
+            }
+
             if (_infoAnex.length > 0) {
+                //FRT05122018 Para quitar los ceros en los vacios
+                if (_infoAnex[i].a1 == 0) {
+                    _infoAnex[i].a1 = "";
+                } else {
+                    _infoAnex[i].a1;
+                }
+
+                if (_infoAnex[i].a2 == 0) {
+                    _infoAnex[i].a2 = "";
+                } else {
+                    _infoAnex[i].a2;
+                }
+
+                if (_infoAnex[i].a3 == 0) {
+                    _infoAnex[i].a3 = "";
+                } else {
+                    _infoAnex[i].a3;
+                }
+
+                if (_infoAnex[i].a4 == 0) {
+                    _infoAnex[i].a4 = "";
+                } else {
+                    _infoAnex[i].a4;
+                }
+
+                if (_infoAnex[i].a5 == 0) {
+                    _infoAnex[i].a5 = "";
+                } else {
+                    _infoAnex[i].a5;
+                }
+
+                //ENDFRT05122018 Para quitar los ceros en los vacios
+
+
                 var ar = addRowInfo($('#table_info').DataTable(), datos.DOCUMENTOPSTR[i].POS, _infoAnex[i].a1, _infoAnex[i].a2, _infoAnex[i].a3, _infoAnex[i].a4, _infoAnex[i].a5, datos.DOCUMENTOPSTR[i].ACCION, datos.DOCUMENTOPSTR[i].FACTURA, datos.DOCUMENTOPSTR[i].TCONCEPTO, datos.DOCUMENTOPSTR[i].GRUPO, datos.DOCUMENTOPSTR[i].CUENTA,
                     datos.DOCUMENTOPSTR[i].NOMCUENTA, datos.DOCUMENTOPSTR[i].TIPOIMP, datos.DOCUMENTOPSTR[i].IMPUTACION, datos.DOCUMENTOPSTR[i].CCOSTO, datos.DOCUMENTOPSTR[i].MONTO, "", datos.DOCUMENTOPSTR[i].IVA, datos.DOCUMENTOPSTR[i].TEXTO, datos.DOCUMENTOPSTR[i].TOTAL, "", "", arrColExTA);
 
@@ -2407,7 +3389,7 @@ function addRowInfo(t, POS, NumAnexo, NumAnexo2, NumAnexo3, NumAnexo4, NumAnexo5
         "<input class=\"NumAnexo5\" style=\"font-size:12px;\" type=\"text\" id=\"\" name=\"\" value=\"" + NumAnexo5 + "\">",
 
         CA,//MGC 04092018 Conceptos
-        "<input " + disabled + " class=\"FACTURA\" style=\"font-size:12px;\" type=\"text\" id=\"\" name=\"\" value=\"" + FACTURA + "\">",
+        "<input " + disabled + " class=\"FACTURA\" style=\"font-size:12px;width:75px;\" type=\"text\" id=\"\" name=\"\" value=\"" + FACTURA + "\">",
         TIPO_CONCEPTO,
         "<input " + disabled + " class=\"GRUPO GRUPO_INPUT\" style=\"font-size:12px;\" type=\"text\" id=\"\" name=\"\" value=\"" + _tcgp + "\">",//LEJGG 06-11-18
         CUENTA,//MGC 04092018 Conceptos
@@ -2415,10 +3397,10 @@ function addRowInfo(t, POS, NumAnexo, NumAnexo2, NumAnexo3, NumAnexo4, NumAnexo5
         TIPOIMP,
         IMPUTACION,
         ceco,
-        "<input " + disabled + " class=\"MONTO OPER\" style=\"font-size:12px;width:70px;\" type=\"text\" id=\"\" name=\"\" value=\"" + MONTO + "\">",
+        "<input " + disabled + " class=\"MONTO OPER\" style=\"font-size:12px;width:76px;\" type=\"text\" id=\"\" name=\"\" value=\"" + MONTO + "\">",
         "",
-        "<input disabled class=\"IVA\" style=\"font-size:12px;width:70px;\" type=\"text\" id=\"\" name=\"\" value=\"" + IVA + "\">",
-        "<textarea " + disabled + " class=\"materialize-textarea\" style=\"font-size:12px;width:100px;height:0px;\" maxlength=\"50\" type=\"text\" id=\"TEXTO\" name=\"TEXTO\" value=\"" + TEXTO + "\"> " + TEXTO + "</textarea>",//Lej 13.09.2018//FRT20112018 
+        "<input disabled class=\"IVA\" style=\"font-size:12px;width:75px;\" type=\"text\" id=\"\" name=\"\" value=\"" + IVA + "\">",
+        "<textarea " + disabled + " class=\"materialize-textarea\" style=\"font-size:12px;width:100px;height:0px;\" maxlength=\"50\" type=\"text\" id=\"TEXTO\" name=\"TEXTO\" value=\"" + TEXTO + "\">" + TEXTO + "</textarea>",//Lej 13.09.2018//FRT20112018 
         //"<input " + disabled + " style=\"font-size:12px;width:100px;height:91px;\" maxlength=\"50\" type=\"text\" id=\"TEXTO\" name=\"TEXTO\" value=\"" + TEXTO + "\">",//Lej 13.09.2018//FRT20112018 
         TOTAL,
         check, //MGC 03-10-2018 solicitud con orden de compra
@@ -2442,9 +3424,13 @@ function addRowl(t, pos, nA, nA2, nA3, nA4, nA5, ca, factura, tipo_concepto, gru
             colstoAdd += '<td class=\"ImpRet' + tRet2[i] + '\"><input class=\"extrasC2 ImpRet' + i + '\" style=\"font-size:12px;width:75px;\" type=\"text\" id=\"\" name=\"\" value=\"' + toShow(_dExtra[i].IMPORTE_RET) + '\"></td>';
         }
     }
-    colstoAdd += "<td><input disabled class=\"TOTAL OPER\" style=\"font-size:12px;width:77px;\" type=\"text\" id=\"\" name=\"\" value=\"" + total + "\"></td>"
+    colstoAdd += "<td><input disabled class=\"TOTAL OPER\" style=\"font-size:12px;width:80px;\" type=\"text\" id=\"\" name=\"\" value=\"" + total + "\"></td>"
         + "<td><p><label><input type=\"checkbox\" checked=\"" + check + "\" /><span></span></label></p></td>";//MGC 03 - 10 - 2018 solicitud con orden de compra
-    var table_rows = '<tr><td></td><td>' + pos + '</td><td><input class=\"NumAnexo\" style=\"font-size:12px;\" type=\"text\" id=\"\" name=\"\" value=\"\"></td><td><input class=\"NumAnexo2\" style=\"font-size:12px;\" type=\"text\" id=\"\" name=\"\" value=\"\"></td><td><input class=\"NumAnexo3\" style=\"font-size:12px;\" type=\"text\" id=\"\" name=\"\" value=\"\"></td><td><input class=\"NumAnexo4\" style=\"font-size:12px;\" type=\"text\" id=\"\" name=\"\" value=\"\"></td><td><input class=\"NumAnexo5\" style=\"font-size:12px;\" type=\"text\" id=\"\" name=\"\" value=\"\"></td>' +
+    //var table_rows = '<tr><td></td><td>' + pos + '</td><td><input class=\"NumAnexo\" style=\"font-size:12px;\" type=\"text\" id=\"\" name=\"\" value=\"\"></td><td><input class=\"NumAnexo2\" style=\"font-size:12px;\" type=\"text\" id=\"\" name=\"\" value=\"\"></td><td><input class=\"NumAnexo3\" style=\"font-size:12px;\" type=\"text\" id=\"\" name=\"\" value=\"\"></td><td><input class=\"NumAnexo4\" style=\"font-size:12px;\" type=\"text\" id=\"\" name=\"\" value=\"\"></td><td><input class=\"NumAnexo5\" style=\"font-size:12px;\" type=\"text\" id=\"\" name=\"\" value=\"\"></td>' +
+    //    '<td> ' + texto + '</td><td>' + ca + '</td><td>' + factura + '</td><td>' + tipo_concepto
+    //    + '</td><td>' + grupo + '</td><td>' + cuenta + '</td><td>' + cuentanom + '</td><td>' + tipoimp + '</td><td>' + imputacion
+    //    + '</td><td>' + ccentro + '</td><td>' + monto + '</td><td>' + impuesto + '</td><td>' + iva + '</td>' + colstoAdd + '</tr>';
+    var table_rows = '<tr><td></td><td>' + pos + '</td><td>' + nA + '</td><td>' + nA2 + '</td><td>' + nA3 + '</td><td>' + nA4 + '</td><td>' + nA5 + '</td>' +
         '<td> ' + texto + '</td><td>' + ca + '</td><td>' + factura + '</td><td>' + tipo_concepto
         + '</td><td>' + grupo + '</td><td>' + cuenta + '</td><td>' + cuentanom + '</td><td>' + tipoimp + '</td><td>' + imputacion
         + '</td><td>' + ccentro + '</td><td>' + monto + '</td><td>' + impuesto + '</td><td>' + iva + '</td>' + colstoAdd + '</tr>';
@@ -2471,7 +3457,7 @@ function addRowl(t, pos, nA, nA2, nA3, nA4, nA5, ca, factura, tipo_concepto, gru
             monto,
             impuesto,
             iva,
-            "<input disabled class=\"TOTAL OPER\" style=\"font-size:12px;\" type=\"text\" id=\"\" name=\"\" value=\"" + total + "\">",
+            "<input disabled class=\"TOTAL OPER\" style=\"font-size:12px;width:80px;\" type=\"text\" id=\"\" name=\"\" value=\"" + total + "\">",
             "<input class=\"CHECK\" style=\"font-size:12px;\" type=\"checkbox\" id=\"\" name=\"\" value=\"" + check + "\">" //MGC 03 - 10 - 2018 solicitud con orden de compra
         ]).draw(false).node();
     } else {
@@ -2729,6 +3715,9 @@ function tamanosRenglones() {
     //TEXTO
     var t_ret = $("#table_info>thead>tr").find('th.TEXTO');
     t_ret.css("text-align", "center");
+    //total
+    var t_fac = $("#table_info>thead>tr").find('th.FACTURA');
+    t_fac.css("text-align", "center");
     //Monto
     var t_mt = $("#table_info>thead>tr").find('th.MONTO');
     t_mt.css("text-align", "center");
@@ -2736,7 +3725,9 @@ function tamanosRenglones() {
     //IVA
     var t_iva = $("#table_info>thead>tr").find('th.IVA');
     t_iva.css("text-align", "center");
-    //t_iva.css("width", "100px");
+    //SELECT IMPUESTO
+    var t_imps = $("#table_info>thead>tr").find('th.IMPUESTO_SELECT');
+    t_imps.css("text-align", "center");
     //reviso si tiene retenciones para agregarles nueva medidas
     if (tRet2.length > 0) {
         for (var i = 0; i < tRet2.length; i++) {
@@ -2749,6 +3740,11 @@ function tamanosRenglones() {
     //total
     var t_tot = $("#table_info>thead>tr").find('th.TOTAL');
     t_tot.css("text-align", "center");
+    //FILA
+    var tpos = $("#table_info>tbody>tr").find('td.POS');
+    tpos.css("text-align", "center");
+    tpos.css("font-size", "15px");
+    $(window).resize();
 }
 
 
@@ -2897,7 +3893,7 @@ function sumarizarTodoRow(_this) {
     //var t = $('#table_info').DataTable();
     var tr = _this.closest('tr'); //Obtener el row 
     //Obtener el valor del impuesto
-    var imp = tr.find("td.IMPUESTO input").val();
+    var imp = tr.find("td.IMPUESTO select").val();
     //Calcular impuesto y subtotal
     var impimp = impuestoVal(imp);
     impimp = parseFloat(impimp);
@@ -2950,4 +3946,52 @@ function sumarizarTodoRow(_this) {
 
 }
 
-
+function alinearEstilo() {
+    $("#table_ret > tbody  > tr[role='row']").each(function () {
+        //1
+        var R1 = $(this).find("td.TRET");
+        R1.css("text-align", "left");
+        //2
+        var R2 = $(this).find("td.DESCTRET");
+        R2.css("text-align", "left");
+        //3
+        var R3 = $(this).find("td.INDRET");
+        R3.css("text-align", "left");
+        //4
+        var R4 = $(this).find("td.BIMPONIBLE");
+        R4.css("text-align", "left");
+        //5
+        var R5 = $(this).find("td.IMPRET");
+        R5.css("text-align", "left");
+    });
+    //--------
+    //Para los titulos
+    var tpo = $("#table_anexa>thead>tr").find('th.POS');
+    tpo.css("text-align", "left");
+    var ts = $("#table_anexa>thead>tr").find('th.STAT');
+    ts.css("text-align", "left");
+    var tn = $("#table_anexa>thead>tr").find('th.NAME');
+    tn.css("text-align", "left");
+    var tt = $("#table_anexa>thead>tr").find('th.TYPE');
+    tt.css("text-align", "left");
+    var tde = $("#table_anexa>thead>tr").find('th.DESC');
+    tde.css("text-align", "left");
+    //--------
+    $("#table_anexa > tbody  > tr[role='row']").each(function () {
+        //1
+        var R1 = $(this).find("td.POS");
+        R1.css("text-align", "left");
+        //2
+        var R2 = $(this).find("td.STAT");
+        R2.css("text-align", "left");
+        //3
+        var R3 = $(this).find("td.NAME");
+        R3.css("text-align", "left");
+        //4
+        var R4 = $(this).find("td.TYPE");
+        R4.css("text-align", "left");
+        //5
+        var R5 = $(this).find("td.DESC");
+        R5.css("text-align", "left");
+    });
+}

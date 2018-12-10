@@ -23,7 +23,7 @@
 </head>
 <body onkeydown="javascript:EnterKeyFilter();" style="background-color:#f4f4f4;">
     <div style="width:100%;height:100%;z-index:999;display:none;position:fixed;padding:0;
-                margin:0;top:0;left:0;;background-color:black;opacity:0.5;" id="loader" class="valign-wrapper">
+                margin:0;top:0;left:0;background-color:black;opacity:0.5;" id="loader" class="valign-wrapper">
         <div style="padding-left:50%;padding-top:20%;">
             <div class="preloader-wrapper big active">
                 <div class="spinner-layer spinner-blue-only">
@@ -41,30 +41,31 @@
     <div class="navbar-fixed" style="z-index: 998;">
         <nav class="nav-extended">
             <div class="nav-wrapper #4e342e brown darken-3" @*style="background-repeat: repeat-x;background-image: url(/images/header-transient.png);"*@>
-                <a href="@Url.Action("Index", "Home")" class="brand-logo left">
+                @*<a href="@Url.Action("Index", "Home")" class="brand-logo left">*@
+                <a href="#" class="brand-logo left">
                     <img src="http://www.artha.com.mx/home/wp-content/themes/temaArtha/images/logo.svg" style="padding-top: 8px; padding-left: 8px;" />
                 </a>
                 <ul id="nav_mobile" class="right" runat="server">
                     @*@if (ViewBag.flag != true)
-        {
-            if (ViewBag.PrSl != null)
             {
-                <li>
-                    <a href="@Url.Action("Proyectos", "Home", new { returnUrl = ViewBag.returnUrl})" class="waves-effect waves-block waves-light dropdown-trigger" data-target="country-dropdown">
-                        <input type="text" id="txtPr" value="@ViewBag.PrSl" style="width: 30px; height: 20px; color:white; border:0;" readonly onclick="location.href='@Url.Action("Proyectos", "Home", new { returnUrl = ViewBag.returnUrl})';return false;" />
-                    </a>
-                </li>
-            }
-            else
-            {
-                <li>
-                    <a href="@Url.Action("Proyectos", "Home", new { returnUrl = ViewBag.returnUrl})" class="waves-effect waves-block waves-light dropdown-trigger" data-target="country-dropdown">
-                        @*<input type="text" id="txtPr" value="-" style="width: 30px; height: 20px; color:white; border:0" readonly onclick="location.href='@Url.Action("Proyectos", "Home", new { returnUrl = ViewBag.returnUrl})';return false;" />
-                    <i class='material-icons white-text' id="icnPr">list</i>
-                    </a>
+                if (ViewBag.PrSl != null)
+                {
+                    <li>
+                        <a href="@Url.Action("Proyectos", "Home", new { returnUrl = ViewBag.returnUrl})" class="waves-effect waves-block waves-light dropdown-trigger" data-target="country-dropdown">
+                            <input type="text" id="txtPr" value="@ViewBag.PrSl" style="width: 30px; height: 20px; color:white; border:0;" readonly onclick="location.href='@Url.Action("Proyectos", "Home", new { returnUrl = ViewBag.returnUrl})';return false;" />
+                        </a>
                     </li>
-                    }
-                    }*@
+                }
+                else
+                {
+                    <li>
+                        <a href="@Url.Action("Proyectos", "Home", new { returnUrl = ViewBag.returnUrl})" class="waves-effect waves-block waves-light dropdown-trigger" data-target="country-dropdown">
+                            @*<input type="text" id="txtPr" value="-" style="width: 30px; height: 20px; color:white; border:0" readonly onclick="location.href='@Url.Action("Proyectos", "Home", new { returnUrl = ViewBag.returnUrl})';return false;" />
+                        <i class='material-icons white-text' id="icnPr">list</i>
+                        </a>
+                        </li>
+                        }
+                        }*@
                     <li>
                         @using Microsoft.AspNet.Identity
                         @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
@@ -101,9 +102,9 @@
                         </td>
                         <td>
                             <div class="white-text">
-                                <a href='@Url.Action("Details", "Usuarios", new { id = ViewBag.usuario.ID})' style='padding: 0;'><span class='white-text name' style='margin: 0'>@ViewBag.usuario.NOMBRE @ViewBag.usuario.APELLIDO_P @ViewBag.usuario.APELLIDO_M</span></a>
-                                <a href='@Url.Action("Edit", "Usuarios", new { id = ViewBag.usuario.ID})' style='padding: 0;'><span class='white-text email' style='margin: 0'>@ViewBag.usuario.EMAIL</span></a>
-                                <a href='@Url.Action("Edit", "Usuarios", new { id = ViewBag.usuario.ID})' style='padding: 0;'><span class='white-text email' style='margin: 0'>@ViewBag.rol</span></a>
+                                <a href='#' style='padding: 0;'><span class='white-text name' style='margin: 0'>@ViewBag.usuario.NOMBRE @ViewBag.usuario.APELLIDO_P @ViewBag.usuario.APELLIDO_M</span></a>
+                                <a href='#' style='padding: 0;'><span class='white-text email' style='margin: 0'>@ViewBag.usuario.EMAIL</span></a>
+                                <a href='#' style='padding: 0;'><span class='white-text email' style='margin: 0'>@ViewBag.rol</span></a>
                             </div>
                         </td>
                     </tr>

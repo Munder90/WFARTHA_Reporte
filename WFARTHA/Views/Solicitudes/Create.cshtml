@@ -7,6 +7,7 @@
     ViewBag.carpeta_r = 200;
     //string wf = ViewBag.worflw;
     // string[] arrwf = wf.Split(',');
+    WFARTHA.Entities.USUARIO us = ViewBag.usuario;
 }
 
 @*<link type="text/css" href="~/Content/datatables.min.css" rel="stylesheet" />
@@ -42,29 +43,27 @@
 
 <input id="miles" name="miles" type="hidden" value="@ViewBag.miles">
 <input id="dec" name="dec" type="hidden" value="@ViewBag.dec">
-
-
-
+<input id="UsC" name="UsC" type="hidden" value="@us.ID">
 
 <div class="row" style="margin-bottom:0">
 
-    @{WFARTHA.Entities.USUARIO us = ViewBag.usuario;
+    @*@{WFARTHA.Entities.USUARIO us = ViewBag.usuario;
 
-        <div class="col s12 m3 l2">
-            <div class="row" style="margin-bottom:0">
-                <div class="input-field col s12">
-                    @Html.EditorFor(model => model.USUARIOC_ID, "Usuario", new { htmlAttributes = new { @disabled = "disabled", @Value = us.ID, @id = "txt_user" } })
-                    @Html.LabelFor(model => model.USUARIOC_ID, "Usuario", new { @id = "lbl_userid" })
+            <div class="col s12 m3 l2">
+                <div class="row" style="margin-bottom:0">
+                    <div class="input-field col s12">
+                        @Html.EditorFor(model => model.USUARIOC_ID, "Usuario", new { htmlAttributes = new { @disabled = "disabled", @Value = us.ID, @id = "txt_user" } })
+                        @Html.LabelFor(model => model.USUARIOC_ID, "Usuario", new { @id = "lbl_userid" })
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="col s12 m4 l2">
-            <div class="input-field col s6">
-                <input type="text" id="txt_status" value="Nuevo" disabled="disabled" />
-                <label for="txt_status" id="lbl_status">Estatus</label>
+            <div class="col s12 m4 l2">
+                <div class="input-field col s6">
+                    <input type="text" id="txt_status" value="Nuevo" disabled="disabled" />
+                    <label for="txt_status" id="lbl_status">Estatus</label>
+                </div>
             </div>
-        </div>
-    }
+        }*@
 
     <style>
         .anchoTxt {
@@ -87,8 +86,8 @@
             clear: both;
         }
 
-        .ncCss {
-          
+        .tcent th {
+            text-align: center;
         }
 
         .hr_bw {
@@ -148,21 +147,9 @@
         .selectImpuesto {
             font-size: 12px;
         }
-
-        /*div.dataTables_wrapper {
-            width: 800px;
-            margin: 0 auto;
-        }*/
-        /*table {
-            margin: 0 auto;
-            width: 100%;
-            clear: both;
-            border-collapse: collapse;
-            table-layout: fixed;
-        }*/
     </style>
 
-    <div class="col s8 right-align">
+    <div class="col s12 right-align">
         <a id="btn_borradorh" class="btn btn-small">Guardar Borrador</a>
 
         @{string b = ViewBag.borradore + "";
@@ -174,25 +161,17 @@
             <a id="btn_borradore" class="btn btn-small" style="display :@display">Descartar Borrador</a>
             <input type="text" id="borradore" name="borradore" value="@ViewBag.borradore" hidden />
         }
-        <a href="@Url.Action("Index", "Home" )" class="btn btn-small">Cancelar</a>
+        <a id="btn_cancelar" href="@Url.Action("Index", "Home" )" onclick="return confirm('Deseas salir sin guardar o enviar');" class="btn btn-small">Cancelar</a>@*FRT02122018 Para poder mostrar mensaje*@
         <a id="btn_guardarh" class="btn btn-small">Enviar</a>
-        <script>
-            //function guardah() {
-            //    //alert("uno")
-            //    M.toast({ html: "Guardando" })
-            //    document.getElementById("loader").style.display = "flex";//RSG 26.04.2018
-            //    document.getElementById("btn_guardarh").classList.add("disabled");//RSG 26.04.2018
-            //}
-        </script>
+    </div>
+    <div class="col s12" style="display:inline;">
         @*FRT 02112018 Agregar titulos*@
         <div>
-            <br />
             <h5 id="head_cabecera" style="display:inline-block">@ViewBag.pid - </h5>
             <h5 id="head_cabecera" style="display:inline-block">@ViewBag.PrSl</h5>
 
         </div>
     </div>
-
     <div class="div_bottom">
         <hr class="hr_bw" />
         <hr class="hr_color #4e342e brown darken-3" />
@@ -202,10 +181,9 @@
 <div class="row">
     <div class="col s12">
         <ul class="tabs" id="tabs">
-            <li class="tab col s2 tabs_menu"><a id="tab_enc" href="#Encabezado_cont" class="">Encabezado</a></li>
-            <li class="tab col s3 tabs_menu"><a id="tab_con" href="#Contable_cont">Detalle</a></li>
+            <li class="tab col s2 tabs_menu" ><a id="tab_enc" href="#Encabezado_cont" class="">Encabezado</a></li>
+            <li class="tab col s3 tabs_menu" ><a id="tab_con" href="#Contable_cont" >Detalle</a></li>
             <li class="tab col s3 tabs_menu"><a id="tab_sop" href="#Informacion_cont">Autorización</a></li>
-            @*<li class="tab col s3 tabs_menu"><a id="tab_sop" href="#Informacion_sap">Información SAP</a></li>*@
         </ul>
     </div>
 </div>
@@ -245,7 +223,7 @@
                             <div class="form-group col s3">
                                 @Html.LabelFor(model => model.FECHAD, "Fecha Documento", htmlAttributes: new { @class = "control-label col-md-2" })
                                 <div class="col-md-10">
-                                    @Html.EditorFor(model => model.FECHAD, new { htmlAttributes = new { @class = "form-control fechaVal input_fe",@disabled="disabled" } })@*LEJ 04.09.2018*@
+                                    @Html.EditorFor(model => model.FECHAD, new { htmlAttributes = new { @class = "form-control fechaVal input_fe", @disabled = "disabled" } })@*LEJ 04.09.2018*@
                                     <input type="hidden" id="FECHADO" name="FECHADO" />
                                 </div>
                             </div>
@@ -501,35 +479,36 @@
                         </div>
                         <h5 id="head_flinea">Retenciones</h5>
                         <div class="row leftAlignement" style="margin-bottom:0">
-                            <table class="table display mdl-data-table striped" id="table_ret" style="width:100%;">
-                                <thead>
-                                    <tr>
-                                        <th class="lbl_socret">
-                                            Sociedad Retención
-                                        </th>
-                                        <th class="lbl_provret">
-                                            Proveedor Retención
-                                        </th>
-                                        <th class="lbl_tret">
-                                            Tipo Retención
-                                        </th>
-                                        <th class="lbl_descret">
-                                            Descripción Retención
-                                        </th>
-                                        <th class="lbl_indret">
-                                            Indicador de Retención
-                                        </th>
-                                        <th class="lbl_bimponible">
-                                            Base Imponible
-                                        </th>
-                                        <th id="lbl_impret">
-                                            Importe de Retención
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody></tbody>
-                            </table>
-
+                            <div style="overflow:auto;">
+                                <table class="table display mdl-data-table striped" id="table_ret" style="width:100%;">
+                                    <thead>
+                                        <tr>
+                                            <th class="lbl_socret">
+                                                Sociedad Retención
+                                            </th>
+                                            <th class="lbl_provret">
+                                                Proveedor Retención
+                                            </th>
+                                            <th class="lbl_tret">
+                                                Tipo Retención
+                                            </th>
+                                            <th class="lbl_descret">
+                                                Descripción Retención
+                                            </th>
+                                            <th class="lbl_indret">
+                                                Indicador de Retención
+                                            </th>
+                                            <th class="lbl_bimponible">
+                                                Base Imponible
+                                            </th>
+                                            <th id="lbl_impret">
+                                                Importe de Retención
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
                             <table class="table display mdl-data-table striped" id="table_reth" style="width:100%; display:none">
                                 <thead>
                                     <tr>
@@ -657,10 +636,10 @@
                             <!--ADD RSG 18.10.2018-->
                             <div id="div_sinPedido" class="col s12">
                                 <div id="div_btns_row_info" class="row">
-                                    <a class="btn"><i class="material-icons left">add</i><span id="addRowInfo">Registros Add</span></a>
-                                    <a class="btn"><i class="material-icons left">clear</i><span id="delRowInfo">Registro Del</span></a>
+                                    <a class="btn"><i class="material-icons left">add</i><span id="addRowInfo">AGREGAR FILA</span></a>
+                                    <a class="btn"><i class="material-icons left">clear</i><span id="delRowInfo">ELIMINAR FILA</span></a>
                                 </div>
-                                <div>
+                                <div style="overflow:auto;">
                                     <table class="table display mdl-data-table striped" id="table_info" style="width:100%; margin:0 auto;">
                                         <thead>
                                             <tr>
@@ -668,7 +647,7 @@
 
                                                 </th>
                                                 <th class="lbl_pos">
-                                                    Pos
+                                                    Fila
                                                 </th>
                                                 <th class="lbl_NmAnexo">
                                                     A1
@@ -721,7 +700,7 @@
                                                 <th id="lbl_impuesto">
                                                     Impuesto
                                                 </th>
-                                                <th id="lbl_iva">
+                                                <th id="lbl_iva" class="tcent">
                                                     IVA
                                                 </th>
                                                 <th id="lbl_total">
@@ -735,11 +714,11 @@
                                         </thead>
                                         <tbody></tbody>
                                         @*<tfoot id="tfoot_info" style="overflow:auto;">
-                                            <tr>
-                                                <th colspan="17" style="text-align:right"></th>
-                                                <th id="total_info"></th>
-                                            </tr>
-                                        </tfoot>*@
+                                                <tr>
+                                                    <th colspan="17" style="text-align:right"></th>
+                                                    <th id="total_info"></th>
+                                                </tr>
+                                            </tfoot>*@
                                     </table>
                                 </div>
                                 <table class="table display mdl-data-table striped" id="table_infoh" style="width:100%; display:none">
@@ -915,11 +894,11 @@
                                         </thead>
                                         <tbody></tbody>
                                         @*<tfoot id="tfoot_info" style="overflow:auto;">
-                                            <tr>
-                                                <th colspan="17" style="text-align:right"></th>
-                                                <th id="total_infoP"></th>
-                                            </tr>
-                                        </tfoot>*@
+                                                <tr>
+                                                    <th colspan="17" style="text-align:right"></th>
+                                                    <th id="total_infoP"></th>
+                                                </tr>
+                                            </tfoot>*@
                                     </table>
                                 </div>
                                 <table class="table display mdl-data-table striped" id="table_infoPh" style="width:100%; display:none">
@@ -999,10 +978,10 @@
                             </table>
                         </div>
                         <div style="text-align:right">
-                            <label id="lbl_status">Total:</label>
-                            <label id="total_info1"></label>
+                            <label id="lbl_status" style="font-size: 1.1rem;font-weight: bold;">Total:</label>
+                            <label id="total_info1" style="font-size: 1.1rem;font-weight: bold;"></label>
                         </div>
-                        
+
                     </div>
                 </div>
             </div>
@@ -1030,13 +1009,13 @@
                                         <th class="">
                                         </th>
                                         <th class="">
-                                            Num
+                                            No. de Anexo
                                         </th>
                                         <th class="">
                                             Status
                                         </th>
                                         <th class="">
-                                            Nombres Archivo
+                                            Nombre del Archivo
                                         </th>
                                         <th class="">
                                             Tipo de Archivo
@@ -1057,14 +1036,13 @@
         @*Soporte Contable*@
         <div id="Informacion_cont" class="col s12" style="font-size:12px;">
             <div class="row">
-
                 @*MGC 02-10-2018 Cadena de autorización -->*@
                 <div class="col s12">
                     <div class="card-panel">
-                        <h5 id="head_cabecera">Autorización</h5>
+                        <h5 id="head_cabecera">Cadena de Autorización</h5>
                         <div class="row" style="margin-bottom:0">
                             <div class="form-group col s6">
-                                @Html.LabelFor(model => model.TSOL_ID, "Cadena de Autorización", htmlAttributes: new { @class = "control-label col-md-2" })
+                                @*@Html.LabelFor(model => model.TSOL_ID, "Cadena de Autorización", htmlAttributes: new { @class = "control-label col-md-2" })*@
                                 <div class="col-md-10">
                                     @Html.DropDownList("DETAA", null, htmlAttributes: new { @class = "form-control", @id = "list_detaa" })
                                 </div>
@@ -1094,8 +1072,8 @@
                             </div>
 
                             <div id="div_btns_row_sop">
-                                <a class="btn"><i class="material-icons left">add</i><span id="addRowSop">Registros Add</span></a>
-                                <a class="btn"><i class="material-icons left">clear</i><span id="delRowSop">Registro Del</span></a>
+                                <a class="btn"><i class="material-icons left">add</i><span id="addRowSop">AGREGAR FILA</span></a>
+                                <a class="btn"><i class="material-icons left">clear</i><span id="delRowSop">ELIMINAR FILA</span></a>
                             </div>
 
                             <table class="table display mdl-data-table striped" id="table_sop" style="width:100%;">
@@ -1148,18 +1126,18 @@
             @*MGC 14-11-2018 Cadena de autorización----------------------------------------------------------------------------->*@
 
             <div class="row" style="font-size:12px;">
-                <div class="col s12" style="padding:0px">
+                <div class="col s12">
                     <div class="card-panel">
                         <div class="row" style="margin-bottom:0">
-                            <h5>Cadena de Autorizadores</h5>
+                            <h5>Información Cadena de Autorización</h5>
                             <table class="table highlight responsive-table" id="tableAutorizadores">
                                 <thead>
                                     <tr>
                                         <th width="" style="width: 300px;">
-                                            Fase
+                                            Tipo de Agente
                                         </th>
                                         <th width="">
-                                            Agente
+                                            Nombre
                                         </th>
                                     </tr>
                                 </thead>

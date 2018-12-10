@@ -38,13 +38,9 @@ D:\Documents\GitHub\WFARTHA\WFARTHA\bin\Microsoft.Owin.Security.Google.dll
 D:\Documents\GitHub\WFARTHA\WFARTHA\bin\Microsoft.Owin.Security.MicrosoftAccount.dll
 D:\Documents\GitHub\WFARTHA\WFARTHA\bin\Microsoft.Owin.Security.OAuth.dll
 D:\Documents\GitHub\WFARTHA\WFARTHA\bin\Microsoft.Owin.Security.Twitter.dll
-D:\Documents\GitHub\WFARTHA\WFARTHA\bin\Microsoft.ReportViewer.Common.dll
-D:\Documents\GitHub\WFARTHA\WFARTHA\bin\Microsoft.ReportViewer.ProcessingObjectModel.DLL
-D:\Documents\GitHub\WFARTHA\WFARTHA\bin\Microsoft.ReportViewer.WebForms.DLL
 D:\Documents\GitHub\WFARTHA\WFARTHA\bin\Microsoft.Web.Infrastructure.dll
 D:\Documents\GitHub\WFARTHA\WFARTHA\bin\Newtonsoft.Json.dll
 D:\Documents\GitHub\WFARTHA\WFARTHA\bin\Owin.dll
-D:\Documents\GitHub\WFARTHA\WFARTHA\bin\ReportViewerForMvc.dll
 D:\Documents\GitHub\WFARTHA\WFARTHA\bin\SimpleImpersonation.dll
 D:\Documents\GitHub\WFARTHA\WFARTHA\bin\System.Linq.Dynamic.dll
 D:\Documents\GitHub\WFARTHA\WFARTHA\bin\System.Web.Helpers.dll

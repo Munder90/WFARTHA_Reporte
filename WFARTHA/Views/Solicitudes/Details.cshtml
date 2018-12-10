@@ -16,16 +16,18 @@
     var total = ViewBag.total;
     var montomd = formatoc.toShow(total, ViewBag.dec);
 
-
+    List<WFARTHA.Entities.ESTATUS_PAGO> lstpag = ViewBag.pagado as List<WFARTHA.Entities.ESTATUS_PAGO>;
+    List<WFARTHA.Entities.ESTATUS_PAGO> lstepag = ViewBag.epagado as List<WFARTHA.Entities.ESTATUS_PAGO>;
 }
 
 <script src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
 <script src="//cdn.datatables.net/1.10.16/js/dataTables.material.min.js"></script>
 <link href="~/Content/dataTable.css" rel="stylesheet" />
 <link href="//cdn.datatables.net/1.10.16/css/dataTables.material.min.css" rel="stylesheet" />
-
+<script src="~/Scripts/menu.js"></script>
 <script src="~/Scripts/details.js"></script>
 <script src="~/Scripts/formatos.js"></script>
+
 @if (ViewBag.error != "")
 {
     <script>
@@ -45,6 +47,10 @@
 <style>
     .leftAlignement {
         text-align: left;
+    }
+
+    .dataTables_filter {
+        display: none;
     }
 </style>
 
@@ -70,23 +76,30 @@
 <input id="dec" name="dec" type="hidden" value="@ViewBag.dec">
 <input id="auxS" name="auxS" type="hidden" value="">
 
-
+<div class="row">
+    <div class="col s12 right-align" style="display:none;">
+        @using (Html.BeginForm("crearReporte", "Solicitudes", FormMethod.Post))
+        {
+            <button id="btnDownload" class="btn" type="submit">Generar Reporte</button>
+        }
+    </div>
+</div>
 <div class="row" style="margin-bottom:0">
 
-    @{WFARTHA.Entities.USUARIO us = ViewBag.usuario;
+    @*@{WFARTHA.Entities.USUARIO us = ViewBag.usuario;
 
-        <div class="col s12 m3 l2">
-            <div class="row" style="margin-bottom:0">
-                <div class="input-field col s12">
-                    @Html.EditorFor(model => model.D.USUARIOC_ID, "Usuario", new { htmlAttributes = new { @disabled = "disabled", @Value = us.ID, @id = "txt_user" } })
-                    @Html.LabelFor(model => model.D.USUARIOC_ID, "Usuario", new { @id = "lbl_userid" })
+            <div class="col s12 m3 l2">
+                <div class="row" style="margin-bottom:0">
+                    <div class="input-field col s12">
+                        @Html.EditorFor(model => model.D.USUARIOC_ID, "Usuario", new { htmlAttributes = new { @disabled = "disabled", @Value = us.ID, @id = "txt_user" } })
+                        @Html.LabelFor(model => model.D.USUARIOC_ID, "Usuario", new { @id = "lbl_userid" })
+                    </div>
+
                 </div>
-
             </div>
-        </div>
-    }
+        }*@
 
-        <style>
+    <style>
         .anexosWidth {
             width: 8px;
         }
@@ -160,125 +173,81 @@
             border-collapse: collapse;
             table-layout: fixed;
         }
-
-        /*MGC 26-11-2018 Visualizar caratula --------------------------------------------------->*/
-        .row#div_caratula{
-            margin-bottom: 5px;
-        }
-        /*MGC 26-11-2018 Visualizar caratula ---------------------------------------------------<*/
-
-        </style>
+    </style>
     @*MGC 04-10-2018 Botones para acciones -->*@
-    <div class="row" style="margin-bottom:0">
+    @*<div class="row" style="margin-bottom:0">
         <div class="col s12 m5 l5">
             <div class="row" style="margin-bottom:0">
-                <div class="input-field col s4">
-                    @Html.EditorFor(model => model.D.USUARIOC_ID, new { htmlAttributes = new { @disabled = "disabled", style = "display:none" } })
-                    @Html.LabelFor(model => model.D.USUARIOC_ID, new { @id = "lbl_userid", style = "display:none" })
-                </div>
-                <div class="input-field col s4">
-                    @if (Model.D.ESTATUS == "N")
-                    {
-                        <input type="text" id="txt_status" value="Nuevo" disabled="disabled" />
-                        <label for="txt_status" id="lbl_status">Estatus</label>
-                    }
-                </div>
-                <div class="input-field col s4">
-                    @*<input type="text" id="txt_user" value="@ViewBag.usuario.MANAGER" disabled="disabled" />
-                        <label for="txt_user">Manager</label>*@
-                    @*@Html.EditorFor(model => model.D.USUARIO.MANAGER, new { htmlAttributes = new { @disabled = "disabled" } })
-                        @Html.LabelFor(model => model.D.USUARIO.MANAGER, new { @id = "lbl_manager" })*@
-                </div>
 
 
-                <div class="input-field col s4">
-                    @Html.EditorFor(model => model.D.USUARIO.BACKUP_ID, new { htmlAttributes = new { @disabled = "disabled", style = "display:none" } })
-                    @Html.LabelFor(model => model.D.USUARIO.BACKUP_ID, new { @id = "lbl_backup", style = "display:none" })
-                    @*<input type="text" id="txt_user" value="@ViewBag.usuario.BACKUP_ID" disabled="disabled" />
-                        <label for="txt_user">Backup</label>*@
-                </div>
             </div>
-        </div>
-        <div class="col s6 m2 l2">
-            <div class="input-field col s6">
-                @*<input type="text" id="txt_user" value="PRGA" disabled="disabled" />
-                    <label for="txt_user">BU</label>*@
-                @*@Html.EditorFor(model => model.D.USUARIO.BUNIT, new { htmlAttributes = new { @disabled = "disabled" } })
-                    @Html.LabelFor(model => model.D.USUARIO.BUNIT, "Sociedad", new { @id = "lbl_bu" })*@
-            </div>
-            @*<div class="input-field col s6">
-                    @if (Model.D.ESTATUS == "N")
-                    {
-                        <input type="text" id="txt_status"  value="Nuevo" disabled="disabled" />
-                        <label for="txt_status" id="lbl_status">Estatus</label>
-                    }
-                </div>*@
-        </div>
-        <div class="col s12 m5 l5">
-            <div class="row right">
-                @if (Model.D.ESTATUS_C != "C")
+        </div>*@
+
+    <div class="col s12" style="margin-bottom: -20px;">
+        <div class="row right">
+            @if (Model.D.ESTATUS_C != "C")
+            {
+                if (ViewBag.acciones != null)
                 {
-                    if (ViewBag.acciones != null)
+                    if (ViewBag.accion == "A" | ViewBag.accion == "R")
                     {
-                        if (ViewBag.accion == "A" | ViewBag.accion == "R")
+
+                        //////MGC 12-11-2018 Saber si el siguiente aprobador es el contabilizador------------------------------------------------------->
+                        ///Obtiene la respuesta de contabilización
+                        WFARTHA.Models.ContabilizarRes contanext = new WFARTHA.Models.ContabilizarRes();
+
+                        contanext = ViewBag.contanext as WFARTHA.Models.ContabilizarRes;
+
+                        //Hay respuesta
+                        if (contanext.contabilizar != null && contanext.res != null)
                         {
-
-                            //////MGC 12-11-2018 Saber si el siguiente aprobador es el contabilizador------------------------------------------------------->
-                            ///Obtiene la respuesta de contabilización
-                            WFARTHA.Models.ContabilizarRes contanext = new WFARTHA.Models.ContabilizarRes();
-
-                            contanext = ViewBag.contanext as WFARTHA.Models.ContabilizarRes;
-
-                            //Hay respuesta
-                            if (contanext.contabilizar != null && contanext.res != null)
+                            if (contanext.contabilizar == true && contanext.res == false)
                             {
-                                if (contanext.contabilizar == true && contanext.res == false)
-                                {
-                                    string sociedadm = Model.D.SOCIEDAD_ID;
+                                string sociedadm = Model.D.SOCIEDAD_ID;
 
 
-                                    <script>
+                                <script>
                                         /**/
                                         /**/
                                         M.toast({ html: 'Se necesita asignar usuario contabilizador a la sociedad: '+ @sociedadm , classes: '' });
                                         /**/
                                         /**/
-                                    </script>
-
-                                }
+                                </script>
 
                             }
 
-
-
-
-                            @*<button type="button" class="btn-small  " id="btn_workf">Acciones</button>*@
-                            <div class="fixed-action-btn" id="lbl_wf">
-                                <a class="btn-floating btn-large blue">
-                                    <i class="large material-icons">work</i>
-                                </a>
-                                <ul>
-                                    <li><a id="lbl_wfr" class="btn-floating red modal-trigger" href="#modal1" onclick="rechazar()"><i class="material-icons">close</i></a></li>
-                                    <li><a id="lbl_wfa" class="btn-floating green modal-trigger" href="#modal1" onclick="aprobar()"><i class="material-icons">check</i></a></li>
-                                </ul>
-                            </div>
-                            <script>
-
-                                var elem = document.querySelector('.fixed-action-btn');
-                                var options = {
-                                    direction: 'left',
-                                    hoverEnabled: false,
-                                    toolbarEnabled: false
-                                };
-                                var instance = M.FloatingActionButton.init(elem, options);
-                            </script>
-                            @*<a id="lbl_wfa" class="btn-small  " href="@Url.Action(" Procesa", "Flujos" , new { id=Model.D.NUM_DOC, accion="A" })">Aprobar</a>
-                                <a id="lbl_wfr" class="btn-small  " href="@Url.Action(" Procesa", "Flujos" , new { id=Model.D.NUM_DOC, accion="R" })">Rechazar</a>*@
-                            <a class="btn-small modal-trigger" href="#modal1" onclick="rechazar()">Rechazar</a>
-                            <a class="btn-small modal-trigger" href="#modal1" onclick="aprobar()">Aprobar</a>
-
                         }
-                        @*else if (ViewBag.accion == "N")
+
+
+
+
+                        @*<button type="button" class="btn-small  " id="btn_workf">Acciones</button>*@
+                        <div class="fixed-action-btn" id="lbl_wf">
+                            <a class="btn-floating btn-large blue">
+                                <i class="large material-icons">work</i>
+                            </a>
+                            <ul>
+                                <li><a id="lbl_wfr" class="btn-floating red modal-trigger" href="#modal1" onclick="rechazar()"><i class="material-icons">close</i></a></li>
+                                <li><a id="lbl_wfa" class="btn-floating green modal-trigger" href="#modal1" onclick="aprobar()"><i class="material-icons">check</i></a></li>
+                            </ul>
+                        </div>
+                        <script>
+
+                            var elem = document.querySelector('.fixed-action-btn');
+                            var options = {
+                                direction: 'left',
+                                hoverEnabled: false,
+                                toolbarEnabled: false
+                            };
+                            var instance = M.FloatingActionButton.init(elem, options);
+                        </script>
+                        @*<a id="lbl_wfa" class="btn-small  " href="@Url.Action(" Procesa", "Flujos" , new { id=Model.D.NUM_DOC, accion="A" })">Aprobar</a>
+                            <a id="lbl_wfr" class="btn-small  " href="@Url.Action(" Procesa", "Flujos" , new { id=Model.D.NUM_DOC, accion="R" })">Rechazar</a>*@
+                        <a class="btn-small modal-trigger" href="#modal1" onclick="rechazar()">Rechazar</a>
+                        <a class="btn-small modal-trigger" href="#modal1" onclick="aprobar()">Aprobar</a>
+
+                    }
+                    @*else if (ViewBag.accion == "N")
                         {
                             <div class="fixed-action-btn" id="lbl_wf">
                                 <a class="btn-floating btn-large blue">
@@ -298,63 +267,36 @@
                                 };
                                 var instance = M.FloatingActionButton.init(elem, options);
                             </script>*@
-                            @*esto ya estaba comentado <a id="lbl_wfn" class="btn-small  " href="@Url.Action(" Procesa", "Flujos" , new { id=Model.D.NUM_DOC, accion="N" })">Siguiente</a>*@
-                            @*<a id="lbl_wfn" class="btn-small modal-trigger" href="#modal1" onclick="siguiente()">Siguiente</a>
+                    @*esto ya estaba comentado <a id="lbl_wfn" class="btn-small  " href="@Url.Action(" Procesa", "Flujos" , new { id=Model.D.NUM_DOC, accion="N" })">Siguiente</a>*@
+                    @*<a id="lbl_wfn" class="btn-small modal-trigger" href="#modal1" onclick="siguiente()">Siguiente</a>
                         }*@
-                        else if (ViewBag.accion == "P")
-                        {
+                    else if (ViewBag.accion == "P")
+                    {
 
-                            <div class="fixed-action-btn" id="lbl_wf">
-                                <a class="btn-floating btn-large blue">
-                                    <i class="large material-icons">work</i>
-                                </a>
-                                <ul>
-                                    <li><a id="lbl_wfr" class="btn-floating red modal-trigger" href="#modal1" onclick="rechazar()"><i class="material-icons">close</i></a></li>
-                                    <li><a id="lbl_wfn" class="btn-floating yellow darken-1 modal-trigger" href="#modal1" onclick="contabilizar()"><i class="material-icons">send</i></a></li>
+                        <div class="fixed-action-btn" id="lbl_wf">
+                            <a class="btn-floating btn-large blue">
+                                <i class="large material-icons">work</i>
+                            </a>
+                            <ul>
+                                <li><a id="lbl_wfr" class="btn-floating red modal-trigger" href="#modal1" onclick="rechazar()"><i class="material-icons">close</i></a></li>
+                                <li><a id="lbl_wfn" class="btn-floating yellow darken-1 modal-trigger" href="#modal1" onclick="contabilizar()"><i class="material-icons">send</i></a></li>
 
-                                </ul>
-                            </div>
-                            <script>
+                            </ul>
+                        </div>
+                        <script>
 
-                                var elem = document.querySelector('.fixed-action-btn');
-                                var options = {
-                                    direction: 'left',
-                                    hoverEnabled: false,
-                                    toolbarEnabled: false
-                                };
-                                var instance = M.FloatingActionButton.init(elem, options);
-                            </script>
-                            @*<a id="lbl_wfn" class="btn-small  " href="@Url.Action(" Procesa", "Flujos" , new { id=Model.D.NUM_DOC, accion="N" })">Siguiente</a>*@
-                            <a class="btn-small modal-trigger" href="#modal1" onclick="rechazar()">Rechazar</a>
-                            <a id="lbl_wfn" class="btn-small modal-trigger" href="#modal1" onclick="contabilizar()">Contabilizar</a>
+                            var elem = document.querySelector('.fixed-action-btn');
+                            var options = {
+                                direction: 'left',
+                                hoverEnabled: false,
+                                toolbarEnabled: false
+                            };
+                            var instance = M.FloatingActionButton.init(elem, options);
+                        </script>
+                        @*<a id="lbl_wfn" class="btn-small  " href="@Url.Action(" Procesa", "Flujos" , new { id=Model.D.NUM_DOC, accion="N" })">Siguiente</a>*@
+                        <a class="btn-small modal-trigger" href="#modal1" onclick="rechazar()">Rechazar</a>
+                        <a id="lbl_wfn" class="btn-small modal-trigger" href="#modal1" onclick="contabilizar()">Contabilizar</a>
 
-                        }
-                        else if (!Model.D.ESTATUS.Equals("A"))
-                        {
-                            if (Model.D.USUARIOC_ID == ViewBag.usuario.ID)
-                            {
-                                <a class="btn-small modal-trigger" id="btn_cancel" href="#modal2">Cancelar</a>
-                                <div id="modal2" class="modal">
-                                    <div class="modal-content">
-                                        <div class="row">
-                                            <h4 id="txt_can">Cancelar Solicitud</h4>
-                                            <br />
-                                        </div>
-                                        <div class="row" style="">
-                                            <div class="col s12 m12 l12">
-                                                <div class="row" style="margin-bottom:0">
-                                                    ¿Está seguro de cancelar esta solicitud?
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="modal-footer right">
-                                        <a href="#!" class="modal-action modal-close btn-flat">No</a>
-                                        <a class="modal-action btn-flat" href="@Url.Action("Cancelar", "Solicitudes" , new { id=Model.D.NUM_DOC })">Si</a>
-                                    </div>
-                                </div>
-                            }
-                        }
                     }
                     else if (!Model.D.ESTATUS.Equals("A"))
                     {
@@ -382,47 +324,71 @@
                             </div>
                         }
                     }
-
-                    if (false)
+                }
+                else if (!Model.D.ESTATUS.Equals("A"))
+                {
+                    if (Model.D.USUARIOC_ID == ViewBag.usuario.ID)
                     {
-                        <button type="button" class="btn-small  " data-target="list_carta" id="btn_carta">Carta</button>
-                        @*<button type="button" class="btn-small  " id="btn_cancel">Cancelar</button>*@
-                        <ul id='list_carta' class='dropdown-content'>
-                            @*<li><a href="@Url.Action(" Index", "CartaF" , new { id=Model.D.NUM_DOC })" id="lbl_list">Lista de cartas</a></li>*@ @*//B20180720P MGC Guardar Carta*@
-                            <li><a href="@Url.Action("Lista", "CartaV", new { id = Model.D.NUM_DOC, swf = Model.D.ESTATUS_WF })" id="lbl_list">Lista de Cartas</a></li> @*//B20180720P MGC Guardar Carta*@
-                            @if (Model.D.ESTATUS_WF.Equals("S"))
-                            {
-                                <li><a href="@Url.Action("Create", "CartaV", new { id = Model.D.NUM_DOC })" id="lbl_genc">Generar Carta</a></li>
-                            }
-                            else
-                            {
-                                <li><a href="@Url.Action("Create", "CartaD", new { id = Model.D.NUM_DOC })" id="lbl_genc">Imprimir draft</a></li>
-                            }
-                        </ul>
-                        <script>
-                            var elem = document.getElementById('btn_carta');
-                            var options = {
-                                constrainWidth: false
-                                //,hover: true
-                            };
-                            var instance = M.Dropdown.init(elem, options);
-                        </script>
+                        <a class="btn-small modal-trigger" id="btn_cancel" href="#modal2">Cancelar</a>
+                        <div id="modal2" class="modal">
+                            <div class="modal-content">
+                                <div class="row">
+                                    <h4 id="txt_can">Cancelar Solicitud</h4>
+                                    <br />
+                                </div>
+                                <div class="row" style="">
+                                    <div class="col s12 m12 l12">
+                                        <div class="row" style="margin-bottom:0">
+                                            ¿Está seguro de cancelar esta solicitud?
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer right">
+                                <a href="#!" class="modal-action modal-close btn-flat">No</a>
+                                <a class="modal-action btn-flat" href="@Url.Action("Cancelar", "Solicitudes" , new { id=Model.D.NUM_DOC })">Si</a>
+                            </div>
+                        </div>
                     }
-                    @* } *@
                 }
 
-
-
-            </div>
-        </div>
-        <div>
-            <br />
-            <h5 id="head_cabecera" style="display:inline-block">@ViewBag.pid - </h5>
-            <h5 id="head_cabecera" style="display:inline-block">@ViewBag.PrSl</h5>
+                if (false)
+                {
+                    <button type="button" class="btn-small  " data-target="list_carta" id="btn_carta">Carta</button>
+                    @*<button type="button" class="btn-small  " id="btn_cancel">Cancelar</button>*@
+                    <ul id='list_carta' class='dropdown-content'>
+                        @*<li><a href="@Url.Action(" Index", "CartaF" , new { id=Model.D.NUM_DOC })" id="lbl_list">Lista de cartas</a></li>*@ @*//B20180720P MGC Guardar Carta*@
+                        <li><a href="@Url.Action("Lista", "CartaV", new { id = Model.D.NUM_DOC, swf = Model.D.ESTATUS_WF })" id="lbl_list">Lista de Cartas</a></li> @*//B20180720P MGC Guardar Carta*@
+                        @if (Model.D.ESTATUS_WF.Equals("S"))
+                        {
+                            <li><a href="@Url.Action("Create", "CartaV", new { id = Model.D.NUM_DOC })" id="lbl_genc">Generar Carta</a></li>
+                        }
+                        else
+                        {
+                            <li><a href="@Url.Action("Create", "CartaD", new { id = Model.D.NUM_DOC })" id="lbl_genc">Imprimir draft</a></li>
+                        }
+                    </ul>
+                    <script>
+                        var elem = document.getElementById('btn_carta');
+                        var options = {
+                            constrainWidth: false
+                            //,hover: true
+                        };
+                        var instance = M.Dropdown.init(elem, options);
+                    </script>
+                }
+                @* } *@
+            }
 
         </div>
     </div>
-
+    <div class="col s12" style="display:inline;">
+        @*FRT 02112018 Agregar titulos*@
+        <div>
+            <h5 id="head_cabecera" style="display:inline-block">@ViewBag.pid - </h5>
+            <h5 id="head_cabecera" style="display:inline-block">@ViewBag.PrSl</h5>
+        </div>
+    </div>
     @*MGC 04-10-2018 Botones para acciones <--*@
 
     <div class="div_bottom">
@@ -485,7 +451,6 @@
                             @Html.LabelFor(model => model.D.FECHAD, "Fecha Documento", htmlAttributes: new { @class = "control-label col-md-2" })
                             <div class="col-md-10">
                                 @Html.EditorFor(model => model.D.FECHAD, new { htmlAttributes = new { @disabled = "disabled", @class = "form-control" } })
-
                             </div>
                         </div>
 
@@ -683,6 +648,12 @@
                             <table class="table display mdl-data-table striped" id="table_ret" style="width:100%;">
                                 <thead>
                                     <tr>
+                                        <th class="lbl_socret leftAlignement">
+                                            Sociedad Retención
+                                        </th>
+                                        <th class="lbl_provret leftAlignement">
+                                            Proveedor Retención
+                                        </th>
                                         <th class="lbl_tret leftAlignement">
                                             Tipo Retención
                                         </th>
@@ -708,6 +679,8 @@
                                         for (var i = 0; i < drets.Count; i++)
                                         {
                                             <tr>
+                                                <td></td>
+                                                <td></td>
                                                 <td class="leftAlignement">
                                                     @Html.DisplayFor(m => drets[i].WITHT)
                                                 </td>
@@ -746,234 +719,276 @@
                 <div class="card-panel">
                     <h5 id="head_cabecera">Detalle</h5>
                     <div class="row" style="margin-bottom:0">
-                        @*aQUI PONES LA TABLA*@
-                        <table class="table display mdl-data-table striped" id="table_info" style="width:100%;">
-                            <thead>
-                                <tr>
-                                    <th></th>
-                                    <th class="">
-                                        Pos
-                                    </th>
-                                    <th class="">
-                                        A1
-                                    </th>
-                                    <th class="">
-                                        A2
-                                    </th>
-                                    <th class="">
-                                        A3
-                                    </th>
-                                    <th class="">
-                                        A4
-                                    </th>
-                                    <th class="">
-                                        A5
-                                    </th>
-                                    <th class="">
-                                        Texto
-                                    </th>
-                                    <th class="">
-                                        D/H
-                                    </th>
-                                    <th class="">
-                                        Factura
-                                    </th>
-                                    <th class="">
-                                        Concepto
-                                    </th>
-                                    <th class="">
-                                        Cuenta
-                                    </th>
-                                    <th class="">
-                                        Centro de Costo
-                                    </th>
-                                    <th class="">
-                                        nombre de cuenta
-                                    </th>
-                                    <th class="">
-                                        tipo imp.
-                                    </th>
-                                    <th class="">
-                                        imputación
-                                    </th>
-                                    <th class="">
-                                        Monto
-                                    </th>
-                                    <th class="">
-                                        Impuesto
-                                    </th>
-                                    <th class="">
-                                        IVA
-                                    </th>
-                                    @for (int i = 0; i < colsret.Count; i++)
-                                    {
+                        <div style="overflow:auto;">
+                            @*aQUI PONES LA TABLA*@
+                            <table class="table display mdl-data-table striped" id="table_info" style="width:100%;">
+                                <thead>
+                                    <tr>
+                                        <th></th>
                                         <th class="">
-                                            @colsret[i] B.I.
+                                            Fila
                                         </th>
                                         <th class="">
-                                            @colsret[i] I.R.
+                                            A1
                                         </th>
-                                    }
-                                    <th class="">
-                                        Total
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
+                                        <th class="">
+                                            A2
+                                        </th>
+                                        <th class="">
+                                            A3
+                                        </th>
+                                        <th class="">
+                                            A4
+                                        </th>
+                                        <th class="">
+                                            A5
+                                        </th>
+                                        <th class="">
+                                            Texto
+                                        </th>
+                                        <th class="">
+                                            D/H
+                                        </th>
+                                        <th class="">
+                                            Factura
+                                        </th>
+                                        <th class="">
+                                            Concepto
+                                        </th>
+                                        <th class="">
+                                            Cuenta
+                                        </th>
+                                        <th class="">
+                                            Centro de Costo
+                                        </th>
+                                        <th class="">
+                                            nombre de cuenta
+                                        </th>
+                                        <th class="">
+                                            tipo imp.
+                                        </th>
+                                        <th class="">
+                                            imputación
+                                        </th>
+                                        <th class="">
+                                            Monto
+                                        </th>
+                                        <th class="">
+                                            Impuesto
+                                        </th>
+                                        <th class="">
+                                            IVA
+                                        </th>
+                                        @for (int i = 0; i < colsret.Count; i++)
+                                        {
+                                            <th class="">
+                                                @colsret[i] B.I.
+                                            </th>
+                                            <th class="">
+                                                @colsret[i] I.R.
+                                            </th>
+                                        }
+                                        <th class="">
+                                            Total
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
 
-                                @if (@Model.D.DOCUMENTOPSTR != null)
-                                {
-                                    for (int i = 0; i < @Model.D.DOCUMENTOPSTR.Count; i++)
+                                    @if (@Model.D.DOCUMENTOPSTR != null)
                                     {
-                                        <tr>
-                                            @*@if (colsret.Count == 0)
+                                        for (int i = 0; i < @Model.D.DOCUMENTOPSTR.Count; i++)
+                                        {
+                                            <tr>
+                                                @*@if (colsret.Count == 0)
+                                                    {
+                                                        <td></td>
+                                                    }*@
+                                                <td></td>
+                                                <td> @Model.D.DOCUMENTOPSTR[i].POS</td>
+                                                @if (@Model.D.Anexo != null)
+                                                {
+                                                    if (@Model.D.Anexo[i].a1 == 0)
+                                                    {
+                                                        <td></td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td>@Model.D.Anexo[i].a1</td>
+                                                    }
+                                                    if (@Model.D.Anexo[i].a2 == 0)
+                                                    {
+                                                        <td></td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td>@Model.D.Anexo[i].a2</td>
+                                                    }
+                                                    if (@Model.D.Anexo[i].a3 == 0)
+                                                    {
+                                                        <td></td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td>@Model.D.Anexo[i].a3</td>
+                                                    }
+                                                    if (@Model.D.Anexo[i].a4 == 0)
+                                                    {
+                                                        <td></td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td>@Model.D.Anexo[i].a4</td>
+                                                    }
+                                                    if (@Model.D.Anexo[i].a5 == 0)
+                                                    {
+                                                        <td></td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td>@Model.D.Anexo[i].a5</td>
+                                                    }
+
+                                                    @*<td>@Model.D.Anexo[i].a1</td>*@
+                                                    @*<td>@Model.D.Anexo[i].a2</td>*@
+                                                    @*<td>@Model.D.Anexo[i].a3</td>*@
+                                                    @*<td>@Model.D.Anexo[i].a4</td>*@
+                                                    @*<td>@Model.D.Anexo[i].a5</td>*@
+                                                }
+                                                else
                                                 {
                                                     <td></td>
-                                                }*@
-                                            <td></td>
-                                            <td> @Model.D.DOCUMENTOPSTR[i].POS</td>
-                                            @if (@Model.D.Anexo != null)
-                                            {
-                                                <td>@Model.D.Anexo[i].a1</td>
-                                                <td>@Model.D.Anexo[i].a2</td>
-                                                <td>@Model.D.Anexo[i].a3</td>
-                                                <td>@Model.D.Anexo[i].a4</td>
-                                                <td>@Model.D.Anexo[i].a5</td>
-                                            }
-                                            else
-                                            {
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                            }
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                }
 
 
-                                            @if (Model.D.DOCUMENTOPSTR[i].TEXTO != null)
-                                            {
-                                                <td> <textarea class="materialize-textarea" style="font-size:12px;width:150px;height:0px;" type="text" value="" disabled>@Model.D.DOCUMENTOPSTR[i].TEXTO </textarea></td>
+                                                @if (Model.D.DOCUMENTOPSTR[i].TEXTO != null)
+                                                {
+                                                    <td> <textarea class="materialize-textarea" style="font-size:12px;width:150px;height:0px;" type="text" value="" disabled>@Model.D.DOCUMENTOPSTR[i].TEXTO </textarea></td>
 
-                                            }
-                                            else
-                                            {
-                                                <td></td>
-                                            }
-
-
-                                            @if (Model.D.DOCUMENTOPSTR[i].ACCION != null)
-                                            {
-                                                <td>@Model.D.DOCUMENTOPSTR[i].ACCION</td> }
-                                            else
-                                            {
-                                                <td></td>}
-
-                                            @if (Model.D.DOCUMENTOPSTR[i].FACTURA != null)
-                                            {
-                                                <td>@Model.D.DOCUMENTOPSTR[i].FACTURA</td> }
-                                            else
-                                            {
-                                                <td></td>}
-
-                                            <td> @Model.D.DOCUMENTOPSTR[i].TCONCEPTO@Model.D.DOCUMENTOPSTR[i].GRUPO</td>
-
-                                            @if (Model.D.DOCUMENTOPSTR[i].CUENTA != null)
-                                            {
-                                                <td>@Model.D.DOCUMENTOPSTR[i].CUENTA</td> }
-                                            else
-                                            {
-                                                <td></td>}
+                                                }
+                                                else
+                                                {
+                                                    <td></td>
+                                                }
 
 
-                                            @if (Model.D.DOCUMENTOPSTR[i].CCOSTO != null)
-                                            {
-                                                <td>@Model.D.DOCUMENTOPSTR[i].CCOSTO</td> }
-                                            else
-                                            {
-                                                <td></td>}
+                                                @if (Model.D.DOCUMENTOPSTR[i].ACCION != null)
+                                                {
+                                                    <td>@Model.D.DOCUMENTOPSTR[i].ACCION</td> }
+                                                else
+                                                {
+                                                    <td></td>}
+
+                                                @if (Model.D.DOCUMENTOPSTR[i].FACTURA != null)
+                                                {
+                                                    <td style="text-align:left">@Model.D.DOCUMENTOPSTR[i].FACTURA</td> }
+                                                else
+                                                {
+                                                    <td></td>}
+
+                                                <td style="text-align:left"> @Model.D.DOCUMENTOPSTR[i].TCONCEPTO@Model.D.DOCUMENTOPSTR[i].GRUPO</td>
+
+                                                @if (Model.D.DOCUMENTOPSTR[i].CUENTA != null)
+                                                {
+                                                    <td style="text-align:left">@Model.D.DOCUMENTOPSTR[i].CUENTA</td> }
+                                                else
+                                                {
+                                                    <td></td>}
 
 
-                                            @if (Model.D.DOCUMENTOPSTR[i].NOMCUENTA != null)
-                                            {
-                                                <td>@Model.D.DOCUMENTOPSTR[i].NOMCUENTA</td> }
-                                            else
-                                            {
-                                                <td></td>}
+                                                @if (Model.D.DOCUMENTOPSTR[i].CCOSTO != null)
+                                                {
+                                                    <td style="text-align:left">@Model.D.DOCUMENTOPSTR[i].CCOSTO</td> }
+                                                else
+                                                {
+                                                    <td></td>}
 
-                                            @if (Model.D.DOCUMENTOPSTR[i].TIPOIMP != null)
-                                            {
-                                                <td>@Model.D.DOCUMENTOPSTR[i].TIPOIMP</td> }
-                                            else
-                                            {
-                                                <td></td>}
+
+                                                @if (Model.D.DOCUMENTOPSTR[i].NOMCUENTA != null)
+                                                {
+                                                    <td style="text-align:left">@Model.D.DOCUMENTOPSTR[i].NOMCUENTA</td> }
+                                                else
+                                                {
+                                                    <td></td>}
+
+                                                @if (Model.D.DOCUMENTOPSTR[i].TIPOIMP != null)
+                                                {
+                                                    <td style="text-align:left">@Model.D.DOCUMENTOPSTR[i].TIPOIMP</td> }
+                                                else
+                                                {
+                                                    <td></td>}
 
 
 
 
-                                            @if (Model.D.DOCUMENTOPSTR[i].IMPUTACION != null)
-                                            {
-                                                <td>@Model.D.DOCUMENTOPSTR[i].IMPUTACION</td> }
-                                            else
-                                            {
-                                                <td></td>}
+                                                @if (Model.D.DOCUMENTOPSTR[i].IMPUTACION != null)
+                                                {
+                                                    <td style="text-align:left">@Model.D.DOCUMENTOPSTR[i].IMPUTACION</td> }
+                                                else
+                                                {
+                                                    <td></td>}
 
 
-                                            @if (Model.D.DOCUMENTOPSTR[i].MONTO != null)
-                                            {
-                                                <td>@Model.D.DOCUMENTOPSTR[i].MONTO</td> }
-                                            else
-                                            {
-                                                <td></td>}
+                                                @if (Model.D.DOCUMENTOPSTR[i].MONTO != null)
+                                                {
+                                                    <td style="text-align:left">@Model.D.DOCUMENTOPSTR[i].MONTO</td> }
+                                                else
+                                                {
+                                                    <td></td>}
 
 
 
-                                            @if (Model.D.DOCUMENTOPSTR[i].IMPUESTOT != null)
-                                            {
-                                                <td>@Model.D.DOCUMENTOPSTR[i].IMPUESTOT</td> }
-                                            else
-                                            {
-                                                <td></td>}
+                                                @if (Model.D.DOCUMENTOPSTR[i].IMPUESTOT != null)
+                                                {
+                                                    <td style="text-align:left">@Model.D.DOCUMENTOPSTR[i].IMPUESTOT</td> }
+                                                else
+                                                {
+                                                    <td></td>}
 
 
-                                            @if (Model.D.DOCUMENTOPSTR[i].IVA != null)
-                                            {
-                                                <td>@Model.D.DOCUMENTOPSTR[i].IVA</td> }
-                                            else
-                                            {
-                                                <td></td>}
+                                                @if (Model.D.DOCUMENTOPSTR[i].IVA != null)
+                                                {
+                                                    <td style="text-align:left">@Model.D.DOCUMENTOPSTR[i].IVA</td> }
+                                                else
+                                                {
+                                                    <td></td>}
 
 
-                                            @for (int y = 0; y < colsret.Count; y++)
-                                            {
-                                                <td>
-                                                    @{var _v = colsret[y]; }
-                                                    @{decimal imp = 0; try { imp = decimal.Parse(lstDrp.Where(p => p.POS == (i + 1) && p.WITHT == _v).FirstOrDefault().BIMPONIBLE.ToString()); } catch (Exception e) { }; string bim = formatoc.toShow(imp, deci);}
-                                                    @bim
-                                                </td>
-                                                <td>
-                                                    @{decimal imp2 = 0; try { imp2 = decimal.Parse(lstDrp.Where(p => p.POS == (i + 1) && p.WITHT == _v).FirstOrDefault().IMPORTE_RET.ToString()); } catch (Exception e) { }; string bim2 = formatoc.toShow(imp2, deci);}
-                                                    @bim2
-                                                </td>
-                                            }
-                                            <td> @Model.D.DOCUMENTOPSTR[i].TOTAL</td>
+                                                @for (int y = 0; y < colsret.Count; y++)
+                                                {
+                                                    <td>
+                                                        @{var _v = colsret[y]; }
+                                                        @{decimal imp = 0; try { imp = decimal.Parse(lstDrp.Where(p => p.POS == (i + 1) && p.WITHT == _v).FirstOrDefault().BIMPONIBLE.ToString()); } catch (Exception e) { }; string bim = formatoc.toShow(imp, deci);}
+                                                        @bim
+                                                    </td>
+                                                    <td>
+                                                        @{decimal imp2 = 0; try { imp2 = decimal.Parse(lstDrp.Where(p => p.POS == (i + 1) && p.WITHT == _v).FirstOrDefault().IMPORTE_RET.ToString()); } catch (Exception e) { }; string bim2 = formatoc.toShow(imp2, deci);}
+                                                        @bim2
+                                                    </td>
+                                                }
+                                                <td> @Model.D.DOCUMENTOPSTR[i].TOTAL</td>
 
-                                        </tr>
+                                            </tr>
+                                        }
                                     }
-                                }
-                            </tbody>
-                            <tfoot>
-                                <tr>
-                                    <th>Total: </th>
-                                    <th>@ViewBag.totalt</th>
-                                </tr>
-                            </tfoot>
-                        </table>
-                        @*aQUI PONES LA TABLA*@
-
+                                </tbody>
+                                @*<tfoot>
+                                        <tr>
+                                            <th>Total: </th>
+                                            <th>@ViewBag.totalt</th>
+                                        </tr>
+                                    </tfoot>*@
+                            </table>
+                            @*aQUI PONES LA TABLA*@
+                        </div>
                     </div>
                     <div style="text-align:right">
-                        <label id="lbl_status">Total:</label>
-                        <label id="total_info1">@ViewBag.totalt</label>
+                        <label id="lbl_status" style="font-size: 1.1rem; font-weight: bold;">Total:</label>
+                        <label id="total_info1" style="font-size: 1.1rem;font-weight: bold;">@ViewBag.totalt</label>
                     </div>
                 </div>
             </div>
@@ -987,21 +1002,21 @@
                         <table class="table display mdl-data-table striped" id="table_anexa" style="width:100%;">
                             <thead>
                                 <tr>
-                                    <th class="">
+                                    <th class="" style="text-align:left">
                                     </th>
-                                    <th class="">
-                                        Num
+                                    <th class="" style="text-align:left">
+                                        No. de Anexo
                                     </th>
-                                    <th class="">
+                                    <th class="" style="text-align:left">
                                         Status
                                     </th>
-                                    <th class="">
-                                        Nombres Archivo
+                                    <th class="" style="text-align:left">
+                                        Nombre del Archivo
                                     </th>
-                                    <th class="">
+                                    <th class="" style="text-align:left">
                                         Tipo de Archivo
                                     </th>
-                                    <th class="">
+                                    <th class="" style="text-align:left">
                                         Descripcion
                                     </th>
                                     <th></th>
@@ -1018,14 +1033,14 @@
 
                                             <tr>
                                                 <td></td>
-                                                <td>
+                                                <td style="text-align:left">
                                                     @(i + 1)
                                                 </td>
-                                                <td>OK</td>
+                                                <td style="text-align:left">OK</td>
                                                 @{var _xtr = lstDocsA[i].PATH.Split('\\'); var nombre = _xtr[_xtr.Length - 1]; if (nombre.Contains("%20")) { nombre = nombre.Replace("%20", " "); }}
-                                                <td>@nombre</td>
-                                                <td> @lstDocsA[i].TIPO</td>
-                                                <td> @lstDocsA[i].DESC</td>
+                                                <td style="text-align:left">@nombre</td>
+                                                <td style="text-align:left"> @lstDocsA[i].TIPO</td>
+                                                <td style="text-align:left"> @lstDocsA[i].DESC</td>
                                                 <td>
                                                     <button class="btn btnD" name="archivo" id="archivo" type="submit" value=@lstDocsA[i].PATH>DESCARGAR</button>
                                                 </td>
@@ -1048,10 +1063,10 @@
             @*//MGC 22-11-2018.2 Cadena de autorización -->*@
             <div class="col s12">
                 <div class="card-panel">
-                    <h5 id="head_cabecera">Autorización</h5>
+                    <h5 id="head_cabecera">Cadena de Autorización</h5>
                     <div class="row" style="margin-bottom:0">
                         <div class="form-group col s6">
-                            @Html.LabelFor(model => model.D.TSOL_ID, "Cadena de autorización ", htmlAttributes: new { @class = "control-label col-md-2" })
+                            @*@Html.LabelFor(model => model.D.TSOL_ID, "Cadena de autorización ", htmlAttributes: new { @class = "control-label col-md-2" })*@
                             <div class="col-md-10">
                                 @Html.DropDownList("DETAA", null, htmlAttributes: new { @class = "form-control", @id = "list_detaa", @disabled = "disabled" })
                             </div>
@@ -1068,10 +1083,10 @@
 
         @*MGC 14-11-2018 Cadena de autorización----------------------------------------------------------------------------->*@
         <div class="row" style="font-size:12px;">
-            <div class="col s12" style="padding:0px">
+            <div class="col s12">
                 <div class="card-panel">
                     <div class="row" style="margin-bottom:0">
-                        <h5>Cadena de Autorizadores</h5>
+                        <h5>Información Cadena de Autorización</h5>
                         @* //MGC 22-11-2018.2 Cadena de autorización-----------------------------------------------------------------------> *@
                         @{List<WFARTHA.Models.CadenaAutorizadores> lcadena = new List<WFARTHA.Models.CadenaAutorizadores>(); lcadena = ViewBag.lcadena as List<WFARTHA.Models.CadenaAutorizadores>; }
 
@@ -1079,10 +1094,10 @@
                             <thead>
                                 <tr>
                                     <th width="" style="width: 300px;">
-                                        Fase
+                                        Tipo de Agente
                                     </th>
                                     <th width="">
-                                        Agente
+                                        Nombre
                                     </th>
                                 </tr>
                             </thead>
@@ -1112,6 +1127,111 @@
 
     @*Soporte SAP*@
     <div id="Informacion_sap" class="col s12" style="font-size:12px;">
+        <div class="row">
+            <div class="col s12">
+                <div class="card-panel">
+                    <div class="row" style="margin-bottom:0">
+                        <h5>Información de Pagos</h5>
+                        <div class="col s6" style="padding:0px">
+                            <div class="card-panel">
+                                <div class="row" style="margin-bottom:0">
+                                    <h5>Pagado</h5>
+                                    <table class="table highlight responsive-table" id="tableP">
+                                        <thead>
+                                            <tr>
+                                                <th width="">
+                                                    Documento
+                                                </th>
+                                                <th width="">
+                                                    Año
+                                                </th>
+                                                <th width="">
+                                                    Sociedad
+                                                </th>
+                                                <th width="">
+                                                    Proveedor
+                                                </th>
+                                                <th width="">
+                                                    Fecha
+                                                </th>
+                                                <th width="">
+                                                    Monto
+                                                </th>
+                                                <th width="">
+                                                    Moneda
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @for (int i = 0; i < lstpag.Count; i++)
+                                            {
+                                                <tr>
+                                                    <td>@lstpag[i].BELNR_P</td>
+                                                    <td>@lstpag[i].GJAHR_P</td>
+                                                    <td>@lstpag[i].BUKRS_P</td>
+                                                    <td>@lstpag[i].LIFNR</td>
+                                                    <td>@lstpag[i].BLDAT_P</td>
+                                                    <td>@lstpag[i].WRBTR_P</td>
+                                                    <td>@lstpag[i].WAERS</td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col s6" style="padding:0px">
+                            <div class="card-panel">
+                                <div class="row" style="margin-bottom:0">
+                                    <h5>Efectivamente Pagado</h5>
+                                    <table class="table highlight responsive-table" id="tableEP">
+                                        <thead>
+                                            <tr>
+                                                <th width="">
+                                                    Documento
+                                                </th>
+                                                <th width="">
+                                                    Año
+                                                </th>
+                                                <th width="">
+                                                    Sociedad
+                                                </th>
+                                                <th width="">
+                                                    Proveedor
+                                                </th>
+                                                <th width="">
+                                                    Fecha
+                                                </th>
+                                                <th width="">
+                                                    Monto
+                                                </th>
+                                                <th width="">
+                                                    Moneda
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @for (int i = 0; i < lstepag.Count; i++)
+                                            {
+                                                <tr>
+                                                    <td>@lstepag[i].BELNR_P</td>
+                                                    <td>@lstepag[i].GJAHR_P</td>
+                                                    <td>@lstepag[i].BUKRS_P</td>
+                                                    <td>@lstepag[i].LIFNR</td>
+                                                    <td>@lstepag[i].BLDAT_P</td>
+                                                    <td>@lstepag[i].WRBTR_P</td>
+                                                    <td>@lstepag[i].WAERS</td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="row">
             <div class="col s12">
                 <div class="card-panel">
@@ -1312,9 +1432,6 @@
 
                 }
 
-
-
-
                 //MGC 18-10-2018 Firma del usuario -------------------------------------------------->
                 //Validar la firma del usuario
                 //$("#form_procesa").submit(function (e) {
@@ -1409,16 +1526,6 @@
 
     }
     @*MGC 04-10-2018 Botones para acciones WF<--*@
-
-    @*//MGC 26-11-2018 Visualizar caratula --------------------------------------------------->*@
-    <script>
-        function fcaratula(elem) {
-            var id = $(elem).data('assigned-id'); //Obtiene el id de la solicitud
-
-
-        }
-    </script>
-    @*//MGC 26-11-2018 Visualizar caratula ---------------------------------------------------<*@
 
     <input id="num_doc_send" type="text" value="@Model.D.NUM_DOC" style="display:none" />
 </div>

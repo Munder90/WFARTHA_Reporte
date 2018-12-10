@@ -19,7 +19,7 @@ namespace WFARTHA.Controllers
             {
                 FnCommon.ObtenerConfPage(db, pagina, User.Identity.Name, this.ControllerContext.Controller);
             }
-            
+
             ViewBag.url = Request.Url.OriginalString.Replace(Request.Url.PathAndQuery, "") + HostingEnvironment.ApplicationVirtualPath + "/" + ruta;
             ViewBag.miNum = ids;
 
