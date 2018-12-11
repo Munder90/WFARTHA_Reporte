@@ -47,12 +47,8 @@ namespace WFARTHA.Models
                     pdfDoc.Open();
                     Paragraph frase1;
 
-                    frase1 = new Paragraph("Solicitud de Cheques", titulo);
-                    a = 18;
-                    frase1.Alignment = Element.ALIGN_LEFT;
-                    pdfDoc.Add(frase1);
+                    frase1 = new Paragraph("Solicitud de Cheques", titulo){Alignment = Element.ALIGN_LEFT}; pdfDoc.Add(frase1);
                     pdfDoc.Add(new Chunk(""));
-                    r = a + b;
 
                     //Cabecera
                     pdfDoc.Add(new Chunk(""));
