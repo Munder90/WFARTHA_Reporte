@@ -213,8 +213,8 @@ D:\Documents\GitHub\WFARTHA_Reporte\WFARTHA\bin\es\Microsoft.Owin.Security.Faceb
 D:\Documents\GitHub\WFARTHA_Reporte\WFARTHA\bin\es\Microsoft.Owin.Security.Google.resources.dll
 D:\Documents\GitHub\WFARTHA_Reporte\WFARTHA\bin\es\Microsoft.Owin.Security.Twitter.resources.dll
 D:\Documents\GitHub\WFARTHA_Reporte\WFARTHA\bin\es\Microsoft.Owin.Security.MicrosoftAccount.resources.dll
-D:\Documents\GitHub\WFARTHA_Reporte\WFARTHA\obj\Debug\WFARTHA.csprojAssemblyReference.cache
 D:\Documents\GitHub\WFARTHA_Reporte\WFARTHA\obj\Debug\WFARTHA.csproj.CoreCompileInputs.cache
 D:\Documents\GitHub\WFARTHA_Reporte\WFARTHA\obj\Debug\WFARTHA.csproj.CopyComplete
 D:\Documents\GitHub\WFARTHA_Reporte\WFARTHA\obj\Debug\WFARTHA.dll
 D:\Documents\GitHub\WFARTHA_Reporte\WFARTHA\obj\Debug\WFARTHA.pdb
+D:\Documents\GitHub\WFARTHA_Reporte\WFARTHA\obj\Debug\WFARTHA.csprojAssemblyReference.cache

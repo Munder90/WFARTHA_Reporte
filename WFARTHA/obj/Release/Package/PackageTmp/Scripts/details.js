@@ -118,7 +118,7 @@ $(document).ready(function () {
     //Tabla de Retenciones
     $('#table_ret').DataTable({
         language: {
-            "url": "../Scripts/lang/ES.json"
+            "url": "../../Scripts/lang/ES.json"
         },
         "paging": false,
         "info": false,
@@ -164,20 +164,27 @@ $(document).ready(function () {
         ],
         columnDefs: [
             {
-                targets: [0, 1, 2, 3, 4],
+                targets: [0, 1, 2, 3, 4, 5, 6],
                 className: 'mdl-data-table__cell--non-numeric'
             }
         ]
     });
 
     $('#div-menu').on('click', function () {
-
+        $(window).resize();
     });
 
     $('#cerrar-menu').on('click', function () {
-
+        $(window).resize();
     });
 
+    //se ocupa un ciclo for con minimo 2 veces que se ejecute el metodo para que lo haga,ó ue e le de 2 clicks a tab_con para que lo haga.
+    //Lejgg 27-11-2018
+    $('#tab_con').on('click', function () {
+        for (var i = 0; i < 2; i++) {
+            $(window).resize();
+        }
+    });
     formatoMon();
 
     var val3 = $('#tsol').val();
@@ -188,8 +195,33 @@ $(document).ready(function () {
 $(window).on('load', function () {
 
     $('.materialize-textarea').css("height", "0px");
-
+    //Lejgg28/11/2018
+    alinearIzq();
+    //---
+    var _fd = $('#D_FECHAD').val().split(' ');
+    $('#D_FECHAD').val(_fd[0]);
+    //---
 });
+function alinearIzq() {
+    $("#table_ret > tbody  > tr[role='row']").each(function () {
+        //1
+        var R1 = $(this).find("td.TRET");
+        R1.css("text-align", "left");
+        //2
+        var R2 = $(this).find("td.DESCTRET");
+        R2.css("text-align", "left");
+        //3
+        var R3 = $(this).find("td.INDRET");
+        R3.css("text-align", "left");
+        //4
+        var R4 = $(this).find("td.BIMPONIBLE");
+        R4.css("text-align", "left");
+        //5
+        var R5 = $(this).find("td.IMPRET");
+        R5.css("text-align", "left");
+    });
+}
+
 function formatoTabla() {
     var colsArray = [
         {//MGC 30-10-2018 Tipo de presupuesto
@@ -200,10 +232,9 @@ function formatoTabla() {
             "visible": false //MGC 30-10-2018 Tipo de presupuesto
         },//MGC 30-10-2018 Tipo de presupuesto
         {
-            "name": 'POS',
+            "name": 'Fila',
             "className": 'POS',
-            "orderable": false,
-            "visible": false //MGC 04092018 Conceptos
+            "orderable": false
         },
         {
             "name": 'A1',
@@ -413,6 +444,15 @@ function formatoTabla() {
             //"url": "../Scripts/lang/@Session["spras"].ToString()" + ".json"
             "url": "../../Scripts/lang/ES.json"
         },
+        scrollX: "50vh",
+        scrollY: "50vh",
+        scrollCollapse: true,
+        columnDefs: [
+            {
+                targets: [0, 1, 2, 3, 4, 5, 6, 8, 9, 10, 11, 12, 13, 14, 15, 16],
+                className: 'mdl-data-table__cell--non-numeric'
+            }
+        ],
         "paging": false,
         "info": false,
         "searching": false,
@@ -429,7 +469,7 @@ function showHide(tsol) {
     val3 = val3.replace(/\,/g, "\" , \"");
     val3 = val3.replace(/\=/g, "\" : \"");
     val3 = val3.replace(/\ /g, "");
-    var jsval = $.parseJSON(val3)
+    var jsval = $.parseJSON(val3);
 
     $.each(jsval, function (i, dataj) {
         ocultarCampos(dataj.EDITDET, param1);
@@ -575,9 +615,74 @@ function asigF(fir) {
 function tamanosRenglones() {
     //TEXTO
     var t_ret = $("#table_info>thead>tr").find('th.TXTPOS');
-    //var t_ret = $(this).find("th.TEXTO");
     t_ret.css("text-align", "center");
-    t_ret.css("width", "150px");
+    //Monto
+    var t_mt = $("#table_info>thead>tr").find('th.CCOSTO');
+    t_mt.css("text-align", "center");
+    //total
+    var t_fac = $("#table_info>thead>tr").find('th.FACTURA');
+    t_fac.css("text-align", "left");
+    //grupo
+    var tg = $("#table_info>thead>tr").find('th.GRUPO');
+    tg.css("text-align", "center");
+    //IVA
+    var t_iva = $("#table_info>thead>tr").find('th.IVA');
+    t_iva.css("text-align", "center");
+    //SELECT IMPUESTO
+    var t_imps = $("#table_info>thead>tr").find('th.IMPUESTO_SELECT');
+    t_imps.css("text-align", "left");
+    //reviso si tiene retenciones para agregarles nueva medidas
+    if (tRet2.length > 0) {
+        for (var i = 0; i < tRet2.length; i++) {
+            var _cex = $("#table_info>thead>tr").find("th.bi" + tRet2[i]);
+            _cex.css("text-align", "left");
+            var _cex2 = $("#table_info>thead>tr").find("th.ir" + tRet2[i]);
+            _cex2.css("text-align", "left");
+        }
+    }
+    //total
+    var t_tot = $("#table_info>thead>tr").find('th.TOTAL');
+    t_tot.css("text-align", "center");
+    //FILA
+    var tpos = $("#table_info>tbody>tr").find('td.POS');
+    tpos.css("text-align", "left");
+    tpos.css("font-size", "15px");
+    if (tRet2.length == 0) {
+        //TEXTO
+        $('.materialize-textarea').css("width", "100%");
+        //FILA
+        var an = $("#table_info>tbody>tr").find('td.NumAnexo');
+        an.css("text-align", "left");
+        //FILA
+        var an2 = $("#table_info>tbody>tr").find('td.NumAnexo2');
+        an2.css("text-align", "left");
+        //FILA
+        var an3 = $("#table_info>tbody>tr").find('td.NumAnexo3');
+        an3.css("text-align", "left");
+        //FILA
+        var an4 = $("#table_info>tbody>tr").find('td.NumAnexo4');
+        an4.css("text-align", "left");
+        //FILA
+        var an5 = $("#table_info>tbody>tr").find('td.NumAnexo5');
+        an5.css("text-align", "left");
+        //total
+        var TTH = $("#table_info>thead>tr").find('th.TOTAL');
+        TTH.css("text-align", "left");
+        var TT = $("#table_info>tbody>tr").find('td.TOTAL');
+        TT.css("text-align", "left");
+        //grupo
+        var tg1 = $("#table_info>thead>tr").find('th.GRUPO');
+        tg1.css("text-align", "left");
+        //Monto
+        var t_mt1 = $("#table_info>thead>tr").find('th.CCOSTO');
+        t_mt1.css("text-align", "left");
+        //IVA
+        var t_iva1 = $("#table_info>thead>tr").find('th.IVA');
+        t_iva1.css("text-align", "left");
+        //IMPUESTO
+        var t_im = $("#table_info>thead>tr").find('th.MONTO');
+        t_im.css("text-align", "left");
+    }
 }
 //LEJGG 21-11-2018 Cadena de autorización----------------------------------------------------------------------------->
 //Al seleccionar un solicitante, obtener la cadena para mostrar
