@@ -265,3 +265,32 @@ WFARTHA/Web.config
 WFARTHA/Descargas/photo-1521173531190-ce76154f20b5.jpg
 WFARTHA/Web.config
 WFARTHA/Web.config
+*.pdf
+*.pubxml
+WFARTHA/obj/Release/WFARTHA.pdb
+WFARTHA/Properties/PublishProfiles/Default Settings.pubxml
+WFARTHA/Web.config
+WFARTHA/Properties/PublishProfiles/Default Settings.pubxml
+WFARTHA/obj/Debug/WFARTHA.csprojAssemblyReference.cache
+WFARTHA/obj/Debug/WFARTHA.dll
+.vs/WFARTHA/v15/.suo
+.vs/WFARTHA/v15/Server/sqlite3/storage.ide
+.vs/WFARTHA/v15/Server/sqlite3/storage.ide-shm
+.vs/WFARTHA/v15/Server/sqlite3/storage.ide-wal
+WFARTHA/bin/WFARTHA.dll
+WFARTHA/bin/WFARTHA.dll.config
+WFARTHA/bin/WFARTHA.pdb
+WFARTHA/obj/Debug/WFARTHA.csprojAssemblyReference.cache
+WFARTHA/obj/Debug/WFARTHA.dll
+WFARTHA/obj/Debug/WFARTHA.pdb
+WFARTHA/obj/Release/DesignTimeResolveAssemblyReferencesInput.cache
+WFARTHA/obj/Release/Package/PackageTmp/bin/WFARTHA.pdb
+WFARTHA/obj/Release/TransformWebConfig/original/Web.config
+WFARTHA/obj/Release/WFARTHA.csproj.FileListAbsolute.txt
+.vs/WFARTHA/v15/.suo
+.vs/WFARTHA/v15/Server/sqlite3/storage.ide
+.vs/WFARTHA/v15/Server/sqlite3/storage.ide-shm
+.vs/WFARTHA/v15/Server/sqlite3/storage.ide-wal
+WFARTHA/bin/WFARTHA.dll
+WFARTHA/bin/WFARTHA.dll.config
+WFARTHA/bin/WFARTHA.pdb
