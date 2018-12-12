@@ -217,3 +217,4 @@ D:\Documents\GitHub\WFARTHA_Reporte\WFARTHA\obj\Release\WFARTHA.csproj.CoreCompi
 D:\Documents\GitHub\WFARTHA_Reporte\WFARTHA\obj\Release\WFARTHA.csproj.CopyComplete
 D:\Documents\GitHub\WFARTHA_Reporte\WFARTHA\obj\Release\WFARTHA.dll
 D:\Documents\GitHub\WFARTHA_Reporte\WFARTHA\obj\Release\WFARTHA.pdb
+D:\Documents\GitHub\WFARTHA_Reporte\WFARTHA\obj\Release\WFARTHA.csprojAssemblyReference.cache
