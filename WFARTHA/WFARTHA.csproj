@@ -540,6 +540,7 @@
     <Compile Include="Models\ProyectoSociedadNuevo.cs" />
     <Compile Include="Models\ReportCabecera.cs" />
     <Compile Include="Models\ReportDetalle.cs" />
+    <Compile Include="Models\ReportEsqueleto2.cs" />
     <Compile Include="Models\ReportEsqueleto.cs" />
     <Compile Include="Models\ReportFirmas.cs" />
     <Compile Include="Models\ReportInfo.cs" />
